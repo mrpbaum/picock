@@ -18,12 +18,15 @@ The upstream merge first becomes a draft PR. Every changed file is then classifi
 
 Confirmed gaps receive separate issues and implementation PRs stacked into the sync branch. The merge order is deliberate: remediation PRs first, sync PR last.
 
+The final sync PR must be merged with GitHub's **Create a merge commit** option. Squash-merge or rebase-merge can copy upstream's files without preserving upstream's commit ancestry, which leaves GitHub's fork UI saying the fork is still behind upstream.
+
 ## It's working if
 
 - The sync PR names the exact upstream commit range.
 - Every changed file has an evidence-backed compatibility classification.
 - Each real compatibility gap has one issue and one focused PR.
 - The sync remains draft until the compatibility gate is complete.
+- After the sync PR is merged with a merge commit, `upstream/main` is an ancestor of the fork's main branch and GitHub no longer reports the fork as behind for those upstream commits.
 
 ## Where it fits
 

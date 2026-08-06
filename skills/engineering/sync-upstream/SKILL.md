@@ -26,7 +26,9 @@ Completion criterion: the exact upstream commit range and both endpoint SHAs are
 - Create a fresh branch from `origin/<default>` named `sync/upstream-<YYYY-MM-DD>`, adding a numeric suffix if it already exists.
 - Merge `upstream/<default>` into it with a merge commit so upstream provenance remains visible. Preserve fork-specific behavior when resolving conflicts; use the `resolving-merge-conflicts` skill when conflicts occur.
 - Run the repository's relevant Pi validation, including `npm run validate:skills`. Do not run or require Claude Code plugin validation; this fork is not installed into Claude Code.
-- Push the branch to `origin` and open a draft PR against the fork's default branch. The body must include the upstream range, endpoint SHAs, conflict resolutions, and validation results.
+- Push the branch to `origin` and open a draft PR against the fork's default branch. The body must include the upstream range, endpoint SHAs, conflict resolutions, validation results, and this warning: **merge this PR with GitHub's "Create a merge commit" option only**.
+
+The sync PR is an ancestry repair as well as a content sync. GitHub only stops reporting the fork as behind upstream when `upstream/<default>` is an ancestor of `origin/<default>`. Squash-merge or rebase-merge can copy the files while discarding upstream's commit ancestry, leaving the GitHub fork UI still behind. Therefore the sync branch must contain the real `--no-ff` upstream merge commit, and the final sync PR must be merged with a merge commit. Never squash, rebase, or auto-update this PR in a way that rewrites away the upstream merge commit.
 
 The PR stays draft until the compatibility gate is complete. Never merge it.
 
@@ -73,7 +75,7 @@ Completion criterion: every required remediation has exactly one owning issue an
 
 - Update the sync PR body with the final classification table and links to every remediation issue and PR.
 - Mark the sync PR ready for review only when no remediation remains unowned and all remediation PRs target a branch that will feed into the sync branch.
-- Leave a merge-order checklist: remediation PRs first, sync PR last.
+- Leave a merge-order checklist: remediation PRs first, sync PR last, and the sync PR must use GitHub's **Create a merge commit** button rather than squash or rebase.
 - Return the sync PR URL, upstream range, compatibility summary, issue/PR pairs, validation results, and merge order.
 
 Never merge, close, or retarget PRs on the user's behalf.
