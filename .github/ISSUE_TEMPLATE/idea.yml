@@ -4,18 +4,15 @@ body:
   - type: markdown
     attributes:
       value: |
-        This repo is curated. An idea stays open only if it clears **both** parts of the bar in [`SCOPE.md`](https://github.com/mattpocock/skills/blob/main/SCOPE.md):
+        This fork maintains upstream skills for Pi consumption. Read [fork scope](https://github.com/mrpbaum/picock/blob/main/SCOPE.md).
 
-        1. **Observed failure**: it describes something that went wrong in a real session, not a hypothetical improvement.
-        2. **Fits the philosophy**: it doesn't match anything in [`.out-of-scope/`](https://github.com/mattpocock/skills/tree/main/.out-of-scope), and it isn't a config option, a harness-specific branch, or a personal-workflow tweak.
-
-        New skills are not accepted. `misc/` skills are frozen.
+        Include an observed failure or reproducible compatibility gap. Pi-specific adaptations are in scope even when upstream rejects harness-specific changes. Upstream `.out-of-scope/` records are historical context, not automatic fork rejections.
   - type: checkboxes
     id: read-scope
     attributes:
       label: Before filing
       options:
-        - label: I've read `SCOPE.md` and checked `.out-of-scope/`, and this isn't covered by either.
+        - label: I've read the fork's `SCOPE.md` and described how this affects Pi consumption.
           required: true
   - type: input
     id: skill

@@ -1,35 +1,23 @@
 # Scope
 
-This repo is the set of skills I use every day. It is curated: ideas are welcome, and each one is judged against the bar below. Issues are for tracking changes to the skills. Questions and discussion go to [GitHub Discussions](https://github.com/mattpocock/skills/discussions).
+This fork consumes upstream skill improvements for Pi. Pi discovery, installation, invocation, tool compatibility, and safe orchestration are in scope. Upstream is a read-only source; branches, issues, and pull requests belong in the fork identified by `origin`.
 
-## The bar
+## Feedback
 
-An idea or feedback issue stays open only if it clears **both** parts:
+File Pi package and fork compatibility problems in this fork's Issues. Include the skill, Pi version, installation method, model, observed behavior, and expected behavior. General questions about upstream skill design can be discussed upstream, but Pi-specific support stays here.
 
-1. **Observed failure.** It describes something that went wrong in a real session: what you ran, what the skill did, what you expected. A hypothetical improvement ("it would be better if...") does not clear this part.
-2. **Fits the philosophy.** It does not match anything in [`.out-of-scope/`](./.out-of-scope/) or a past rejection, and it is not a config option, a harness-specific branch, or a tweak to suit one person's workflow. Those belong in your own `CLAUDE.md` / `AGENTS.md`, or in a fork (skills.sh gives you an editable copy).
+Prefer evidence from a real session or a reproducible check. Fork remediations may include harness-specific instructions and fork-only skills when required for Pi consumption. Upstream's rejection of those changes is not a rejection by this fork.
 
-Size is irrelevant: a one-word fix and a rewrite face the same bar. Reactions and +1 comments do not count towards it.
+## Distribution
 
-## By bucket
+- `engineering/` and `productivity/` are promoted and distributed in the Pi package.
+- `in-progress/` is public beta content, excluded from the package and top-level README.
+- `misc/`, `deprecated/`, and `personal/` are excluded; manual use is not a supported package route.
 
-- **`engineering/`, `productivity/`, `in-progress/`**: the bar above.
-- **`misc/`**: frozen and unmaintained. Every issue is closed. See [`frozen-misc-skills.md`](./.out-of-scope/frozen-misc-skills.md).
-- **New skills**: proposals and contributions are closed. If the behaviour composes from existing skills, it does not get a new one. See [`new-skills.md`](./.out-of-scope/new-skills.md).
+## Upstream policy records
 
-## Already decided
+The files under `.out-of-scope/` record upstream design choices. They are useful historical context, not binding fork policy when they conflict with Pi compatibility. Evaluate the concrete Pi impact instead of automatically closing a request because upstream rejected a similar concept.
 
-Each file in [`.out-of-scope/`](./.out-of-scope/) records one rejected concept and why. Read them before filing:
+## Repository automation
 
-- [`frozen-misc-skills.md`](./.out-of-scope/frozen-misc-skills.md)
-- [`harness-name-collisions.md`](./.out-of-scope/harness-name-collisions.md)
-- [`mainstream-issue-trackers-only.md`](./.out-of-scope/mainstream-issue-trackers-only.md)
-- [`native-question-tool.md`](./.out-of-scope/native-question-tool.md)
-- [`new-skills.md`](./.out-of-scope/new-skills.md)
-- [`question-limits.md`](./.out-of-scope/question-limits.md)
-- [`setup-skill-verify-mode.md`](./.out-of-scope/setup-skill-verify-mode.md)
-- [`subagent-recursion.md`](./.out-of-scope/subagent-recursion.md)
-
-## Unclear issues
-
-An issue that can't be judged against the bar gets one round of questions and the `needs-info` label. With no reply from the reporter in 14 days, it is closed. Rejections close as "not planned".
+Upstream-only issue-management and publishing workflows are excluded. There is no automatic 14-day issue closure in this fork. Any future fork automation must demonstrably support Pi consumption and be introduced explicitly.
