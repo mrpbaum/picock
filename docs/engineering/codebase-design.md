@@ -69,7 +69,7 @@ It does now, but for a long time it did not. v1.0 removed the inline deep-module
 
 **Does the design-it-twice pattern work outside Claude Code?**
 
-This fork inspects the available tools. With the Pi subagents extension, design passes run in isolated sessions. Without it, the skill discloses a degraded sequential mode and keeps each design in a separate temporary note before comparing them. Sequential passes are not equivalent to independent sessions. The upstream portability limitation is tracked in [issue #564](https://github.com/mattpocock/skills/issues/564).
+Pi's design-it-twice workflow requires `@tintinweb/pi-subagents`, the fork's sole supported backend. Design passes run in independent sessions; if the backend is unavailable, the workflow stops and reports the prerequisite rather than substituting sequential passes. The skill's standalone design vocabulary remains usable without dispatch. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
 
 **Can I add my own concepts to the glossary, such as connascence, module secrets, [progressive disclosure](https://www.aihero.dev/ai-coding-dictionary/progressive-disclosure)?**
 

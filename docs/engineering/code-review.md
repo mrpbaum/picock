@@ -4,6 +4,8 @@
 
 The skill never merges or re-ranks the two axes. The report ends with a worst issue *per axis* and declines to name a single winner across them. A change can pass one axis and fail the other. Code that follows every convention but implements the wrong thing passes Standards and fails Spec. Code that does exactly what the [ticket](https://www.aihero.dev/ai-coding-dictionary/ticket) asked but breaks the repo's conventions does the reverse. A blended verdict lets the passing axis hide the failing one.
 
+Pi requires `@tintinweb/pi-subagents`, the sole supported backend, for its independent review passes. If unavailable, the review stops with a prerequisite report; sequential passes are not a supported substitute. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
+
 ## When to reach for it
 
 In Pi, invoke `/skill:code-review`; the bare `/code-review` examples below apply to skills.sh-installed harnesses. The agent can also reach for it automatically for review tasks.

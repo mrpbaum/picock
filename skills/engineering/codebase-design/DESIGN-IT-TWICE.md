@@ -20,9 +20,7 @@ Show this to the user, then immediately proceed to Step 2.
 
 Produce 3+ **radically different** interfaces for the deepened module.
 
-If the `Agent` tool is available, send all design passes as parallel `Agent` calls in one message, using `subagent_type: "general-purpose"` and an independent prompt for each constraint. In Pi, install [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents) with `pi install npm:@tintinweb/pi-subagents` and restart Pi to provide the same Claude-compatible tool and isolated sessions.
-
-If the `Agent` tool is unavailable, tell the user about the Pi extension and run the passes sequentially in degraded mode. Write the shared technical brief and each constraint to separate temporary notes. For each pass, start from the shared brief without reading earlier designs, save the result to its own note, and only read all designs after every pass is complete. This prevents an early design from anchoring the later ones. Delete the temporary notes after comparison.
+In Pi, follow the [required subagent backend contract](../PI-SUBAGENTS.md); stop if unavailable. Send all design passes as parallel `Agent` calls with `subagent_type: "general-purpose"`, `run_in_background: false`, and an independent prompt for each constraint.
 
 Give each pass the same technical brief (file paths, coupling details, dependency category from [DEEPENING.md](DEEPENING.md), what sits behind the seam) but a different design constraint:
 

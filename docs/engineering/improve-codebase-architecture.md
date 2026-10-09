@@ -89,7 +89,7 @@ Rarely, so know that before you start. The skill exists to output findings, so i
 
 **Does it work in Codex or another harness?**
 
-This fork uses available exploration tools and explicitly falls back to direct exploration when subagents are unavailable. Pi can provide isolated exploration through its subagents extension. The fallback remains useful, but it is not parallel or context-isolated.
+Pi requires `@tintinweb/pi-subagents` for isolated exploration. It is the sole supported backend; if unavailable, the workflow stops and reports the missing prerequisite rather than substituting direct exploration. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
 
 **How do I actually implement deep modules in TypeScript?**
 

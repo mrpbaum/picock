@@ -14,7 +14,7 @@ The tickets are not a list of steps. They are a **task graph** with blocking rel
 
 Communication to and from subagents should be sparse. Communicate primarily through **context pointers**: to the spec, tickets, research notes, and previous commits. Don't duplicate information already available via pointers.
 
-Inspect the available subagent and worktree tools before starting. This skill requires isolated implementers; if the harness cannot provide them, stop and offer the user the `implement` skill per ticket instead of pretending to run concurrent work. Use background implementers when supported, following the host's lifecycle and result-delivery rules. The coordinator owns integration, verification, publication, and worktree cleanup.
+Follow the [required Pi subagent backend contract](../PI-SUBAGENTS.md). Stop if its agent/worktree capabilities are unavailable. Use `@tintinweb/pi-subagents` background implementers with worktree isolation.
 
 ## Steps
 
@@ -27,9 +27,9 @@ Inspect the available subagent and worktree tools before starting. This skill re
 4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
    - starts from the recorded committed integration-branch tip in its own worktree; if the base is wrong, reports it to the coordinator instead of resetting potentially dirty work;
    - reads and applies the `tdd` skill to build the ticket;
-   - runs the ticket's checks, commits its work, and reports its base/head SHAs and verification evidence. It does not push, integrate other branches, or remove worktrees unless the host and coordinator explicitly authorize that task.
+   - merges the current integration tip into its own branch, runs the ticket's checks, and reports its base/head SHAs and verification evidence. The backend auto-commits worktree changes on completion; verify the resulting branch/head before integration.
 
-5. Once an implementer completes, inspect its diff and evidence, integrate it on the integration branch, and run relevant checks. Serialize integration writes. A dedicated merger may perform this bounded task only when the host supports it and the coordinator explicitly authorizes it. Reconcile conflicts against the current integration tip; parallel results are not guaranteed fast-forwards.
+5. Once an implementer completes, use a merger subagent to inspect its diff and evidence, integrate it on the integration branch, and run relevant checks. Run one merger at a time, with explicit authority to write the integration branch. Reconcile conflicts against the current integration tip; parallel results are not guaranteed fast-forwards.
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
@@ -37,4 +37,4 @@ Inspect the available subagent and worktree tools before starting. This skill re
 
 8. Follow the configured completion gates. Mark an existing PR or merge request ready only after verification; leave PR-linked issues open until its merge. For local/custom trackers, record completion and evidence before any allowed closure. Report the integration branch and remaining human gates.
 
-9. After all implementers have exited and integration is verified, clean up worktrees through the host's supported tools and authorization rules. Preserve dirty/unintegrated work; report any retained workspace.
+9. After all implementers have exited and integration is verified, clean up worktrees using the required backend's documented lifecycle. Preserve dirty/unintegrated work; report any retained workspace.

@@ -26,12 +26,14 @@ If you want to keep up with changes to these skills, and any new ones I create, 
 
 This fork is distributed for Pi. It is not intended to be installed into Claude Code, and Claude Code plugin references from upstream can be ignored for this fork.
 
-Install the package, plus [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents) for the Claude-compatible `Agent` tools used by parallel review, exploration, design, and research workflows:
+Install the package and its **required subagent backend**, [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents). This is the sole supported Pi subagent extension for this fork, not an optional alternative. Review, exploration, parallel design, research, and spec implementation use its `Agent` tools:
 
 ```bash
 pi install git:github.com/p-baum/picock
 pi install npm:@tintinweb/pi-subagents
 ```
+
+The subagent dependency is installed separately, not automatically by this skills package. If it is missing or unavailable, affected workflows stop with installation instructions rather than silently running sequentially or switching backends. See the [shared backend contract](./skills/engineering/PI-SUBAGENTS.md).
 
 The Pi package manifest discovers skills broadly while excluding the `deprecated`, `in-progress`, `misc`, and `personal` buckets. Skills in those excluded buckets, including `git-guardrails-pi`, are manual-only and are not installed with the package.
 

@@ -12,6 +12,8 @@ Before stating what a skill does or recommending a step be skipped, read that sk
 
 A **flow** is a path through the skills. Most paths run along one **main flow**, and two **on-ramps** merge onto it. Everything else is standalone, or a vocabulary layer that runs underneath.
 
+Pi subagent workflows require `@tintinweb/pi-subagents`; follow the [shared backend contract](../PI-SUBAGENTS.md). Do not route users to silent sequential fallbacks or substitute another extension.
+
 Route labels below are skill names, not literal commands. Model-invoked dependencies are loaded by reading their SKILL.md and applying the instructions, not by typing a bare slash command. For context resets, Pi uses `/new` or a fresh session, not Claude's `/clear`; `/compact` is available in Pi. In Pi, tell the user to invoke a route as `/skill:<name>`; in Claude Code and harnesses where skills.sh installs bare commands, tell them to use `/<name>`.
 
 ## The main flow: idea → ship
