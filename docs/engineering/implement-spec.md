@@ -29,9 +29,9 @@ Everything lands on one branch. Each implementer:
 
 1. confirms its worktree is based on the integration branch before it starts,
 2. builds its ticket with [tdd](https://aihero.dev/skills-tdd), red-green one slice at a time,
-3. runs its checks, commits, and reports its base/head SHAs and evidence to the coordinator.
+3. merges the current integration tip into its branch, runs its checks, and reports base/head SHAs and evidence. The supported backend auto-commits isolated worktree changes on completion.
 
-The coordinator verifies each diff, serializes integration, and checks the integrated result. Parallel branches can conflict, so fast-forward merges are not guaranteed. Workers do not reset dirty work or publish branches by default.
+A merger subagent verifies each diff, integrates it, and checks the integrated result. Only one merger writes the integration branch at a time. Parallel branches can conflict, so fast-forward merges are not guaranteed. Dirty work is preserved rather than reset.
 
 The configured tracker decides the review and completion workflow: GitHub uses PRs, GitLab uses merge requests, and local/custom trackers can stop on the integration branch. A draft review request opens only after there is an integrated change to review. Readiness, evidence, and issue closure follow the tracker's completion gates; PR-linked issues remain open until merge.
 
