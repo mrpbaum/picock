@@ -6,6 +6,8 @@ The skill never merges or re-ranks the two axes. The report ends with a worst is
 
 ## When to reach for it
 
+In Pi, invoke `/skill:code-review`; the bare `/code-review` examples below apply to skills.sh-installed harnesses. The agent can also reach for it automatically for review tasks.
+
 Type `/code-review`, or the agent reaches for it automatically when you ask to review a branch, a PR, work in progress, or anything "since X".
 
 | Your situation | Reach for |

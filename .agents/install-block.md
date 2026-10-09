@@ -1,5 +1,7 @@
 # The canonical install block
 
+This reference describes upstream Claude/skills.sh installation surfaces, not this fork's Pi distribution. For the fork, README.md's Pi package workflow is authoritative; package.json excludes misc, in-progress, deprecated, and personal buckets. Claims below about upstream Pi discovery or release Actions do not apply to this fork.
+
 One install story, one wording. `README.md`, `.changeset/*`, and every page under `docs/` must say **this** and nothing else. Change it here first, then propagate.
 
 ## Managed installs first

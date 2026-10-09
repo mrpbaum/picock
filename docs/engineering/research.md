@@ -6,6 +6,8 @@ It does not answer you in the conversation. The output is a file, written where 
 
 ## When to reach for it
 
+In Pi, invoke `/skill:research`; in skills.sh-installed harnesses, use `/research`. The agent can also reach for it automatically for research tasks. Without a subagent tool, this fork performs the research in the current session and reports that it is not running in the background.
+
 Type `/research`, or the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reaches for it automatically when a task turns into reading legwork.
 
 Reach for it when the next step is *finding something out* from outside the working directory (how a third-party API behaves, what a spec says, whether a version claim holds), and you'd rather not stall your own thread doing the reading. What you need decides which skill:
