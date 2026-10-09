@@ -47,7 +47,7 @@ Check:
 - Top-level/bucket READMEs, promoted docs, invocation metadata, and `ask-matt` routing.
 - Tool assumptions: Claude-only APIs, subagents, hooks, browser access, paths, and authentication.
 - Installation/setup changes against `setup-matt-pocock-skills`.
-- Existing adaptations and their intent, using history and `docs/pi-compatibilty-review.md` as historical evidence, not current truth.
+- Existing adaptations and their intent, using history and `docs/pi-compatibilty.md` as historical evidence, not current truth.
 - Cross-cutting renames across all active readers/writers and pointers. Preserve historical references where explicitly historical; record migration requirements for consumers.
 
 Classify **every incoming file** in the draft PR body:
