@@ -26,14 +26,14 @@ Inspect the available subagent and worktree tools before starting. This skill re
 
 4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
    - starts from the recorded committed integration-branch tip in its own worktree; if the base is wrong, reports it to the coordinator instead of resetting potentially dirty work;
-   - calls the Skill tool with `tdd` to build the ticket;
+   - reads and applies the `tdd` skill to build the ticket;
    - runs the ticket's checks, commits its work, and reports its base/head SHAs and verification evidence. It does not push, integrate other branches, or remove worktrees unless the host and coordinator explicitly authorize that task.
 
 5. Once an implementer completes, inspect its diff and evidence, integrate it on the integration branch, and run relevant checks. Serialize integration writes. A dedicated merger may perform this bounded task only when the host supports it and the coordinator explicitly authorizes it. Reconcile conflicts against the current integration tip; parallel results are not guaranteed fast-forwards.
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Once all tickets are complete, call the Skill tool with `code-review` on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
+7. Once all tickets are complete, read and apply the `code-review` skill on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
 
 8. Follow the configured completion gates. Mark an existing PR or merge request ready only after verification; leave PR-linked issues open until its merge. For local/custom trackers, record completion and evidence before any allowed closure. Report the integration branch and remaining human gates.
 
