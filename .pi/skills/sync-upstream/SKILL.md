@@ -23,8 +23,9 @@ Update this fork from `mattpocock/skills` for **Pi consumption**, preserving the
 3. Inspect remotes and verify `origin` is the intended fork. Remotes live in each clone's `.git/config`, so another machine's `upstream` configuration does not carry over. When missing, add `https://github.com/mattpocock/skills.git` after user confirmation; confirm before repairing a different upstream fetch URL. Leave `origin` unchanged.
 4. Fetch and prune both remotes. Discover their default branches rather than assuming `main`.
 5. Record endpoint SHAs and commits in `origin/<default>..upstream/<default>`. Inventory incoming files from the merge-base to upstream, not a tip-to-tip diff that mistakes fork-only adaptations for upstream deletions. Also inspect upstream commits for changes later reverted.
+6. Use the complete `assess-compatibilty` skill against the exact upstream endpoint. Run it even when no upstream commits remain: it checks marker and document freshness, refreshes the ledger when stale, and reports already consolidated when current. A failed assessment or an inconsistent marker blocks sync; do not reset the marker manually.
 
-**Done:** clean worktree, exact endpoints, commit range, and incoming file inventory. If no upstream commits remain, report current and stop without branches or GitHub items.
+**Done:** clean worktree, exact endpoints, commit range, incoming file inventory, and a compatibility ledger consolidated through the exact upstream endpoint. If no upstream commits remain and the ledger is current, report current and stop without branches or GitHub items.
 
 ## 2. Prepare the draft sync
 
@@ -34,6 +35,8 @@ Update this fork from `mattpocock/skills` for **Pi consumption**, preserving the
 4. Push only to the fork and open a draft PR against its default branch. Include endpoints, commit range, conflict resolutions, excluded automation, checks, and: **merge this PR with GitHub's "Create a merge commit" option only**.
 
 Use `GH_TOKEN="$PI_GITHUB_PAT" gh ...` when token authentication is needed. Keep credentials out of logs and remote URLs. If GitHub rejects workflow changes, inspect the fork-relative final workflow diff before requesting broader permission. Report the actual rejection; do not assume preserving ancestry necessarily requires retaining workflow files or a broader PAT.
+
+If assessment changed `docs/pi-compatibilty.md` and `.pi/skills/assess-compatibilty/last-consolidated.sha`, include both together in this draft sync. Do not commit either alone, and do not advance the marker independently of its ledger. Their inclusion does not make the ledger a fork-adaptation audit.
 
 **Done:** draft fork PR containing the real upstream merge, with provenance and validation recorded. On authentication failure, preserve local work and report the blocker.
 
@@ -47,7 +50,7 @@ Check:
 - Top-level/bucket READMEs, promoted docs, invocation metadata, and `ask-matt` routing.
 - Tool assumptions: Claude-only APIs, subagents, hooks, browser access, paths, and authentication.
 - Installation/setup changes against `setup-matt-pocock-skills`.
-- Existing adaptations and their intent, using history and `docs/pi-compatibilty.md` as historical evidence, not current truth.
+- Existing adaptations and their intent, using history and the freshly consolidated `docs/pi-compatibilty.md`. Use its current findings to focus the fork audit, then verify each affected adaptation against the merged tree. The ledger is upstream evidence, not proof that a fork fix survived or covers the change.
 - Cross-cutting renames across all active readers/writers and pointers. Preserve historical references where explicitly historical; record migration requirements for consumers.
 
 Classify **every incoming file** in the draft PR body:
@@ -73,7 +76,9 @@ For each independent confirmed gap:
 
 ## 5. Hand off the gate
 
-Update the sync PR with final classifications and remediation links. Mark ready only after the audit is complete, checks are reported, and every gap has an implementation PR on a branch feeding the sync branch. Ready for review does not mean remediation PRs have already merged.
+Re-run the `assess-compatibilty` skill against the same upstream endpoint before handoff. If it reports already consolidated, continue. If it reports stale state, consolidate it and include the resulting document/marker pair before proceeding. If it cannot consolidate, keep the sync draft and report the blocker.
+
+Update the sync PR with final classifications, remediation links, and the compatibility marker/baseline. Mark ready only after the audit is complete, checks are reported, the marker matches the upstream endpoint and document baseline, and every gap has an implementation PR on a branch feeding the sync branch. Ready for review does not mean remediation PRs have already merged.
 
 Return the sync URL, endpoints/range, compatibility summary, issue/PR pairs, checks, and merge-order checklist:
 

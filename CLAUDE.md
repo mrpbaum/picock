@@ -6,7 +6,7 @@ Skills are organized into bucket folders under `skills/`:
 - `in-progress/`: beta: public on purpose, feedback wanted, not shipped in the plugin
 - `deprecated/`: no longer used
 
-Repository-maintenance skills live in `.pi/skills/`, outside the distributed `skills/` tree. Keep them out of package manifests, global skill linking, public skill listings, and the `ask-matt` router. `sync-upstream` is available only when working in this repo: invoke `/skill:sync-upstream`. See [the maintenance guide](./docs/maintenance/sync-upstream.md).
+Repository-maintenance skills live in `.pi/skills/`, outside the distributed `skills/` tree. Keep them out of package manifests, global skill linking, public skill listings, and the `ask-matt` router. `sync-upstream` is available only when working in this repo: invoke `/skill:sync-upstream`. It uses the repository-only `assess-compatibilty` skill to keep `docs/pi-compatibilty.md` and `.pi/skills/assess-compatibilty/last-consolidated.sha` current before auditing the fork. See [the maintenance guide](./docs/maintenance/sync-upstream.md).
 
 The `engineering/setup-matt-pocock-skills` skill contains remediations for installing on non claude agents. Before making code changes to improve pi compatibilty always check if this skill impacts the changes being considered.
 

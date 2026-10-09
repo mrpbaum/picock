@@ -10,6 +10,8 @@ This guide and the [repository-local skill](../../.pi/skills/sync-upstream/SKILL
 
 Start Pi in this repo, trust its project resources, and invoke `/skill:sync-upstream`. Run `/reload` if Pi was already open when the skill moved. Pi discovers it from `.pi/skills/`; package installation and global skill linking do not expose it elsewhere. The agent won't reach for it on its own.
 
+Every run uses the repository-only `assess-compatibilty` skill. It compares the upstream endpoint with `.pi/skills/assess-compatibilty/last-consolidated.sha` and `docs/pi-compatibilty.md`, refreshes the ledger when stale, and advances the marker only after validation. A current marker is a successful no-op, not a skipped check.
+
 Reach for it whenever this fork needs to catch up with upstream while preserving its Pi-specific distribution and harness adaptations.
 
 ## Prerequisites
@@ -18,7 +20,7 @@ Run it in this fork with clean working state, `origin` pointing to the fork, and
 
 ## The compatibility gate
 
-The upstream merge first becomes a draft PR. Every changed file is then classified as compatible, already adapted, or requiring remediation. The audit covers skill discovery, invocation syntax, manifests, linking, setup behavior, tool assumptions, and prior Pi adaptations.
+The upstream merge first becomes a draft PR. Every changed file is then classified as compatible, already adapted, or requiring remediation. The freshly consolidated compatibility ledger focuses that audit, but fork history and the merged tree remain the evidence for whether an adaptation survived. The audit covers skill discovery, invocation syntax, manifests, linking, setup behavior, tool assumptions, and prior Pi adaptations.
 
 Confirmed gaps receive separate issues and implementation PRs stacked into the sync branch. The merge order is deliberate: remediation PRs first, sync PR last.
 
@@ -41,6 +43,7 @@ No. A merge commit preserves upstream ancestry independently of the files retain
 - Every changed file has an evidence-backed compatibility classification.
 - Each real compatibility gap has one issue and one focused PR.
 - The sync remains draft until the compatibility gate is complete.
+- The compatibility ledger and consolidation marker agree on the exact upstream endpoint, including runs with no new upstream commits.
 - Only the fork receives pushed branches and PRs; upstream-only administration is absent from the resulting tree.
 - After the sync PR is merged with a merge commit, the recorded upstream endpoint is an ancestor of the fork's default branch.
 

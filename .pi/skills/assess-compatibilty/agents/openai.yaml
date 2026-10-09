@@ -1,0 +1,3 @@
+interface:
+  display_name: "Assess Compatibility"
+  short_description: "Refresh the upstream Pi compatibility ledger"
