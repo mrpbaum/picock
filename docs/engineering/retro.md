@@ -6,7 +6,7 @@ It changes the environment, not the code. Take the bug the agent shipped, the fi
 
 ## When to reach for it
 
-You invoke this by typing `/retro`, and the agent won't reach for it on its own.
+In Pi, invoke `/skill:retro`; in skills.sh-installed harnesses, use `/retro`. The agent won't reach for it on its own.
 
 Reach for it at the end of a session that was harder than it should have been. For example, the agent searched too long for something, made a mistake a tool could have caught, or needed information it could not get. A smooth session has little to teach, and the findings come from the difficult ones. If you want a verdict on the code the session produced, use [code-review](https://aihero.dev/skills-code-review) instead.
 

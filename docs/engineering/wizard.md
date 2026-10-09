@@ -6,6 +6,8 @@ The [agent](https://www.aihero.dev/ai-coding-dictionary/agent) writes the script
 
 ## When to reach for it
 
+In Pi, invoke `/skill:wizard`; in skills.sh-installed harnesses, use `/wizard`. The agent can also reach for it automatically for human-only setup steps.
+
 You can type `/wizard`, and the agent can also reach for it on its own. When it hits a step you have to take (a key it can't mint, a dashboard it can't click), it builds you a wizard instead of writing the instructions into the chat, where they scroll away.
 
 Reach for it when the next thing blocking you is a trip through a dashboard:

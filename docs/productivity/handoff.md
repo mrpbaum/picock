@@ -6,7 +6,9 @@ What it gives you is **portability**, not compression, so the skill is narrower 
 
 ## When to reach for it
 
-You invoke this by typing `/handoff`; the agent won't reach for it on its own. Pass a note about what the next session is for, and the skill writes the document for that purpose.
+The `/clear` comparisons below use Claude terminology. Pi starts a fresh conversation with `/new` or a new session; use `/skill:handoff` for the handoff itself.
+
+In Pi, invoke `/skill:handoff`; in skills.sh-installed harnesses, use `/handoff`. The agent won't reach for it on its own. Pass a note about what the next session is for, and the skill writes the document for that purpose.
 
 There are four triggers, and only four:
 

@@ -24,6 +24,11 @@ The body reuses the leading words already in your global `CLAUDE.md` and your pr
 
 If you have no `GLOSSARY.md` (and no `GLOSSARY-MAP.md` pointing to one for the context at hand), the skill still works. You lose only the domain-vocabulary half.
 
+## Common questions
+
+**Does it need a project glossary?**
+No. Without `GLOSSARY.md` (or a `GLOSSARY-MAP.md` pointing to one), it still explains the missing context in plain English. It just cannot reuse project-specific vocabulary from a glossary.
+
 ## It's working if
 
 - The re-pitch is **shorter and clearer**, not shorter and blunter.
