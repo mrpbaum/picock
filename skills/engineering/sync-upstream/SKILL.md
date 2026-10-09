@@ -13,7 +13,7 @@ This skill is specific to the `p-baum/picock` fork of `mattpocock/skills`. The f
 ## 1. Establish the sync range
 
 - Require a clean worktree. Stop and report any local changes rather than stashing them.
-- Inspect `git remote -v`; verify `origin` is the fork and `upstream` is `mattpocock/skills`. Add or repair only the `upstream` fetch remote after confirming with the user.
+- Inspect `git remote -v`; verify `origin` is the fork and `upstream` is `mattpocock/skills`. Git remotes are local checkout configuration stored in `.git/config`, so an `upstream` remote added on another machine will not appear here. If `upstream` is missing, explain that locality, then add `https://github.com/mattpocock/skills.git` as the fetch remote after confirming with the user. Repair only the `upstream` fetch remote after confirming with the user.
 - Fetch `origin` and `upstream`, including pruning stale remote refs.
 - Read the repository instructions and the complete `setup-matt-pocock-skills` skill before assessing compatibility.
 - Identify the fork's default branch and upstream's default branch from the remotes rather than assuming `main`.

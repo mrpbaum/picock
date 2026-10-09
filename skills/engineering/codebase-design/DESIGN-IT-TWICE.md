@@ -31,7 +31,7 @@ Give each pass the same technical brief (file paths, coupling details, dependenc
 - Agent 3: "Optimise for the most common caller: make the default case trivial."
 - Agent 4 (if applicable): "Design around ports & adapters for cross-seam dependencies."
 
-Include both [SKILL.md](SKILL.md) vocabulary and CONTEXT.md vocabulary in the brief so each pass names things consistently with the architecture language and the project's domain language.
+Include both [SKILL.md](SKILL.md) vocabulary and GLOSSARY.md vocabulary in the brief so each pass names things consistently with the architecture language and the project's domain language.
 
 Each pass outputs:
 
