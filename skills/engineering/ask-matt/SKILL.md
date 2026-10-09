@@ -67,7 +67,7 @@ Not feature work, just upkeep.
 
 ## Fork maintenance
 
-- **`sync-upstream`**: periodically bring `mattpocock/skills` into this fork through a **compatibility gate**. It opens a draft sync PR, audits every incoming file for Pi impact, and creates focused issue/PR pairs for confirmed adaptations before the sync is ready. Use it for upstream maintenance, not ordinary dependency updates or feature work.
+- **`sync-upstream`**: periodically bring `mattpocock/skills` into this fork through a **compatibility gate**. It opens a draft sync PR, audits every incoming file for Pi impact, and creates focused issue/PR pairs for confirmed adaptations before the sync is ready. Upstream is read-only: it pushes only to this fork and excludes upstream-only administration workflows. Use it for upstream maintenance, not ordinary dependency updates or feature work.
 
 ## Vocabulary underneath
 
