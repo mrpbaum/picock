@@ -14,7 +14,7 @@ The tickets are not a list of steps. They are a **task graph** with blocking rel
 
 Communication to and from subagents should be sparse. Communicate primarily through **context pointers**: to the spec, tickets, research notes, and previous commits. Don't duplicate information already available via pointers.
 
-**Implementer subagents** should be run in the background where possible for maximum concurrency.
+Follow the [required Pi subagent backend contract](../PI-SUBAGENTS.md). Stop if its agent/worktree capabilities are unavailable. Use `@tintinweb/pi-subagents` background implementers with worktree isolation, not another host's lifecycle APIs.
 
 ## Steps
 

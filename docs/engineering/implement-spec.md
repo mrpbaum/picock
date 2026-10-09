@@ -4,6 +4,8 @@
 
 It reads the tickets as a **task graph**, not a list. Blocking edges decide what can start, so at any moment there is a **frontier** of tickets whose blockers have all landed, and every ticket on the frontier runs at once. That is the difference from working the tickets one by one. The graph's shape sets the pace, not the tickets' order on the tracker.
 
+Pi requires `@tintinweb/pi-subagents`, including its worktree isolation capability. This is the sole supported subagent backend; the workflow stops if it is unavailable. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
+
 ## When to reach for it
 
 You invoke this by typing `/implement-spec`, and the agent won't reach for it on its own.

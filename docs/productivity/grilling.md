@@ -4,6 +4,8 @@
 
 It does not ask one question at a time, and it does not ask everything at once. Each **round** asks the whole **frontier**: every decision whose prerequisites are already settled, and nothing else. Two questions never share a round if one depends on the other; a question that hinges on an answer still open belongs to a later round. Your answers settle decisions, the frontier moves outward, and the next round asks what that unblocked. Thirteen questions typically land in about three rounds rather than thirteen.
 
+Fact-finding delegation in Pi requires `@tintinweb/pi-subagents`, the fork's sole supported backend. If it is unavailable, that workflow stops with a prerequisite report rather than switching to a sequential substitute. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
+
 ## When to reach for it
 
 In Pi, invoke `/skill:grilling`; the bare `/grilling` examples below apply to skills.sh-installed harnesses.

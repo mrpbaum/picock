@@ -8,6 +8,8 @@
 It recommends and stops. It does not grill, write a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), open a file or fire the skill it just named; what you get back is the next thing to type, and you type it. It is also a hand-written map of the skills in this repo rather than a scan of what you have installed, so it will not route you over your own skills or another author's.
 
 
+Pi subagent workflows require `@tintinweb/pi-subagents`, the sole supported backend. The router does not offer another backend or silent sequential substitutes for those workflows. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
+
 ## When to reach for it
 
 In Pi, invoke it with `/skill:ask-matt`. In Claude Code and harnesses where skills.sh installs bare commands, use `/ask-matt`. The agent won't reach for it on its own.

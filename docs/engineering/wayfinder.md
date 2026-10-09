@@ -4,6 +4,8 @@
 
 It plans and does not build. Every ticket asks a question, and the answer is a decision, not a slice of a build. The map is finished when nothing is left to decide before someone builds the thing. This rule separates a wayfinder ticket from an ordinary implementation [ticket](https://www.aihero.dev/ai-coding-dictionary/ticket), and it is the rule agents break most often. When the map clears, wayfinder hands off and does not continue into code.
 
+Dispatching research in Pi requires `@tintinweb/pi-subagents`, the fork's sole supported backend. The research workflow stops if unavailable instead of silently running in the parent session. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
+
 ## When to reach for it
 
 In Pi, invoke `/skill:wayfinder`; the bare `/wayfinder` examples below apply to skills.sh-installed harnesses. This is user-invoked.
