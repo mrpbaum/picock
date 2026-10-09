@@ -1,3 +1,5 @@
+
+
 ## What it does
 
 `to-spec` turns the conversation you have just had into a **[spec](https://www.aihero.dev/ai-coding-dictionary/spec)**, and publishes it to your issue tracker as a single issue.
@@ -6,7 +8,9 @@ It does not interview you. When you reach for it, the deciding is already done. 
 
 ## When to reach for it
 
-You invoke this by typing `/to-spec`; the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) won't reach for it on its own.
+
+In Pi, invoke it with `/skill:to-spec`. In Claude Code and harnesses where skills.sh installs bare commands, use `/to-spec`. The agent won't reach for it on its own.
+
 
 Reach for it when the build is too big for one agent [session](https://www.aihero.dev/ai-coding-dictionary/session) and must be split across several. That is the whole trigger:
 

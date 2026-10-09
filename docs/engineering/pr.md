@@ -6,7 +6,7 @@ The summary is a visual, not a paragraph. A default PR body describes the diff i
 
 ## When to reach for it
 
-Type `/pr`, or the agent reaches for it automatically whenever it is writing a PR body.
+In Pi, invoke `/skill:pr`; in skills.sh-installed harnesses, use `/pr`. The agent can also reach for it automatically whenever it is writing a PR body.
 
 | Your situation | Reach for |
 | --- | --- |

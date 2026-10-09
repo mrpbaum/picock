@@ -1,4 +1,4 @@
-> **Archived.** This skill was removed from the plugin in v1.3.0 and is no longer maintained. Nothing replaces it: the agent works through a merge or rebase conflict without a dedicated skill. The page stays up for reference.
+> **Retained in this Pi fork.** Upstream removed the skill in v1.3.0, but this fork continues to distribute it for intent-based conflict resolution.
 
 ## What it does
 
@@ -7,6 +7,8 @@
 It refuses to treat a conflict as a text problem. Before touching a hunk it traces each side back to its **[primary source](https://www.aihero.dev/ai-coding-dictionary/primary-source)** (the commit message, the PR, the original issue), so it is choosing between two intents rather than between two blocks of text, and it preserves both wherever they are compatible. Where they are not, it picks the side matching the merge's stated goal and names the trade-off. It invents no new behaviour to hide a clash, and it never uses `--abort`. It always takes the merge to a finished commit.
 
 ## When to reach for it
+
+In Pi, invoke `/skill:resolving-merge-conflicts`; in skills.sh-installed harnesses, use `/resolving-merge-conflicts`. The agent can also reach for it automatically during a merge or rebase conflict.
 
 Type `/resolving-merge-conflicts`, or the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reaches for it automatically when a task fits.
 

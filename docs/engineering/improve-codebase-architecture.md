@@ -8,6 +8,8 @@ Two filters stop the report from becoming generic cleanup advice. First, every c
 
 ## When to reach for it
 
+In Pi, invoke `/skill:improve-codebase-architecture`; in skills.sh-installed harnesses, use `/improve-codebase-architecture`. This is user-invoked.
+
 You invoke this by typing `/improve-codebase-architecture`; the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) will not reach for it on its own.
 
 It is not a step in the main build loop. You run it periodically to queue up more work that improves the codebase. People use it in four situations:
@@ -87,7 +89,7 @@ Rarely, so know that before you start. The skill exists to output findings, so i
 
 **Does it work in Codex or another harness?**
 
-Partly. The exploration step names Claude Code's `Agent` tool with `subagent_type=Explore` directly. A [harness](https://www.aihero.dev/ai-coding-dictionary/harness) without that tool may skip the parallel exploration instead of using its own equivalent. The skill still runs, but the scan is less thorough. Someone has proposed a harness-neutral rewrite, but it is not merged.
+Pi requires `@tintinweb/pi-subagents` for isolated exploration. It is the sole supported backend; if unavailable, the workflow stops and reports the missing prerequisite rather than substituting direct exploration. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
 
 **How do I actually implement deep modules in TypeScript?**
 

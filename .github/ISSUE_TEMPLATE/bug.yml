@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Bugs in `skills/misc/` are not fixed (see [`.out-of-scope/frozen-misc-skills.md`](https://github.com/mattpocock/skills/blob/main/.out-of-scope/frozen-misc-skills.md)). Installer problems with `npx skills` belong at skills.sh.
+        Report Pi package and fork compatibility problems here. Excluded buckets are manual-only; see [fork scope](https://github.com/mrpbaum/picock/blob/main/SCOPE.md). Redact credentials and personal information from session excerpts.
   - type: input
     id: skill
     attributes:
@@ -17,7 +17,7 @@ body:
     id: harness
     attributes:
       label: Harness and version
-      description: e.g. Claude Code 2.3.1, Codex CLI 0.40, Cursor. Say how you installed (plugin or skills.sh) and which skills version.
+      description: Pi version, package version or commit, and installation method (Pi package or manually linked skills).
     validations:
       required: true
   - type: input

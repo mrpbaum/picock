@@ -5,6 +5,10 @@ disable-model-invocation: true
 argument-hint: "What would you like to learn about?"
 ---
 
+## Usage
+
+In Pi, invoke `/skill:teach <topic to learn>`, for example `/skill:teach TypeScript generics`. If no topic is passed, ask the user what they want to learn.
+
 The user has asked you to teach them something. This is a stateful request - they intend to learn the topic over multiple sessions.
 
 ## Teaching Workspace

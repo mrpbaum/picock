@@ -12,4 +12,4 @@ The skills speak in terms of five canonical triage roles. This file maps those r
 
 When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
 
-Judge every issue against [`SCOPE.md`](../../SCOPE.md) before picking a state. Rejections close as "not planned".
+Judge every issue against this fork's [`SCOPE.md`](../../SCOPE.md) before picking a state. Upstream `.out-of-scope/` records are historical context, not automatic rejection of Pi adaptations. Rejections close as "not planned" only after the maintainer confirms.

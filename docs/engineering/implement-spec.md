@@ -4,9 +4,11 @@
 
 It reads the tickets as a **task graph**, not a list. Blocking edges decide what can start, so at any moment there is a **frontier** of tickets whose blockers have all landed, and every ticket on the frontier runs at once. That is the difference from working the tickets one by one. The graph's shape sets the pace, not the tickets' order on the tracker.
 
+Pi requires `@tintinweb/pi-subagents`, including its worktree isolation capability. This is the sole supported subagent backend; the workflow stops if it is unavailable. See the [backend contract](https://github.com/mrpbaum/picock/blob/main/skills/engineering/PI-SUBAGENTS.md).
+
 ## When to reach for it
 
-You invoke this by typing `/implement-spec`, and the agent won't reach for it on its own.
+In Pi, invoke `/skill:implement-spec`. In harnesses where skills.sh installs bare commands, use `/implement-spec`. The agent won't reach for it on its own.
 
 | Your situation | Reach for |
 | --- | --- |
@@ -27,9 +29,11 @@ Everything lands on one branch. Each implementer:
 
 1. confirms its worktree is based on the integration branch before it starts,
 2. builds its ticket with [tdd](https://aihero.dev/skills-tdd), red-green one slice at a time,
-3. merges the integration branch tip into its own branch before reporting done, so landing it is a fast-forward.
+3. merges the current integration tip into its branch, runs its checks, and reports base/head SHAs and evidence. The supported backend auto-commits isolated worktree changes on completion.
 
-The tracker decides whether a pull request exists at all. If your tracker closes work through PRs, or you ask for one, the skill opens a draft PR after the first merge and marks it ready at the end. Otherwise the run stops on the integration branch with every ticket resolved the way your tracker closes work, which works fully offline against a local markdown tracker.
+A merger subagent verifies each diff, integrates it, and checks the integrated result. Only one merger writes the integration branch at a time. Parallel branches can conflict, so fast-forward merges are not guaranteed. Dirty work is preserved rather than reset.
+
+The configured tracker decides the review and completion workflow: GitHub uses PRs, GitLab uses merge requests, and local/custom trackers can stop on the integration branch. A draft review request opens only after there is an integrated change to review. Readiness, evidence, and issue closure follow the tracker's completion gates; PR-linked issues remain open until merge.
 
 Implementers talk to the orchestrator through [context pointers](https://www.aihero.dev/ai-coding-dictionary/context-pointer) (the spec, the ticket, shared exploration notes, earlier commits) rather than pasted summaries. This keeps each subagent's prompt small and leaves room in the orchestrator's window for the graph.
 
@@ -57,7 +61,7 @@ Worktrees don't remove collisions; they postpone them to merge time. A blocking 
 
 **Blocked tickets never start, even after their blocker has merged.**
 
-This is a known problem on GitHub. The tracker's blocked-by count only drops when a blocker *closes*, and tickets typically close when the PR merges, which is the end of the run. The tracker is the right source for the starting graph but a stale one mid-run. Tell the orchestrator to track which tickets have merged into the integration branch itself and compute the frontier from that.
+This is a known problem on GitHub. The tracker's blocked-by count only drops when a blocker *closes*, and tickets typically close when the PR merges, which is the end of the run. The tracker is the right source for the starting graph but can be stale mid-run. This fork instructs the orchestrator to compute the frontier from verified tickets integrated on the branch, rather than waiting for PR-linked issues to close.
 
 **Does this replace Sandcastle or an AFK script?**
 
@@ -72,8 +76,8 @@ A worktree holds only what git tracks. Tests that read gitignored fixtures, loca
 - Several implementers are running at once whenever the graph allows, not one after another.
 - A ticket starts as soon as its last blocker lands on the integration branch, not when the whole run ends.
 - Every ticket's trace shows `tdd` running, with a failing test before the code.
-- Merges into the integration branch are fast-forwards, not conflict resolutions.
-- The run ends on one branch with every ticket resolved, and a PR only if your tracker wanted one.
+- Integration writes are serialized and checked; conflicts are resolved by intent rather than hidden by resets.
+- The run ends on one verified branch with completion evidence and any remaining human gates recorded. PR-linked issues are not closed prematurely.
 
 ## Where it fits
 

@@ -16,9 +16,10 @@ Fill the template below, keeping its order. The **fixed frame** (`## What it doe
 
 Four sections make a page worth reading: `What it does`, `When to reach for it`, `Common questions`, `It's working if`. The first two orient the reader; the last two are where the page stops summarising the skill and starts answering the reader's own situation. Each of the last two has a bar to clear, below, but treat a page that clears neither as unfinished, not as finished-and-short.
 
-**A page carries no install commands.** The ai-hero page template renders the install widget itself (a copy button, the single-skill command, the whole-set command, and the update line) above the body. A page that also writes them out shows the reader the same command twice, and the two copies drift: the hand-written pair on every page went stale against the widget beside it. Install wording is a property of the site, not of the page. If it needs changing, change it in ai-hero; the canonical wording lives in [the install block](./install-block.md).
+**A page carries no install commands.** The ai-hero page template renders the install widget itself (a copy button, the single-skill command, the whole-set command, and the update line) above the body. A page that also writes them out shows the reader the same command twice, and the two copies drift. Install wording is a property of the site, not of the page. For Pi-facing docs, invocation examples must still use Pi's `/skill:<name>` syntax alongside the bare command used by skills.sh-installed harnesses.
 
 <page-template>
+
 
 ## What it does
 
@@ -28,7 +29,7 @@ One or two plain-language paragraphs. Lead with the skill's one-sentence job, th
 
 How and when you reach for the skill, in two beats that are both effectively always present:
 
-- **Invocation mode.** State whether you type it or the agent fires it. A user-invoked skill: "You invoke this by typing `/<name>`, and the agent won't reach for it on its own." A model-invoked skill: "Type `/<name>`, or the agent reaches for it automatically when a task fits."
+- **Invocation mode.** State both harness syntaxes and whether the agent fires it. A user-invoked skill: "In Pi, invoke it with `/skill:<name>`. In Claude Code and harnesses where skills.sh installs bare commands, use `/<name>`. The agent won't reach for it on its own." A model-invoked skill: "In Pi, invoke it with `/skill:<name>`. In Claude Code and harnesses where skills.sh installs bare commands, use `/<name>`. The agent can also reach for it automatically when a task fits."
 - **Trigger boundary.** The index entry: "reach for this when …". Where the skill is confusable with a sibling, add the other half: "for <X> instead, use [<sibling>](https://aihero.dev/skills-<sibling>)."
 
 ## Prerequisites
@@ -82,6 +83,8 @@ Always present. Situate the skill in the system in a sentence or two:
 
 - The page exists at `docs/<bucket>/<name>.md`, and no stale page survives a rename or bucket move.
 - The page carries no source link and writes no install command of its own.
+- The invocation line gives Pi's `/skill:<name>` syntax and the bare `/<name>` syntax used by Claude Code and skills.sh-installed harnesses.
+- Cross-skill dependencies use harness-neutral skill names, never bare slash commands.
 - `## What it does` states the defining constraint, as plain prose rather than a labelled aside.
 - The page names no author and quotes no author: every claim stands on its own.
 - `## When to reach for it` states invocation mode and the trigger boundary.

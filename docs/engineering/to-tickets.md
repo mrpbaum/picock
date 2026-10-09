@@ -1,3 +1,5 @@
+
+
 ## What it does
 
 `to-tickets` takes a plan, a [spec](https://www.aihero.dev/ai-coding-dictionary/spec), or the conversation you are in, and breaks it into a set of **[tickets](https://www.aihero.dev/ai-coding-dictionary/ticket)** on your issue tracker. Each ticket declares its **blocking edges**: the other tickets that have to finish before it can start.
@@ -6,7 +8,9 @@ Every ticket is a **tracer bullet**: a narrow but complete path through every la
 
 ## When to reach for it
 
-You invoke this by typing `/to-tickets`. The [agent](https://www.aihero.dev/ai-coding-dictionary/agent) won't reach for it on its own.
+
+In Pi, invoke it with `/skill:to-tickets`. In Claude Code and harnesses where skills.sh installs bare commands, use `/to-tickets`. The agent won't reach for it on its own.
+
 
 | Where you are | What to run |
 | --- | --- |

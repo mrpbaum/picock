@@ -6,6 +6,8 @@ It will not let the agent form a theory until a **tight** feedback loop exists: 
 
 ## When to reach for it
 
+In Pi, invoke `/skill:diagnosing-bugs`; the bare `/diagnosing-bugs` examples below apply to skills.sh-installed harnesses.
+
 Type `/diagnosing-bugs`, or the agent reaches for it on its own when a task fits. It is model-invoked, and fires on "diagnose" or "debug this", or on a report that something is broken, throwing, failing, or slow.
 
 Reach for it on the hard ones: a bug you can't solve at first look, an intermittent flake, a regression introduced between two known-good states. It is slow and thorough on purpose, so it is the wrong tool for a question you want answered in one message.

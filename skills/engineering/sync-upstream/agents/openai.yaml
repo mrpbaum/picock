@@ -1,0 +1,5 @@
+interface:
+  display_name: "Sync Upstream"
+  short_description: "Sync upstream through a Pi compatibility gate"
+policy:
+  allow_implicit_invocation: false

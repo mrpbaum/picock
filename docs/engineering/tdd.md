@@ -1,3 +1,5 @@
+
+
 ## What it does
 
 `tdd` builds a feature or fixes a bug test-first: one failing test, then just enough code to pass it, then the next behaviour. It carries the standards that make that loop produce tests worth keeping: what a good test is, where tests go, what mocks are for, and the three anti-patterns that make a suite worthless.
@@ -6,7 +8,9 @@ It writes no test at a seam you have not agreed to first. Before any test exists
 
 ## When to reach for it
 
-Type `/tdd`, or the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reaches for it automatically when a task fits: building a feature or fixing a bug test-first, or when you say "red-green-refactor".
+
+In Pi, invoke it with `/skill:tdd`. In Claude Code and harnesses where skills.sh installs bare commands, use `/tdd`. The agent can also reach for it automatically when a task fits, such as building a feature or fixing a bug test-first, or when you say "red-green-refactor".
+
 
 Reach for it when there is a concrete behaviour to build, with an input and an observable output, and you want tests that survive a refactor.
 

@@ -5,6 +5,8 @@ description: Set up Claude Code hooks to block dangerous git commands (push, res
 
 # Setup Git Guardrails
 
+> **Claude Code only.** These hooks do not run in Pi. Pi users must use the [`git-guardrails-pi`](../git-guardrails-pi/SKILL.md) skill, which installs a Pi `tool_call` extension instead.
+
 Sets up a PreToolUse hook that intercepts and blocks dangerous git commands before Claude executes them.
 
 ## What Gets Blocked
