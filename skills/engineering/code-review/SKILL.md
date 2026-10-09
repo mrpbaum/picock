@@ -8,7 +8,7 @@ Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
 - **Standards**: does the code conform to this repo's documented coding standards?
 - **Spec**: does the code faithfully implement the originating issue / spec?
 
-Run both axes in **independent review passes**, then aggregate their findings. In Pi, use the [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents) extension to provide Claude-compatible parallel `Agent` calls. If no sub-agent system is installed, preserve the separation with isolated sequential passes.
+Run both axes in independent parallel subagents, then aggregate their findings. In Pi, follow the [required subagent backend contract](../PI-SUBAGENTS.md). Stop if the required backend is unavailable.
 
 The issue tracker should have been provided to you. Ask the user to run the `setup-matt-pocock-skills` skill if `docs/agents/issue-tracker.md` is missing.
 
@@ -26,7 +26,7 @@ Before going further, confirm the fixed point resolves (`git rev-parse <fixed-po
 
 Look for the originating spec, in this order:
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.), fetched via the workflow in `docs/agents/issue-tracker.md`.
+1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.), fetched via the workflow in the tracker doc.
 2. A path the user passed as an argument.
 
 3. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
@@ -35,7 +35,7 @@ Look for the originating spec, in this order:
 
 ### 3. Identify the standards sources
 
-Anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
+Search the repo for every file that documents how code should be written. When `CODING_STANDARDS.md` or `CONTRIBUTING.md` exists, it must be on the list.
 
 On top of whatever the repo documents, the Standards axis always carries the **smell baseline** below: a fixed set of Fowler code smells (_Refactoring_, ch.3) that applies even when a repo documents nothing. Two rules bind it:
 
@@ -59,12 +59,9 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 
 ### 4. Run two independent passes
 
-First inspect the available tools.
+Verify the required backend before dispatch. Send two parallel `Agent` calls with `subagent_type: "general-purpose"` and `run_in_background: false`, one for Standards and one for Spec. Reviewers perform their own axis directly, without invoking this skill or delegating again.
 
-- **`Agent` tool available:** send a single message containing two parallel `Agent` calls with `subagent_type: "general-purpose"`, one for Standards and one for Spec. In Pi, this tool is supplied by [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents); if it is missing, tell the user they can install it with `pi install npm:@tintinweb/pi-subagents` and restart Pi.
-- **No `Agent` tool:** tell the user that the review will use a degraded sequential mode, then run the passes sequentially. Before each pass, write its brief to a separate temporary note. During the pass, read only the diff plus that axis's sources, and write findings to that axis's note before beginning the other pass. Do not revise the first note during the second pass. Delete both temporary notes after aggregation.
-
-**Standards pass brief** should include:
+**Standards sub-agent prompt** should include:
 
 - The full diff command and commit list.
 - The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full. An independent reviewer has no other access to it.

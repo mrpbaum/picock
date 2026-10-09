@@ -111,4 +111,4 @@ Good interfaces make testing natural:
 ## Going deeper
 
 - **Deepening a cluster given its dependencies**, see [DEEPENING.md](DEEPENING.md): dependency categories, seam discipline, and replace-don't-layer testing.
-- **Exploring alternative interfaces**: see [DESIGN-IT-TWICE.md](DESIGN-IT-TWICE.md). Run independent design passes (parallel with sub-agents when available, sequential and isolated otherwise), then compare on depth, locality, and seam placement.
+- **Exploring alternative interfaces**: see [DESIGN-IT-TWICE.md](DESIGN-IT-TWICE.md). Run independent parallel design passes through the [required Pi subagent backend](../PI-SUBAGENTS.md), then compare on depth, locality, and seam placement. Stop that workflow if the backend is unavailable.

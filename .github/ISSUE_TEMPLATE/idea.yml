@@ -1,0 +1,37 @@
+name: Idea or feedback
+description: A change to an existing skill, grounded in a failure you saw.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This fork maintains upstream skills for Pi consumption. Read [fork scope](https://github.com/mrpbaum/picock/blob/main/SCOPE.md).
+
+        Include an observed failure or reproducible compatibility gap. Pi-specific adaptations are in scope even when upstream rejects harness-specific changes. Upstream `.out-of-scope/` records are historical context, not automatic fork rejections.
+  - type: checkboxes
+    id: read-scope
+    attributes:
+      label: Before filing
+      options:
+        - label: I've read the fork's `SCOPE.md` and described how this affects Pi consumption.
+          required: true
+  - type: input
+    id: skill
+    attributes:
+      label: Skill
+      description: Which existing skill this changes.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: What went wrong
+      description: The real session where the skill fell short. What you ran, what it did, and why that was a problem. Include harness and model.
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed change
+      description: What you'd change in the skill, as concretely as you can.
+    validations:
+      required: true
