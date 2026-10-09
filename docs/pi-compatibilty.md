@@ -11,23 +11,24 @@
 | Upstream package/plugin version | `1.3.1` (the commit, not this version alone, identifies the reviewed files) |
 | Previous document baseline | `272f99b22574f50e4266791c86b9302682970e23` |
 | Pi baseline | Installed `@earendil-works/pi-coding-agent` version `1.1.0` |
-| Pi environment assumed | Default tools and commands, no third-party subagent, skill-dispatch, or guardrail extension |
+| Pi adaptation environment | Pi plus the required `@tintinweb/pi-subagents` extension; no assumed `Skill` dispatcher or Claude-hook adapter |
+| Subagent API reference | Published `@tintinweb/pi-subagents` `0.20.0`, npm `gitHead` `13106ab6f608b3acc54185da5299ee7fbaabb6b9`; requires Pi `>=1.1.0`. This is the version inspected, not a claim about the project's installed/pinned version. |
 | Method | Fresh upstream clone, review of all 38 `SKILL.md` files, bundled-reference dependency scan, install surfaces, and upstream changes since the previous baseline; isolated Pi skill-loader and package-resource checks |
-| Excluded | This fork's skills, manifests, fixes, installed third-party packages, and working-tree changes |
+| Excluded | This fork's skills, manifests, fixes, installed-package state, and working-tree changes; the required subagent dependency's published contract is reviewed separately |
 
-All repository paths below refer to the **upstream snapshot**, not files in this fork. Open them beneath the [pinned upstream tree][upstream]. Recommendations describe possible adaptations, not fixes already applied here.
+Skill repository paths below refer to the **upstream snapshot**, not files in this fork. Open them beneath the [pinned upstream tree][upstream]. Extension paths refer to the separately pinned [pi-subagents source][subagents-source]. The adaptation policy now requires `@tintinweb/pi-subagents`; it is not an optional orchestrator choice. Recommendations describe changes still needed to upstream instructions, not fixes already applied here.
 
 This is a source compatibility assessment, not an end-to-end certification. The loader checks did not invoke a model, install the skills.sh CLI, run the upstream linker, create issues, launch child agents, or exercise generated scripts. Those limits matter when distinguishing a confirmed API mismatch from likely model behavior.
 
 ## Verdict
 
-**Upstream is loadable in Pi, but not behaviorally portable without adaptations.** A Pi manifest is optional, so its absence is not an installation failure. An unfiltered Pi git-package install discovers more skills than the Claude plugin advertises. Even the promoted subset contains calls to Claude's `Skill` tool, subagent requirements, and command examples that need translation.
+**Upstream is loadable in Pi, but not behaviorally portable without adaptations.** A Pi manifest is optional, so its absence is not an installation failure. An unfiltered Pi git-package install discovers more skills than the Claude plugin advertises. Even the promoted subset contains calls to Claude's `Skill` tool, subagent requirements, and command examples that need translation. The required `@tintinweb/pi-subagents` dependency supplies isolated child sessions, foreground/background execution, and worktree facilities. PI-003 is therefore an **instruction/configuration adaptation requirement**, not an unmet dependency in the target environment; it remains an upstream incompatibility with bare Pi.
 
 | ID | Severity | Status at reviewed commit | Issue |
 | --- | --- | --- | --- |
 | PI-001 | High | Open, route-dependent | Unfiltered Pi package discovery exposes non-promoted skills |
 | PI-002 | High | Open | Composition instructions call a nonexistent default Pi `Skill` tool |
-| PI-003 | High | Open, workflow-dependent | Subagent/background execution is assumed |
+| PI-003 | High | Capability supplied by required dependency; adaptation open | Map upstream delegation to `@tintinweb/pi-subagents` and configure child skills, nesting, and worktree lifecycle |
 | PI-004 | Medium | Open | Bare skill slash commands do not invoke Pi skills |
 | PI-005 | Medium | Open | Session guidance uses `/clear` and model-specific context assumptions |
 | PI-006 | High | Open, non-promoted only | Claude hooks and Claude background CLI do not implement Pi behavior |
@@ -40,6 +41,14 @@ Severity describes impact when the relevant route or workflow is used. It does n
 ## Installation routes and discovered scope
 
 The upstream [plugin manifest][plugin] lists **27 promoted skills**: 20 engineering and 7 productivity. Pi does not use `.claude-plugin/plugin.json` or `marketplace.json` to select package skills.
+
+Every adapted installation also requires the subagent extension, independently of the skill installation route. Install the project's selected version through Pi's package workflow and verify that `Agent`, `get_subagent_result`, `steer_subagent`, and `/agents` are available. For reproducing the API reference in this document:
+
+```bash
+pi install npm:@tintinweb/pi-subagents@0.20.0
+```
+
+This is a reference-version example, not a change to the project's dependency pin. Reload/restart Pi after installation and check effective agent/extension settings. A declared or installed dependency that is disabled in the active session does not satisfy the workflow's runtime requirement.
 
 | Route | Scope at this snapshot | Update/compatibility caveat |
 | --- | --- | --- |
@@ -90,39 +99,51 @@ This is an illustrative entry to merge into Pi settings, not an instruction to o
 
 The non-promoted `claude-handoff` and `setup-ts-deep-modules` also use this wording. Upstream `docs/engineering/implement.md`, under “It's working if”, even expects a `tdd` Skill tool call in the trace.
 
-Default Pi has no tool named `Skill`. It advertises model-invoked skills by name, description, and path, and the model loads their instructions with `read`. Explicit human invocation expands `/skill:<name>`. This is a separate mismatch from missing subagents: wrappers such as `grill-me` can be affected before any parallel work is attempted.
+Default Pi has no tool named `Skill`, and `@tintinweb/pi-subagents` does not add one. Pi advertises model-invoked skills by name, description, and path, and the model loads their instructions with `read`. Explicit human invocation expands `/skill:<name>`. This mismatch remains even with the required subagent extension loaded: wrappers such as `grill-me` can be affected before any parallel work is attempted.
 
 **Adaptation:** Replace tool-specific dispatch with “read and follow the available `grilling` skill's `SKILL.md`”, and equivalent instructions for other model-invoked dependencies. Adapt success criteria to expect a file read rather than a `Skill` tool call. Include dependencies when installing a wrapper alone.
 
 Keep the human/model invocation distinction: `disable-model-invocation: true` removes a skill from Pi's automatic skill catalogue. A router should recommend `/skill:<user-invoked-name>` to the human rather than silently loading it as a dependency. This flag is routing behavior, not a filesystem access-control boundary.
 
-**Recheck when:** Any skill or helper adds cross-skill calls, dependency names change, invocation flags change, or Pi gains a dispatch tool.
+**Dependency relevance:** Child agents can inherit skills or preload named skills through their agent definition's `skills` field. That helps deliver instructions to children; it does not translate a Claude `Skill` call. Named preloading has different discovery rules from Pi, including rejection of symlinks and no package-cache roots in its search list. See the child-contract checks under PI-003.
+
+**Recheck when:** Any skill or helper adds cross-skill calls, dependency names change, invocation flags change, or Pi/the required extension changes skill dispatch or preloading.
 
 ### PI-003: Subagents and background agents are workflow dependencies
 
 **Evidence:** The current instructions usually say “sub-agent” generically rather than naming Claude's `Agent` tool. Removing the literal tool name has not removed the execution requirement.
 
-| Upstream source and locator | Required behavior |
-| --- | --- |
-| `skills/engineering/code-review/SKILL.md`, “Spawn both sub-agents in parallel” | Two foreground parallel reviews, explicitly separated to avoid context pollution |
-| `skills/engineering/improve-codebase-architecture/SKILL.md`, “Explore” | A subagent explores architectural friction |
-| `skills/engineering/codebase-design/DESIGN-IT-TWICE.md`, “Spawn sub-agents” | 3+ parallel agents produce radically different designs |
-| `skills/engineering/research/SKILL.md`, opening instruction | Background research while the parent continues working |
-| `skills/engineering/implement-spec/SKILL.md`, steps 2, 4–7, 9 | Exploration, implementer, and merger agents; per-ticket worktrees/branches, integration, and cleanup |
-| `skills/engineering/wayfinder/SKILL.md`, “Research” ticket type and charting step 5 | Parallel research agents with branch artifacts; the child is told to invoke `research`, which itself launches a background agent |
-| `skills/productivity/grilling/SKILL.md`, facts paragraph | Nonblocking exploration agents while other interview questions continue |
-| `skills/engineering/ask-matt/SKILL.md` and `PHASE-BOUNDARIES.md` | Recommendations to delegate AFK work or split mid-phase work into subagents |
-| `skills/in-progress/chief-of-staff/SKILL.md`, “Subagents” | All work runs in background subagents; recurring schedules are explicitly harness-dependent |
+| Upstream source and locator | Required behavior | Mapping to the required dependency |
+| --- | --- | --- |
+| `skills/engineering/code-review/SKILL.md`, “Spawn both sub-agents in parallel” | Two foreground parallel reviews, explicitly separated to avoid context pollution | Two `Agent` calls together with `run_in_background: false` and `inherit_context: false`, distinct briefs, no cross-reviewer results. Preserve the two axes when aggregating. |
+| `skills/engineering/improve-codebase-architecture/SKILL.md`, “Explore” | A subagent explores architectural friction | `Agent` with `subagent_type: "Explore"` or a configured exploration specialist; pass domain/design references explicitly. Set foreground/background mode deliberately. |
+| `skills/engineering/codebase-design/DESIGN-IT-TWICE.md`, “Spawn sub-agents” | 3+ parallel agents produce radically different designs | Three or more `Agent` calls with different constraints and `inherit_context: false`; `Plan` or configured design specialists. Background calls let the user read while designs run. Compare only after all required results arrive. |
+| `skills/engineering/research/SKILL.md`, opening instruction | Background research while the parent continues working | `Agent` with `run_in_background: true`; use `general-purpose` or a research specialist with write and retrieval capabilities, not the default read-oriented `Explore` for saving notes. |
+| `skills/engineering/implement-spec/SKILL.md`, steps 2, 4–7, 9 | Exploration, implementer, and merger agents; per-ticket worktrees/branches, integration, and cleanup | Background implementers with `isolation: "worktree"`; collect the returned branches and serialize merges into the integration branch. Rewrite upstream's named-branch/worktree ownership and cleanup steps to match the extension lifecycle described below. |
+| `skills/engineering/wayfinder/SKILL.md`, “Research” ticket type and charting step 5 | Parallel research agents with branch artifacts; the child is told to invoke `research`, which itself launches a background agent | Parent launches background research workers directly. Tell each worker to research/save findings itself, avoiding nested redispatch. If using worktrees, use returned `pi-agent-*` branches as the artifacts or deliberately rename them; push/link only the preserved branch, not an ephemeral worktree path. |
+| `skills/productivity/grilling/SKILL.md`, facts paragraph | Nonblocking exploration agents while other interview questions continue | Background `Explore` calls; keep independent frontier questions moving. Resume dependent questions only when their facts arrive. |
+| `skills/engineering/ask-matt/SKILL.md` and `PHASE-BOUNDARIES.md` | Recommendations to delegate AFK work or split mid-phase work into subagents | Route AFK delegation to `Agent`, with a bounded task and explicit foreground/background choice; normal phase-boundary commands still need PI-005 translation. |
+| `skills/in-progress/chief-of-staff/SKILL.md`, “Subagents” | All work runs in background subagents; recurring schedules are explicitly harness-dependent | Background `Agent` calls. The extension's `schedule` field can support recurring agents when scheduling is enabled, but jobs are session-scoped, not an always-on scheduler. |
 
 `implement` also inherits this dependency through its required closing `code-review`. The interview wrappers and skills that compose `grilling` inherit its fact-finding dependency when that branch is needed.
 
-**Pi behavior:** Pi deliberately does not ship a built-in subagent orchestrator. Parallel tool calls are not independent agent contexts. A shell-launched Pi process is possible, but spawning, supervising, returning results, selecting models, managing child skills, and cleaning up worktrees are not supplied by these upstream instructions.
+**Pi behavior:** Bare Pi deliberately has no built-in subagent orchestrator. The required extension supplies the `Agent`, `get_subagent_result`, and `steer_subagent` tools plus `/agents` management. Each child runs in a separate session. This satisfies the missing execution-capability requirement, but installing it does not rewrite upstream skills, guarantee child configuration, or resolve PI-002.
 
-**Adaptation:** Declare an explicit orchestrator dependency and translate the workflow to its real tool contract, including child skill availability and worktree ownership. For `wayfinder`, decide which layer owns research delegation so the child does not accidentally delegate again. If no orchestrator is available, stop or offer a user-approved sequential variant.
+**Adaptation contract (`0.20.0` reference):**
 
-A sequential fallback is a **degraded mode**, not an equivalent implementation: separate headings or notes within one session do not give `code-review` the context isolation it requests, nor do they preserve nonblocking research or concurrency. Disclose the limitation rather than claiming independent passes.
+- **Launch:** `Agent` requires `subagent_type`, `prompt`, and `description`. Set `model` and `thinking` deliberately using available models. Agent-file frontmatter is authoritative over caller values, so inspect the effective configuration. Built-in types are `general-purpose`, `Explore`, and `Plan`; specialized implementer/merger/research types must be defined if named. A missing/disabled type can fall back to `general-purpose`; check dispatch or configure `fallbackSubagent: "none"` to fail closed.
+- **Foreground versus background:** Set `run_in_background` explicitly. `false` blocks and returns the full output inline; multiple calls in one turn can run concurrently. `true` returns an ID, then delivers completion notifications with previews. Retrieve full results through `get_subagent_result` after notification, or use its `wait: true` when a genuine barrier is required. Do not poll/sleep for completion. A grouped notification can be partial, so track each required child rather than treating the first notification as completion of the whole batch.
+- **Independent contexts:** Use `inherit_context: false` and fresh children for independent reviews/designs. The built-in `general-purpose` uses `prompt_mode: append`, inheriting the parent's system prompt, not automatically its whole conversation. A custom `prompt_mode: replace` can reduce inherited instruction/context coupling; supply the relevant standards, glossary, spec, and skill references explicitly. Separate sessions do not by themselves provide cross-model-family independence.
+- **Child skills and tools:** `skills: true` is the default inheritance mode; `skills: false` disables it; a list preloads only named skills. Verify actual skill visibility with the chosen installation route. The named preloader searches project/global skill directories, rejects symlinks, and does not search Pi package-cache roots directly. For symlinked or package-installed skills, pass verified absolute `SKILL.md` and helper-reference paths and have the worker read them, or arrange supported non-symlink copies. Preloaded content alone should not be assumed to retain the base path for relative helper links. `isolated: true` disables extensions and skills; it is **not** the filesystem isolation setting `isolation: "worktree"`. Write-capable research and implementation agents need appropriate tools; a `replace` prompt also needs explicit project/context-file pointers (PI-007).
+- **Nested delegation:** It is default-off. A child does not automatically get another unrestricted `Agent` tool merely because the parent has the extension. Custom agent definitions must opt in through `allowed_subagents`, subject to `maxSubagentDepth` (default 2). Children are ownership-scoped and stopped when their owning agent finishes. Prefer leaf research workers for `wayfinder`; for an implementer that must run parallel `code-review`, either let the top-level coordinator launch reviewers or deliberately configure a narrowly allowed nested review type and wait for it before the implementer settles.
+- **Worktree lifecycle:** Enable `worktreeIsolation` and check agent frontmatter before relying on `isolation: "worktree"`. Disabling worktree isolation can downgrade a request to a normal shared-checkout run. The extension creates a detached copy at the spawning checkout's committed `HEAD`, not a caller-selected base/branch, and does not copy uncommitted changes. For `implement-spec`, commit/check out the current integration tip before spawning the next frontier and require children to verify their base. It preserves changed/child-committed work on a returned `pi-agent-*` branch and normally removes the temporary worktree on completion; use the returned branch, not a guessed branch name or vanished path. The coordinator still owns review, tests, merge/conflict handling, tracker updates, and intentional branch cleanup. Automatic preservation commits use `--no-verify`, so they are not proof that hooks/tests passed. Cleanup is best-effort on errors; verify artifact preservation on failed/cancelled runs rather than assuming every outcome leaves a usable branch.
+- **Stop/resume:** `steer_subagent` redirects a running child; `Agent({ resume: <id>, ... })` continues a completed child session. `/agents` can stop background agents. Cancelling a `get_subagent_result` wait stops the wait, not the child. Treat stopped, aborted, and turn-limited output as partial and do not close a ticket solely because an agent returned text.
+- **Scripted orchestration:** `SubagentWorkflow` is available for dynamic fan-out/task graphs when enabled. Its `agent()` options differ from `Agent`: `agentType` and `effort` correspond to type/thinking, and `parallel()` joins independent results. This is an implementation option, not an upstream requirement or an automatic translation. The script has no filesystem/network access, so merge/test operations must happen in workers. Handle failed/skipped calls returning `null`; a generic review-panel synthesis must not merge/rerank upstream `code-review`'s two axes.
+- **Schedules:** `Agent` also supports `schedule` when enabled, relevant to `chief-of-staff`. Jobs reset on `/new`, restore on `/resume`, and require a live session/process to fire. They cannot be combined with `resume` or `inherit_context`; they are not scheduled workflows or durable unattended infrastructure.
 
-**Recheck when:** New orchestration skills appear, parallel/background requirements change, references move, or the Pi baseline gains such capabilities. Test cancellation, artifact delivery, and cleanup in addition to successful completion.
+**Dependency missing or disabled:** Treat this as a setup/configuration error and restore the required dependency before claiming the adapted workflow works. A sequential variant is only an explicit user-approved degraded mode, not the normal fallback: separate headings within one session do not preserve isolated review contexts, nonblocking research, or concurrency.
+
+**Recheck when:** Upstream orchestration changes, or Pi/the required extension changes its tool schemas, agent defaults, child skill discovery, nesting, notifications, scheduling, or worktree preservation. Record the exact extension version and relevant settings. Test two-axis isolation, nonblocking delivery, branch bases, full result retrieval, cancellation, and cleanup in addition to successful completion.
 
 ## Commands and session behavior
 
@@ -165,7 +186,7 @@ A bare `/tdd` does not expand the skill unless a separate command or prompt temp
 
 **Impact:** The hook script can pass its direct shell test while providing **no protection for Pi tool calls**. The handoff either needs the Claude CLI or launches Claude rather than Pi. Both are outside the promoted plugin list, but PI-001 makes them visible through unfiltered Pi discovery; the developer linker also exposes `claude-handoff`.
 
-**Adaptation:** Exclude them from a Pi skill set, or port them deliberately. Pi extensions can block calls through the `tool_call` event, but that is not compatibility with Claude hook JSON. Specify which execution paths a guardrail protects; shell-pattern checks are not an operating-system sandbox. A handoff port needs an explicit Pi process/orchestrator contract, not a mechanical CLI name substitution.
+**Adaptation:** Exclude them from a Pi skill set, or port them deliberately. Pi extensions can block calls through the `tool_call` event, but that is not compatibility with Claude hook JSON. Specify which execution paths a guardrail protects; shell-pattern checks are not an operating-system sandbox. For `claude-handoff`, the fixed dependency supplies a concrete port: save the handoff file, then launch a background `Agent` with instructions to read it, using the intended agent type and context policy. Replace `claude agents` management with `/agents` and the extension's result/steering/resume tools. This does not port the guardrail hooks; `@tintinweb/pi-subagents` is not a Claude-hook adapter.
 
 **Recheck when:** These skills are removed/promoted, CLI instructions change, or Pi imports Claude hook configuration.
 
@@ -185,7 +206,7 @@ A bare `/tdd` does not expand the skill unless a separate command or prompt temp
 
 **Evidence:** Upstream `README.md`, “Any other agent, or editable files”, explicitly lists `pi` for `npx skills@latest add mattpocock/skills -a <agent>`. `.agents/install-block.md` explicitly prefers that route over an unfiltered `pi install` because of the extra buckets. Current docs do not universally repeat the old install block: upstream now relies on an external install widget for docs pages.
 
-This is a valid offered installation route, not proof that the skills cannot install on Pi. It is also not managed by Pi's package commands. Installing editable skills does not translate their instructions or provide missing tools.
+This is a valid offered installation route, not proof that the skills cannot install on Pi. It is also not managed by Pi's package commands. Installing editable skills does not translate their instructions or activate the required subagent extension. Install/manage that dependency through Pi separately, regardless of whether the skills come from skills.sh or a Pi git package.
 
 **Adaptation:** Document the distinction if adding a Pi package route:
 
@@ -218,7 +239,7 @@ Every current upstream skill appears below. All load successfully in the isolate
 | Engineering | `code-review`, `research` | PI-003 |
 | Engineering | `codebase-design` | PI-003 only for the design-it-twice branch; vocabulary itself is portable |
 | Engineering | `grill-with-docs`, `implement`, `triage` | PI-002; inherited PI-003 through `grilling` or closing `code-review` |
-| Engineering | `implement-spec`, `improve-codebase-architecture`, `wayfinder` | PI-002 and PI-003; worktree/artifact ownership needs an orchestrator for `implement-spec` and research dispatch needs one for `wayfinder` |
+| Engineering | `implement-spec`, `improve-codebase-architecture`, `wayfinder` | PI-002 and PI-003; required pi-subagents mapping covers dispatch, but integration-tip bases, returned-branch artifacts, child skills, and nesting need explicit adaptation |
 | Engineering | `retro`, `tdd` | PI-002; `retro` also needs the appropriate session log/context files |
 | Engineering | `setup-matt-pocock-skills` | PI-007; tracker CLI/authentication as applicable |
 | Engineering | `diagnosing-bugs`, `domain-modeling`, `pr`, `prototype`, `to-spec`, `to-tickets`, `wizard` | No additional mismatch; repository/test tools, tracker access, browser or human-run bash scripts as applicable |
@@ -226,8 +247,8 @@ Every current upstream skill appears below. All load successfully in the isolate
 | Productivity | `grilling` | PI-003 when fact-finding delegation is needed |
 | Productivity | `handoff` | PI-002 in suggested-skill instructions; PI-005 in human-facing docs; document creation itself is portable |
 | Productivity | `teach`, `to-questionnaire`, `wait-what`, `writing-for-agents` | No additional mismatch; `teach` needs trusted-source retrieval and browser access for HTML lessons |
-| In-progress | `chief-of-staff` | PI-001, PI-003; recurring schedules require an additional facility if used |
-| In-progress | `claude-handoff` | PI-001, PI-002, PI-006 |
+| In-progress | `chief-of-staff` | PI-001, PI-003; required pi-subagents supplies background dispatch and session-scoped schedules, not always-on scheduling |
+| In-progress | `claude-handoff` | PI-001, PI-002, PI-006; background CLI can be ported to the required dependency's `Agent` and `/agents` lifecycle |
 | In-progress | `setup-ts-deep-modules` | PI-001, PI-002, PI-007; Node/package manager/dependency-cruiser prerequisites |
 | In-progress | `loop-me`, `writing-beats`, `writing-fragments`, `writing-shape` | PI-001; no additional hard mismatch found; `loop-me` names `/grilling`, whose workflow has PI-003 |
 | Misc | `git-guardrails-claude-code` | PI-001, PI-006 |
@@ -243,15 +264,15 @@ Every current upstream skill appears below. All load successfully in the isolate
 
 ## Updating this review against a new upstream release
 
-Keep this document a ledger of **upstream versus Pi**, not a checklist of this fork's remediation progress.
+Keep this document a ledger of **upstream versus Pi plus the required pi-subagents dependency**, not a checklist of this fork's remediation progress. Preserve the distinction between bare-Pi mismatches and capabilities supplied by the fixed dependency. Installing the dependency does not mean an upstream skill's instructions have been adapted.
 
-1. **Pin both baselines.** Resolve the requested upstream tag/ref, record its full SHA, package/plugin versions, and review date. If reviewing default-branch HEAD, say so. Record `pi --version` and the exact installed Pi package/docs version. Use a fresh clone or detached upstream checkout outside this fork.
+1. **Pin the baselines.** Resolve the requested upstream tag/ref, record its full SHA, package/plugin versions, and review date. If reviewing default-branch HEAD, say so. Record `pi --version`, the exact Pi package/docs version, and the exact `@tintinweb/pi-subagents` version/source used to review its contract. The API reference version is not an implied dependency pin. Use a fresh clone or detached upstream checkout outside this fork.
 2. **Diff upstream only.** Compare the previous recorded upstream SHA with the new SHA. Read changed files plus their called skills and bundled references, including unchanged dependencies. Include `package.json`, `.claude-plugin/*`, `README.md`, `.agents/install-block.md`, `scripts/link-skills.sh`, and human-facing docs. Never substitute a diff against this fork's main branch.
 3. **Recount discovery.** Inventory all `SKILL.md` files and compare the plugin list, promoted buckets, and actual Pi loader results. Re-run the isolated loader with default/user/project skill discovery disabled so this fork and installed skills cannot affect the result. Record counts and diagnostics. If testing an installer, use an isolated home/settings directory and record its exact version and selected skills.
 4. **Scan, then read in context.** Search all skill bodies, helpers, scripts, and docs for dispatch, agents, hooks, commands, context filenames, metadata, tool names, and environment assumptions. Search hits are candidates, not findings; distinguish literal tool requirements from examples and domain vocabulary.
-5. **Recheck Pi contracts.** Read the pinned Pi skills, packages, configuration, slash-command, and CLI references. Inspect the installed loader where documentation leaves precedence or metadata behavior unclear. Separate default Pi from optional extensions; record any extension/version used in runtime tests.
-6. **Update stable IDs.** Retain `PI-001` through `PI-009`. Mark findings `open`, `resolved upstream`, `resolved by Pi`, or `not applicable`, with the resolving SHA/version and reason. Allocate a new ID for a genuinely new mismatch. Move removed skills out of the current coverage ledger, retaining a short history note when needed. A proposed workaround or a fix in this fork does not resolve an upstream finding.
-7. **Verify claims at their stated level.** At minimum, re-run loader diagnostics and source checks. For runtime claims, test explicit command expansion, wrapper composition, context-file selection, and affected orchestration in a clean Pi session. Test guardrail interception rather than only its script's exit code. Disclose anything not executed.
+5. **Recheck Pi contracts.** Read the pinned Pi skills, packages, configuration, slash-command, and CLI references. Inspect the installed loader where documentation leaves precedence or metadata behavior unclear. Read the required pi-subagents README/tool schemas and relevant sources for skill loading, nesting, worktrees, and schedules. Separate bare Pi, required pi-subagents, and any other optional extensions; record extension versions and effective settings used in runtime tests.
+6. **Update stable IDs.** Retain `PI-001` through `PI-009`. Mark findings `open`, `capability supplied by required dependency; adaptation open`, `resolved upstream`, `resolved by Pi/dependency`, or `not applicable`, with the relevant SHA/version and reason. Allocate a new ID for a genuinely new mismatch. Move removed skills out of the current coverage ledger, retaining a short history note when needed. A proposed workaround or a fix in this fork does not resolve an upstream finding.
+7. **Verify claims at their stated level.** At minimum, re-run loader diagnostics and source checks. For runtime claims, test explicit command expansion, wrapper composition, context-file selection, and affected orchestration in a clean Pi session. For the required dependency, test parallel foreground isolation, asynchronous full-result delivery, child skill/helper resolution, nested ownership when used, integration-base selection, preserved branches, and cancellation/cleanup. Test guardrail interception rather than only its script's exit code; the subagent dependency does not implement those hooks. Disclose anything not executed.
 
 Useful commands from the isolated upstream checkout:
 
@@ -265,10 +286,11 @@ rg -n 'Skill tool|Agent tool|Task tool|sub.?agent|background agent|claude |PreTo
   skills docs README.md package.json scripts .agents
 ```
 
-**Completion criterion:** Every skill present at the new upstream SHA is accounted for; every still-applicable finding has current upstream evidence and a pinned Pi contract; discovery counts are reproduced; resolved findings identify why they no longer apply; untested behavior is labelled; no statement of current compatibility depends on this fork.
+**Completion criterion:** Every skill present at the new upstream SHA is accounted for; every still-applicable finding has current upstream evidence and a pinned Pi/required-dependency contract; discovery counts are reproduced; resolved findings identify why they no longer apply; untested behavior is labelled; no statement of current compatibility depends on this fork.
 
 ## Changes from the previous document
 
+- Made `@tintinweb/pi-subagents` the fixed adaptation dependency, referencing its published `0.20.0` contract. PI-003 now distinguishes supplied execution capabilities from remaining instruction/configuration work; its per-workflow mapping and child-contract checks identify where the dependency is relevant. No adapted skill or extension runtime was exercised in this documentation update.
 - Corrected “not Pi-package compatible as-is” to “loadable, with discovery and execution mismatches”. A Pi manifest is optional.
 - Updated the plugin count from 20 to 27. The full-tree count is still 38, but membership changed substantially.
 - Corrected linker scope: it now excludes both `misc/` and `deprecated/`, deliberately retaining `in-progress/`.
@@ -295,6 +317,17 @@ Portable source locations for subsequent reviews: [Pi repository](https://github
 /home/paul/.pi/agent/install/releases/1.1.0/node_modules/@earendil-works/pi-coding-agent/
 ```
 
+### Required subagent dependency
+
+Reviewed the published npm `@tintinweb/pi-subagents` `0.20.0` tarball, without installing or launching it: complete `README.md` and `docs/workflows.md`, the `examples/workflows/review-panel.js` example, `package.json`, `src/worktree.ts`, `src/skill-loader.ts`, and relevant `src/agent-runner.ts`/`src/prompts.ts` sections. npm reports `gitHead` `13106ab6f608b3acc54185da5299ee7fbaabb6b9` for this release.
+
+- [Pinned source and README][subagents-source], especially Tools, Frontmatter Fields, Nested subagents, Worktree Isolation, Skill Preloading, and Scheduling.
+- [Published version metadata](https://registry.npmjs.org/@tintinweb%2fpi-subagents/0.20.0) and [reviewed tarball](https://registry.npmjs.org/@tintinweb/pi-subagents/-/pi-subagents-0.20.0.tgz).
+- [Workflow guide](https://github.com/tintinweb/pi-subagents/blob/13106ab6f608b3acc54185da5299ee7fbaabb6b9/docs/workflows.md).
+
+This evidence establishes the adaptation contract, not successful installation, effective agent configuration, or workflow behavior in this fork.
+
+[subagents-source]: https://github.com/tintinweb/pi-subagents/tree/13106ab6f608b3acc54185da5299ee7fbaabb6b9
 [upstream]: https://github.com/mattpocock/skills/tree/49dd158d1076134a641b33efb035946536778336
 [package]: https://github.com/mattpocock/skills/blob/49dd158d1076134a641b33efb035946536778336/package.json
 [plugin]: https://github.com/mattpocock/skills/blob/49dd158d1076134a641b33efb035946536778336/.claude-plugin/plugin.json
