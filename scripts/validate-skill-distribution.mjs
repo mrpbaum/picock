@@ -58,6 +58,14 @@ const expectedPaths = distributedSkills
   .sort();
 
 const names = distributedSkills.map((path) => path.split("/").at(-1));
+const repositorySkills = await findSkillDirectories(join(root, ".pi/skills"));
+for (const path of repositorySkills) {
+  const name = path.split("/").at(-1);
+  assert.ok(
+    !names.includes(name),
+    `repository-maintenance skill ${name} must not be distributed or globally linked`,
+  );
+}
 assert.equal(
   new Set(names).size,
   names.length,

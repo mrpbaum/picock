@@ -67,10 +67,6 @@ Not feature work, just upkeep.
 
 - **`improve-codebase-architecture`**: run whenever you have a spare moment to keep the codebase good for agents to operate in. It surfaces **deepening opportunities**; picking one _generates an idea_ you can take into the main flow at `grill-with-docs`. It's the survey that finds the candidates; **`codebase-design`** (below) is the bench you design the chosen one on.
 
-## Fork maintenance
-
-- **`sync-upstream`**: periodically bring `mattpocock/skills` into this fork through a **compatibility gate**. It opens a draft sync PR, audits every incoming file for Pi impact, and creates focused issue/PR pairs for confirmed adaptations before the sync is ready. Upstream is read-only: it pushes only to this fork and excludes upstream-only administration workflows. Use it for upstream maintenance, not ordinary dependency updates or feature work.
-
 ## Vocabulary underneath
 
 Two model-invoked references that run *beneath* the other skills, each the single source of truth for its vocabulary. Reach for them directly when the **words**, not the process, are the problem; or let the skills above pull them in.

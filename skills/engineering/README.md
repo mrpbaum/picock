@@ -11,7 +11,6 @@ Reachable only when you type them (Claude Code: `disable-model-invocation: true`
 - **[triage](./triage/SKILL.md)**: Move issues through a state machine of triage roles.
 - **[improve-codebase-architecture](./improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.
 - **[setup-matt-pocock-skills](./setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo.
-- **[sync-upstream](./sync-upstream/SKILL.md)**: Sync this fork from upstream through a Pi compatibility gate, opening a draft sync PR plus issue/PR pairs for required adaptations.
 - **[to-spec](./to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker.
 - **[to-tickets](./to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, whether as text in a local file or as native blocking links on a real tracker.
 - **[implement](./implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving the `tdd` skill at pre-agreed seams and closing out with the `code-review` skill before committing.

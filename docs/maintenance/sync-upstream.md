@@ -1,10 +1,14 @@
+# Sync upstream (repository maintenance)
+
+This guide and the [repository-local skill](../../.pi/skills/sync-upstream/SKILL.md) are for maintaining this fork. They are not part of the distributed skill collection.
+
 ## What it does
 
 `sync-upstream` brings skill improvements from `mattpocock/skills` into this Pi fork and opens a draft sync pull request. Upstream is read-only; branches, issues, and PRs are created only in the fork identified by `origin`. Upstream-only issue-management and publishing workflows are excluded, while Pi-facing improvements and upstream ancestry are preserved. It treats Pi compatibility as a gate: upstream changes are classified before the sync is declared ready, and confirmed gaps become linked issue/PR pairs rather than notes left for later.
 
 ## When to reach for it
 
-In Pi, invoke it with `/skill:sync-upstream`. In Claude Code and harnesses where skills.sh installs bare commands, use `/sync-upstream`. The agent won't reach for it on its own.
+Start Pi in this repo, trust its project resources, and invoke `/skill:sync-upstream`. Run `/reload` if Pi was already open when the skill moved. Pi discovers it from `.pi/skills/`; package installation and global skill linking do not expose it elsewhere. The agent won't reach for it on its own.
 
 Reach for it whenever this fork needs to catch up with upstream while preserving its Pi-specific distribution and harness adaptations.
 
@@ -42,4 +46,4 @@ No. A merge commit preserves upstream ancestry independently of the files retain
 
 ## Where it fits
 
-This is periodic fork maintenance rather than feature delivery. It complements [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills), whose installation and configuration behavior is one of the compatibility surfaces being protected. See [ask-matt](https://aihero.dev/skills-ask-matt) for the map of the wider skill set.
+This is periodic fork maintenance rather than feature delivery. It checks [setup-matt-pocock-skills](../../skills/engineering/setup-matt-pocock-skills/SKILL.md) as one of the compatibility surfaces being protected. It is deliberately absent from the public `ask-matt` router and skill listings.
