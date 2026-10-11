@@ -16,7 +16,7 @@ The upstream names `claude-handoff` and `git-guardrails-claude-code` remain for 
 
 Claude plugin metadata, this repository's GitHub issue forms, and inherited rejection records have been removed. Useful repository guidance lives under `docs/maintenance/`, and inherited pending upstream release notes are archived outside the active Changeset queue. The original shell-hook script remains bundled source reference material, not the Pi installation. Package versioning and validation do not synchronise Claude metadata. No skills were deleted in this implementation. The upstream debugging redaction requirements were restored and the unrelated fork post-mortem addition was removed, as stated before implementation.
 
-Repository-maintenance skills remain under `.pi/skills/` and are not distributed, globally linked, or publicly routed. `docs/pi-compatibilty.md` and its marker retain their upstream evidence baseline unchanged. `AGENTS.md` is an existing symlink to `CLAUDE.md`; repository-instruction edits consequently appear in Git as changes to `CLAUDE.md`.
+Repository-maintenance skills remain under `.pi/skills/` and are not distributed, globally linked, or publicly routed. `docs/pi-compatibilty.md` and its marker retain their upstream evidence baseline unchanged. `AGENTS.md` is the canonical regular instruction file. `CLAUDE.md` points to it through a compatibility symlink, so there is only one instruction source.
 
 ## Verification
 

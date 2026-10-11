@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, readlinkSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -8,7 +8,10 @@ const read = (path) => readFileSync(resolve(root, path), 'utf8');
 for (const path of ['.agents', '.claude-plugin', '.github', '.out-of-scope', 'scripts/sync-plugin-version.mjs']) {
   assert.ok(!existsSync(resolve(root, path)), `${path}: removed repository scaffolding was reintroduced`);
 }
-for (const path of ['CLAUDE.md', 'docs/maintenance/handoff-extract-adapted-skills.md', 'docs/maintenance/pi-port.md', 'docs/maintenance/sync-upstream.md']) {
+assert.ok(lstatSync(resolve(root, 'AGENTS.md')).isFile(), 'AGENTS.md must be the canonical regular file');
+assert.ok(lstatSync(resolve(root, 'CLAUDE.md')).isSymbolicLink(), 'CLAUDE.md must be a compatibility symlink');
+assert.equal(readlinkSync(resolve(root, 'CLAUDE.md')), 'AGENTS.md');
+for (const path of ['AGENTS.md', 'docs/maintenance/handoff-extract-adapted-skills.md', 'docs/maintenance/pi-port.md', 'docs/maintenance/sync-upstream.md']) {
   assert.doesNotMatch(read(path), /\.agents\/(?:invocation|writing-docs|install-block)\.md/, `${path}: stale maintenance pointer`);
 }
 for (const path of ['docs/maintenance/invocation.md', 'docs/maintenance/writing-docs.md', 'docs/maintenance/changesets.md']) {

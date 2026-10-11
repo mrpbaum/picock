@@ -15,6 +15,8 @@ None. Keep the source skills and bundled assets unchanged. Archive inherited pen
 
 ## Pi adaptations
 
+Make `AGENTS.md` the canonical regular repository instruction file, preserving its content and reversing `CLAUDE.md` into a compatibility symlink. Validate this arrangement to prevent accidental regression.
+
 Move useful repository invocation, documentation, and setup-pointer guidance into `docs/maintenance/`. Remove obsolete Claude installation/marketplace scaffolding, the plugin-version synchroniser, repository-specific GitHub issue forms, and inherited rejection policy records.
 
 Use enriched Changesets to preserve upstream context, Pi adaptations, skill coverage, source provenance, and verification together in release notes. Versioning uses a local credential-free adapter rather than the GitHub changelog adapter. Rewrite repository maintenance around skill snapshot parity and required dependency closure, not upstream ancestry or administrative-file tracking.
