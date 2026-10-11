@@ -1,106 +1,125 @@
-# Handoff: stop forking upstream, vendor the adapted skills
+# Handoff: maintain a one-to-one Pi port of upstream skills
 
 ## Next session
 
-Turn this repository from a full fork of `mattpocock/skills` into a Pi package that contains only the skills whose instructions must change for Pi, plus the two repository-maintenance skills and the compatibility ledger. Do not implement a SQLite index. Do not merge upstream.
+Make this repository a complete, one-to-one Pi port of `mattpocock/skills`, not an adapted-only extraction. Preserve upstream skill names, intent, workflows, and bundled references. Keep portable skills unchanged where possible, and adapt harness-specific instructions so their workflows work in Pi.
 
-The strategy is already decided. Do not reopen the fork-versus-extract choice unless a concrete blocker appears.
+The previous extraction plan was incorrect. Users must not need a separate upstream skills installation to recover portable skills or satisfy cross-skill dependencies. Do not implement a SQLite index or merge upstream before reviewing its changes.
+
+This handoff correction does not implement the migration. Work on a new implementation branch from the reviewed starting state, preserving any approved handoff correction.
+
+## Confirmed decisions
+
+- The repository's GitHub username changed. The correct `origin` is `git@github.com:mrpbaum/picock.git`; use `mrpbaum/picock` in package metadata and Pi install instructions.
+- The required subagent backend is `@tintinweb/pi-subagents`. Do not switch to `pi-herdr-agents` or silently degrade workflows to sequential execution.
+- Keep both repository-maintenance skills under `.pi/skills/`: `sync-upstream` and `assess-compatibilty`.
+- Keep `docs/pi-compatibilty.md` as an upstream-versus-Pi compatibility ledger, not a checklist of fixes applied here.
+- Keep portable upstream skills in this package. Their lack of a harness mismatch is a reason to copy them faithfully, not remove them.
 
 ## Suggested skills
 
-- `writing-for-agents`, before editing `AGENTS.md` or either maintenance skill.
-- `assess-compatibilty`, to keep `docs/pi-compatibilty.md` an upstream-versus-Pi ledger. Do not use it to classify this tree.
-- Do not run `sync-upstream` until that skill has been rewritten. Its current procedure merges the whole upstream tree and must not be executed.
+- Read and follow `writing-for-agents` before editing `AGENTS.md` or either maintenance skill.
+- Read `setup-matt-pocock-skills` before compatibility changes, because its context-file setup affects the port.
+- Use `assess-compatibilty` to assess upstream evidence, never to classify this tree as upstream.
+- Rewrite `sync-upstream` before running it. Its current whole-tree merge procedure is not the maintenance procedure specified here.
 
-## Current facts
+## Starting evidence
 
-- Working repo: `/home/paul/dev/picock`
-- `origin`: `git@github.com:mrpbaum/picock.git`
-- `upstream`: `https://github.com/mattpocock/skills.git`
-- `main` is `2763767`, exactly four commits ahead of upstream `49dd158d1076134a641b33efb035946536778336` (package `1.3.1`). That SHA is also the baseline in `docs/pi-compatibilty.md` and `.pi/skills/assess-compatibilty/last-consolidated.sha`.
-- Upstream is current with that pin. Nothing on upstream is missing from `main`.
-- The tree delta versus that pin is 95 files. Much of it is legitimate Pi adaptation. The rest is fork baggage: restored `resolving-merge-conflicts`, deleted upstream workflows, rewritten `SCOPE.md` and issue templates, changelog punctuation, and a `diagnosing-bugs` behavior change the ledger does not ask for.
-- `docs/pi-compatibilty.md` is the issue list. It is not a checklist of fixes already applied here. Fork fixes do not resolve its findings.
+The earlier handoff recorded upstream `49dd158d1076134a641b33efb035946536778336` (package `1.3.1`) and `main` at `2763767`, four commits ahead. That upstream SHA is the baseline in `docs/pi-compatibilty.md` and `.pi/skills/assess-compatibilty/last-consolidated.sha`.
 
-## Goal
+Recheck actual refs and working-tree state before implementation. Do not treat these historical observations as a claim that upstream remains unchanged.
 
-`main` should no longer try to be "upstream plus patches". It should be the extracted adaptation closure:
+The ledger reviewed 38 upstream skills, of which 27 were promoted. The existing fork contains useful Pi adaptations, but also unrelated changes: restored `resolving-merge-conflicts`, repository policy changes, and a `diagnosing-bugs` behavior change that removes secret redaction and adds a post-mortem. Separate compatibility adaptations from behavior drift.
 
-- skills whose own text must change for Pi
-- skills those adapted skills load, when the upstream copy would give the wrong instructions
-- `skills/engineering/PI-SUBAGENTS.md`
-- `.pi/skills/sync-upstream/` and `.pi/skills/assess-compatibilty/`
-- `docs/pi-compatibilty.md` and this maintenance doc
+## Goal and scope
 
-Portable upstream skills stay upstream. Users install those from `mattpocock/skills`. This package replaces only the names it vendors. Pi keeps the first discovered copy of a skill name, so a vendored name must not also be loaded from upstream.
+The source inventory is every `SKILL.md` present at the pinned upstream SHA, including non-promoted buckets, plus the references and scripts each skill requires. Maintain one corresponding Pi skill per upstream skill, with the same name and invocation policy.
 
-## Vendored set
+- Portable skills remain in this package with their upstream behavior intact.
+- Harness-dependent skills receive explicit Pi adaptations that preserve their purpose.
+- Cross-skill dependencies resolve within this package. Retain `domain-modeling` and its bundled references rather than routing users to a separate upstream install.
+- Preserve bucket organisation and upstream distinctions between promoted and non-promoted skills. Public promoted-skill listings are not the complete port inventory.
+- Keep `skills/engineering/PI-SUBAGENTS.md` as the shared Pi backend contract.
+- Keep `.pi/skills/` outside package discovery, global skill linking, public skill listings, and `ask-matt`.
 
-Include these, adapted, not as untouched upstream copies:
+A skill that cannot be faithfully ported is a blocker to report to the user, with its missing capability and proposed options. Do not silently omit it, replace its purpose, or claim parity through a stub.
 
-- Skill-tool callers: `grill-with-docs`, `grill-me`, `implement`, `implement-spec`, `improve-codebase-architecture`, `retro`, `tdd`, `triage`, `wayfinder`, `handoff`
-- Subagent workflows and their shared contract: `code-review`, `research`, `grilling`, `codebase-design` (including design-it-twice), `ask-matt`, `PI-SUBAGENTS.md`
-- `setup-matt-pocock-skills`, because PI-007 is still unfixed in the current tree: the skill still prefers `CLAUDE.md` whenever that file exists
+### Portable skills to retain
 
-Do not vendor:
+Examples include `domain-modeling`, `diagnosing-bugs`, `pr`, `prototype`, `to-spec`, `to-tickets`, `wizard`, `teach`, `to-questionnaire`, `wait-what`, and `writing-for-agents`. The ledger's full inventory, not this example list, determines coverage.
 
-- `resolving-merge-conflicts`. Upstream removed it. The ledger calls those examples stale.
-- `diagnosing-bugs`, unless you copy it unchanged from upstream. The current fork deletes its secret-redaction section and adds a post-mortem. That is not a Pi compatibility fix. Prefer leaving it upstream.
-- `git-guardrails-claude-code` and `git-guardrails-pi`. Exclude them unless a later, explicit request asks for the Pi guardrail. The ledger's default for PI-006 is to keep those skills out of the Pi set.
-- Portable skills with no additional harness mismatch: `domain-modeling`, `pr`, `prototype`, `to-spec`, `to-tickets`, `wizard`, `teach`, `to-questionnaire`, `wait-what`, `writing-for-agents`, and the rest of the upstream tree.
-- `in-progress/`, `misc/`, `deprecated/`, `personal/`, `.claude-plugin/`, upstream issue workflows, `SCOPE.md` as upstream policy, and the upstream changelog.
+Restore upstream `diagnosing-bugs` behavior, including secret redaction. An unrelated post-mortem addition is not a compatibility adaptation.
 
-`domain-modeling` is loaded by vendored skills, but the ledger does not require its text to change. Leave it upstream and tell the adapted callers to load the installed `domain-modeling` skill. Do not vendor it just to make a relative link work.
+### Non-promoted and removed skills
 
-## Adaptations the vendored copies still owe
+The previous blanket exclusion of `in-progress/`, `misc/`, `deprecated/`, and `personal/` is withdrawn. Include skills actually present at the chosen upstream pin in the port inventory. Review package discovery explicitly and document what is loaded; do not conflate upstream promotion with compatibility.
 
-Use `docs/pi-compatibilty.md` as the requirement source. Current `main` is only a partial implementation.
+In particular, `git-guardrails-claude-code` and `claude-handoff` need deliberate Pi ports, not exclusion. Preserve their upstream names for one-to-one correspondence, while explaining their Pi implementation. A guardrail must protect the intended Pi execution paths; a passing shell-script test alone is insufficient. Surface any sandbox or interception limitations before implementation.
 
-- PI-002: no "call the Skill tool". Say to read and follow the named skill.
-- PI-003: point at `PI-SUBAGENTS.md`. Do not offer a silent sequential fallback. For `wayfinder`, the parent launches research workers directly. Do not tell a child to invoke `research` in a way that launches another researcher. Do not invent `research/<name>` branches when the backend returns `pi-agent-*` branches.
-- PI-004: Pi invocation is `/skill:<name>`. Bare `/name` is only for harnesses where skills.sh installed that command. `ask-matt` still has many bare route labels. `PHASE-BOUNDARIES.md` must be adapted if `ask-matt` is vendored, because it still says `/clear`.
-- PI-005: `/new` or a fresh session, not `/clear`. Keep `/compact` as compaction. Treat 150k and 100K figures as heuristics.
-- PI-007: setup must write the context file Pi will actually load. If `AGENTS.md` and `CLAUDE.md` both exist, Pi reads `AGENTS.md`. Do not keep the current "always edit `CLAUDE.md` if it exists" rule.
-- PI-009: useful argument examples belong in the skill text. Do not rely on `argument-hint` or `agents/openai.yaml` for Pi.
+`resolving-merge-conflicts` is absent from the recorded upstream snapshot, so it is not part of upstream parity. Identify any fork-only skills, including `git-guardrails-pi`, and ask before deleting or retaining them as separately documented extras. Do not remove potentially important local behavior without informing the user.
 
-PI-001 is mostly gone once non-promoted buckets are not in the tree. Do not add an exclusion filter whose only job is hiding files you no longer ship.
+## Required adaptations
 
-## Maintenance skills
+Use `docs/pi-compatibilty.md` as the requirement source and review every upstream skill and bundled dependency.
 
-Keep both under `.pi/skills/`, out of package discovery, public listings, and `ask-matt`.
+- **PI-001:** Inventory and test actual Pi discovery across the complete port. Preserve promotion labels in documentation, and make any intentional loading restrictions explicit rather than deleting skills to hide them.
+- **PI-002:** Replace Claude `Skill` dispatch with reading and following the named available skill. Recommend user-invoked dependencies to the human instead of silently invoking them.
+- **PI-003:** Point delegating workflows at `PI-SUBAGENTS.md` and the required `@tintinweb/pi-subagents` contract. Preserve isolated reviews, parallel designs, asynchronous research, and worktree ownership. The parent launches `wayfinder` research workers directly, avoiding nested redispatch. Use returned branches instead of inventing `research/<name>` artifact branches.
+- **PI-004:** Use `/skill:<name>` for Pi skill invocation, including router labels and human docs. Preserve actual Pi built-in commands.
+- **PI-005:** Use `/new` or a fresh session instead of `/clear`; keep `/compact` as compaction. Treat 150k and 100K context figures as heuristics, not Pi guarantees. Adapt `ask-matt/PHASE-BOUNDARIES.md` too.
+- **PI-006:** Port Claude hooks and background CLI workflows to supported Pi mechanisms. Document and test actual protection, ownership, completion, and cancellation behavior. Stop and report concrete capability gaps before promising equivalence.
+- **PI-007:** Setup writes the context file Pi actually selects. Cover only `CLAUDE.md`, only `AGENTS.md`, both, uppercase alternatives, and `AGENTS.override.md`. Preserve other agents' files and tell users to reload.
+- **PI-008:** Document the Pi package install/update/reload lifecycle, with the correct repository URL and separately installed subagent dependency.
+- **PI-009:** Put useful argument examples in skill text, not only `argument-hint` or Codex metadata.
 
-`assess-compatibilty` is already scoped correctly: compare upstream commits with upstream commits, never with this tree. Update its wording so the result is a drift list for the vendored set, not a focus list for a fork merge audit. It still writes only `docs/pi-compatibilty.md` and `last-consolidated.sha`. Fork fixes still do not close ledger findings.
+Preserve upstream behavior except where a Pi compatibility requirement demands a change. Maintain the complete `ask-matt` routing map, including portable skills, and keep repository-only maintenance skills out of it.
 
-Rewrite `sync-upstream`. Delete the merge procedure: no `--no-ff`, no "Create a merge commit", no workflow-exclusion step, no requirement to classify every upstream file. The new loop is:
+## Provenance and maintenance
+
+Add a small manifest in git mapping every ported upstream file to its upstream path and source SHA or blob. Mark unchanged copies versus adapted copies, and identify Pi-only helpers separately. Markdown or JSON is enough; do not use SQLite.
+
+Keep both maintenance skills under `.pi/skills/`.
+
+`assess-compatibilty` continues to compare upstream commits with upstream commits, never this tree. It writes only `docs/pi-compatibilty.md` and `last-consolidated.sha`. Its findings drive compatibility review for the complete port; fixes here do not close upstream findings.
+
+Rewrite `sync-upstream` as a reviewed port-update loop:
 
 1. Pin upstream and run `assess-compatibilty` against that exact SHA.
-2. Diff each vendored file against the upstream file and SHA it was copied from.
-3. Port upstream improvements into the adapted copy. Do not overwrite an adaptation with upstream text.
-4. If the ledger says a new skill entered the adaptation closure, add that skill. If a vendored skill no longer needs adaptation, say so and wait for confirmation before deleting it.
-5. Open a normal PR on `origin` only. Never push to upstream.
+2. Inventory additions, removals, renames, and changed dependencies across the complete upstream skill set.
+3. Diff ported files against the upstream source recorded in the manifest.
+4. Update portable copies faithfully and port upstream improvements into adapted copies without overwriting adaptations.
+5. Add corresponding Pi ports for new upstream skills. Explain removals, behavioral losses, and capability blockers before taking destructive action; wait for confirmation when important behavior would be lost.
+6. Update provenance, docs, router, package discovery, and validation together.
+7. Open a normal PR on `origin` only when asked. Never push to upstream.
 
-Add a small manifest, in git, mapping each vendored path to its upstream path and source SHA or blob. Markdown or JSON is enough. Do not use SQLite.
+Remove automatic whole-tree merge instructions, workflow-exclusion rituals, and merge-commit requirements. Skill parity does not require copying unrelated upstream repository automation or Claude marketplace infrastructure.
 
-## Docs and repo instructions
+## Docs and repository instructions
 
-- Keep `docs/pi-compatibilty.md` as the upstream ledger. Do not turn it into a status page for this repo.
-- Update `AGENTS.md` so the promoted-bucket, docs-page, and README rules apply only to skills this repo actually distributes. Do not require pages for upstream skills that are not here.
-- Replace the README install story. This is a Pi package, not a Claude plugin and not a skills.sh mirror. The current install line says `git:github.com/p-baum/picock` while `origin` is `mrpbaum/picock`, and `package.json` still points at `mattpocock/skills`. Fix those to this repository.
-- Human docs, if kept, use `/skill:<name>` and must not claim this tree is the upstream plugin.
-- This handoff can be deleted or archived after the migration PR lands. It is not a permanent guide.
+- Preserve `docs/pi-compatibilty.md`, its upstream baseline, and its evidence boundaries.
+- Update `AGENTS.md` to describe a complete Pi port. Promoted skills still require linked README entries and human docs; non-promoted skills retain their bucket listings without being promoted implicitly.
+- Follow `.agents/writing-docs.md` when syncing promoted-skill docs. Use `/skill:<name>` in Pi-facing docs.
+- Replace the README installation story with a self-contained Pi package workflow. Users do not need to install a second copy of upstream skills. Warn that duplicate skill names from other installations can shadow this port.
+- Point package metadata and install instructions to `mrpbaum/picock`.
+- Keep required licensing and upstream attribution. Remove or replace irrelevant Claude plugin and upstream policy surfaces only after checking their dependencies and informing the user of meaningful losses.
+- Adapt validation and linking scripts to the actual port inventory. Do not require `claude plugin validate`.
+- Keep this handoff until the implementation is reviewed; it may be archived after the migration lands.
 
 ## How to land it
 
-Work on a branch from current `main`. Do not rewrite published history. Do not merge `upstream/main` into the branch. The resulting tree will not contain most upstream files, and that is intentional. A merge commit that preserves upstream ancestry is the old strategy.
+Work on a new branch. Do not rewrite published history or merge `upstream/main` into it. Leave `main` publishable until review. Do not push or open a PR unless asked.
 
-Leave `main` publishable until the branch is reviewed. Do not push or open a PR unless the user asks in that session.
+Before changing skills or removing files, report unresolved scope questions, concrete blockers, and any potentially important losses. The user has explicitly rejected removing portable skills merely to reduce the maintained set.
 
 ## Done when
 
-- The distributed tree contains only the vendored set above, plus the files required to install and explain it.
-- No vendored skill tells the model to call a Claude `Skill` tool, `/clear`, or a missing subagent backend.
-- `setup-matt-pocock-skills` selects the context file Pi loads, including the case where `AGENTS.md` and `CLAUDE.md` both exist.
-- `sync-upstream` cannot merge upstream. `assess-compatibilty` still refuses to treat this tree as upstream evidence.
-- The ledger baseline is still an upstream SHA, and a manifest records the upstream source of every vendored file.
-- `resolving-merge-conflicts`, the `diagnosing-bugs` fork behavior, deleted-workflow policy, and upstream issue templates are gone.
-- Validation covers the vendored set only. Do not require `claude plugin validate`.
+- Every skill at the pinned upstream SHA has a corresponding functioning Pi port; portable skills and all cross-skill dependencies remain available in this package.
+- Differences from upstream behavior are justified by Pi compatibility, documented, and tested at the stated level.
+- No port requires Claude `Skill` dispatch, `/clear`, Claude-only hooks/CLI, or an unavailable subagent backend.
+- Setup selects the context file Pi loads, including coexistence and override cases.
+- Both repository-maintenance skills remain under `.pi/skills/`, excluded from distributed discovery and public routing.
+- `sync-upstream` performs reviewed port updates, not whole-tree merges. `assess-compatibilty` uses upstream evidence only.
+- `docs/pi-compatibilty.md` retains an upstream baseline, and the manifest records provenance for the full port.
+- Package discovery, invocation flags, bundled references, dependency closure, router coverage, and relevant runtime adaptations are validated. Untested runtime claims are labelled.
+- Fork-only skills and unrelated behavior changes are explicitly accounted for; important removals have user approval.
+- A single package installation provides the skills, with the required subagent backend installed separately. No separate upstream skills installation is needed.
