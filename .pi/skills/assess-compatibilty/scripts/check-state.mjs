@@ -29,8 +29,9 @@ if (!shaPattern.test(marker.replace(/\n$/, "")) || !marker.endsWith("\n")) {
 
 const markerSha = marker.slice(0, 40);
 const document = readFileSync(resolve(repoRoot, "docs/pi-compatibilty.md"), "utf8");
-const baseline = document.match(/^\| Upstream commit \| `([0-9a-f]{40})` \|$/m)?.[1];
-if (!baseline) {
+const baselines = [...document.matchAll(/^\| Upstream commit \| `([0-9a-f]{40})` \|$/gm)];
+const baseline = baselines[0]?.[1];
+if (baselines.length !== 1) {
   console.error("compatibility document has no unique upstream commit baseline");
   process.exit(2);
 }
@@ -46,12 +47,6 @@ function git(args) {
 
 git(["rev-parse", "--verify", `${target}^{commit}`]);
 git(["rev-parse", "--verify", `${markerSha}^{commit}`]);
-const ancestor = spawnSync("git", ["merge-base", "--is-ancestor", markerSha, target], { cwd: repoRoot, encoding: "utf8" });
-if (ancestor.status !== 0) {
-  console.error(`marker is not an ancestor of target: ${markerSha}..${target}`);
-  process.exit(2);
-}
-
 if (markerSha !== target || baseline !== target) {
   console.error(`stale: marker=${markerSha} document=${baseline} target=${target}`);
   process.exit(1);

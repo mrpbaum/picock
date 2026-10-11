@@ -47,6 +47,10 @@ After installing or updating, run `/reload` in an existing Pi session or restart
 
 Inspect installed packages with `pi list` and resources with `pi config`. `pi update --extensions` updates unpinned packages; bare `pi update` updates Pi itself. A pinned git ref or npm version does not advance automatically: change it deliberately after reviewing a new release. The backend reference is pinned here for reproducibility, not installed automatically.
 
+## Maintenance and releases
+
+We update skill snapshots and their required dependencies, not upstream repository ancestry or scaffolding. Each update combines incorporated upstream changes with Pi adaptations in an [enriched Changeset](./docs/maintenance/changesets.md), preserving coverage, provenance, and verification in release notes. The [snapshot update guide](./docs/maintenance/sync-upstream.md) describes this repository-only workflow.
+
 ## Why These Skills Exist
 
 I built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.

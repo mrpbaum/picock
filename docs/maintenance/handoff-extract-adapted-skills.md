@@ -98,10 +98,10 @@ Remove automatic whole-tree merge instructions, workflow-exclusion rituals, and 
 
 - Preserve `docs/pi-compatibilty.md`, its upstream baseline, and its evidence boundaries.
 - Update `AGENTS.md` to describe a complete Pi port. Promoted skills still require linked README entries and human docs; non-promoted skills retain their bucket listings without being promoted implicitly.
-- Follow `.agents/writing-docs.md` when syncing promoted-skill docs. Use `/skill:<name>` in Pi-facing docs.
+- Follow `docs/maintenance/writing-docs.md` when syncing promoted-skill docs. Use `/skill:<name>` in Pi-facing docs.
 - Replace the README installation story with a self-contained Pi package workflow. Users do not need to install a second copy of upstream skills. Warn that duplicate skill names from other installations can shadow this port.
 - Point package metadata and install instructions to `mrpbaum/picock`.
-- Keep required licensing and upstream attribution. Remove or replace irrelevant Claude plugin and upstream policy surfaces only after checking their dependencies and informing the user of meaningful losses.
+- Keep required licensing and upstream attribution. Keep Claude plugin metadata, repository issue forms, inherited rejection policy, and upstream release queues outside the skill copy boundary. Preserve bundled tracker and issue-body templates, and record skill updates plus Pi adaptations in enriched Changesets following `docs/maintenance/changesets.md`.
 - Adapt validation and linking scripts to the actual port inventory. Do not require `claude plugin validate`.
 - Keep this handoff until the implementation is reviewed; it may be archived after the migration lands.
 

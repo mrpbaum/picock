@@ -1,71 +1,40 @@
 ---
 name: assess-compatibilty
-description: "Refresh this repo's upstream-versus-Pi compatibility ledger and consolidation marker. Use on every sync-upstream run, when its marker is stale or inconsistent, or when asked to reassess upstream compatibility."
+description: Assess a pinned upstream skill snapshot and its dependency closure against Pi, keeping the compatibility ledger and evidence marker current for port updates.
 ---
 
-# Assess Compatibility
+# Assess Skill Compatibility
 
-Keep `docs/pi-compatibilty.md` current against **upstream plus Pi and the required `@tintinweb/pi-subagents` dependency**, independently of this fork's implementation. This is a repository-only, model-invoked maintenance skill. `sync-upstream` must use it on every run; humans can also invoke `/skill:assess-compatibilty`.
+Maintain `docs/pi-compatibilty.md` as upstream-versus-Pi evidence, independent of this port's fixes. The target is Pi plus required `@tintinweb/pi-subagents`. This repository-only skill writes only that ledger and its adjacent `last-consolidated.sha`; the sync coordinator owns port implementation and the enriched Changeset.
 
-Resolve repository paths from the repo root, not this skill directory. The state file beside this skill is `last-consolidated.sha`: one full lowercase upstream commit SHA followed by a newline. It means the ledger has incorporated compatibility effects through that commit, not that this fork has merged or remediated them.
+Resolve repository paths from the root. A source pin identifies the skill snapshot assessed, not a whole-repository tracking obligation, merged ancestry, or remediation status.
 
-## Boundaries
+## 1. Pin evidence and check state
 
-- Read upstream in a separate checkout at a pinned commit. Compare upstream commits with upstream commits, never with the fork's tree or merge result.
-- Write only the compatibility document and this skill's marker. Do not implement remediations, change other skills, install packages, push, or create GitHub items. The caller owns commits and integration.
-- Treat `@tintinweb/pi-subagents` as required. Distinguish supplied capabilities from instruction/configuration gaps; keep Claude `Skill` dispatch and hooks separate from subagent execution.
-- Advance the marker **last**, only after the ledger passes verification. On incomplete assessment, unavailable evidence, or failed validation, retain the old marker and report the blocker. Partial document edits are not a consolidated review.
-- Use one writer for the document/marker pair. Read-only research may be delegated, but this skill owns consolidation.
+1. Read repository instructions, this skill, the complete ledger and its sources/update procedure, and the marker. If sync supplies a full upstream target SHA, use it throughout. Otherwise resolve the requested source snapshot, confirming any remote repair, and obtain a separate pinned upstream checkout.
+2. Confirm the target and prior marker resolve to upstream commits. Compare the marker with the ledger's `Upstream commit`. Compare source snapshots directly. Missing source objects or a changed copy boundary require a full snapshot reassessment, not resetting the marker blindly. No ancestry relation is required by the state checker.
+3. Run `node .pi/skills/assess-compatibilty/scripts/check-state.mjs <target-sha>`. Exit 0 means the source pins agree, not that the assessment was thorough. Exit 1 is stale/inconsistent evidence; exit 2 is invalid state.
+4. If pins match, check that Pi/backend contracts remain current and no known skill/dependency gap was missed. Report already consolidated and leave evidence unchanged unless a fresh contract review is requested or warranted. Failed source resolution is a blocker, not permission to call a cached ref current.
 
-## 1. Pin the target and validate prior state
+**Done:** exact upstream target and evidenced previous baseline, with a justified no-op, incremental skill-file review, or full snapshot reassessment.
 
-1. Read repository instructions, this complete skill, `last-consolidated.sha`, and the complete compatibility document, including its sources and update procedure.
-2. If `sync-upstream` supplied an exact upstream endpoint, use that SHA throughout this run. Do not fetch a different endpoint midway. Otherwise verify the `upstream` remote points to `mattpocock/skills`, fetch it, discover its remote default branch, and resolve its current full commit SHA. Ask before adding/repairing a remote. Record how the target was selected.
-3. Require the target to resolve to an upstream commit. The marker must contain exactly one full lowercase SHA that resolves to a commit. Check whether it is an ancestor of the target, and compare it with the document's `Upstream commit` baseline.
-4. Run `node .pi/skills/assess-compatibilty/scripts/check-state.mjs <target-sha>` from the repo root. Exit 0 means marker and document baseline both match the target; exit 1 means stale/inconsistent state; exit 2 means invalid inputs/state. The checker does not certify that the review was thorough.
+## 2. Assess the skill closure
 
-If both endpoints match, verify the document still has its pinned Pi/dependency sources and no known unincorporated compatibility changes, then report **already consolidated**. Leave the document and marker unchanged unless the user requests a fresh Pi/dependency review or known evidence requires one. This freshness check counts as the skill's invocation on a no-change sync.
+1. Inventory every target upstream `SKILL.md`, its invocation mode, and required references, assets, scripts, and cross-skill dependencies. Account for new/removed/renamed skills. Keep upstream promotion labels separate from this port's complete-distribution goal.
+2. Compare source skill files and their dependencies against the previous upstream evidence pin. Read relevant source history when needed to establish intent. Never use this port's copies or local diffs as upstream evidence, and do not classify every unrelated upstream administrative file.
+3. Follow the ledger's review procedure for dispatch, context files, invocation, metadata, session commands, hooks/CLI, required subagent contracts, and shared prerequisites. Consult source installation/discovery surfaces only where needed to establish a compatibility claim; inspecting a Claude manifest as evidence does not mean copying it here.
+4. Read pinned Pi and backend documentation/source. Record exact versions and effective settings for runtime tests. Reproduce isolated loader/resource checks with defaults disabled. Check dependency closure and instruction-file precedence, not just changed skill bodies.
+5. Distinguish source findings, static checks, and runtime execution. Do not execute untrusted source scripts or install dependencies without authorisation. Unavailable evidence or unresolved capability questions block consolidation; label tests not run instead of implying certification.
 
-A missing, malformed, unavailable, non-ancestor, or document-inconsistent marker is not grounds to skip commits or blindly reset it. Recover an evidenced prior baseline if possible; otherwise review the full target snapshot. Explicitly record a history rewrite or full reassessment instead of pretending there is a trustworthy incremental range. A failed target fetch/resolution is a blocker, not permission to mark a cached remote ref current.
+**Done:** complete target skill coverage and required dependency evidence, with source-supported compatibility findings and explicit verification limits.
 
-**Done:** exact target, prior baseline and integrity/ancestry checks, and either a verified no-op or a justified review range/full-review scope.
+## 3. Consolidate and verify
 
-## 2. Assess upstream changes
+1. Preserve stable PI finding IDs, upstream evidence boundaries, and the distinction between supplied backend capabilities and remaining adaptation requirements. Local fixes do not resolve upstream findings.
+2. Update source pins, review date, scope, versions, coverage, source links, findings, and verification limits. Retain historical source references as historical, rather than implying deleted local infrastructure is still required.
+3. Summarise changes relevant to the port: upstream skill changes, compatibility drift, resolved/new findings, and new adaptation needs. These are inputs for the coordinator's enriched Changeset, not proof the port implemented them.
+4. Re-read every current finding against target sources, run isolated checks and `git diff --check`, and confirm the prior marker has not changed concurrently.
+5. Advance the marker last, only after the ledger is consolidated. Run the state checker again and require exit 0. Restore the prior marker on failure, report partial edits, and stop. Ledger and marker belong together in the caller's commit.
+6. Return previous/target source pins, review outcome, affected skills/assets, finding changes, checks/runtime limits, and a concise evidence summary suitable for the enriched record's Provenance, Upstream changes, Pi adaptations, Skill coverage, and Verification sections. State explicitly that the caller must record implementation separately.
 
-Follow the document's **Updating this review against a new upstream release** procedure. Use a fresh temporary clone or detached upstream checkout; clean it up after the review without deleting caller-owned workspaces.
-
-For a trustworthy marker, inspect both:
-
-```bash
-git diff --name-status <last-consolidated-sha> <target-sha>
-git log --oneline <last-consolidated-sha>..<target-sha>
-```
-
-Read relevant commits, including changes later reverted, and the final target versions. For every changed path, establish its Pi effect or explain why it has none. Follow changed skills into their unchanged dependencies, helpers, metadata, scripts, routers, install surfaces, and docs. Recheck renamed/deleted paths and any current findings that cite them. Keep resolved historical evidence distinct from current claims.
-
-Cover discovery/filtering, invocation/dispatch, child contexts and skills, parallel/background agents, nesting, worktree lifecycle, hooks, commands, context files, setup, installation/update behavior, metadata, and shared prerequisites. Read the exact Pi and required dependency contracts used as evidence; record versions rather than assuming the latest package matches an installed one. Consult upstream's setup skill for setup effects, without treating this fork's remediations as upstream evidence.
-
-Recount all target skills and the promoted/plugin sets, and reproduce isolated Pi loader/resource checks with user/project defaults disabled. Every current skill must remain covered, not just changed skills. Distinguish static checks from runtime tests; do not execute untrusted upstream scripts or install packages without authorization. If a previous result cannot be reproduced, remove its claim of current verification or mark it historical/untested.
-
-**Done:** all changed paths accounted for, dependent workflows inspected, current coverage complete, and each compatibility effect supported by upstream and pinned Pi/dependency evidence. Unresolved questions block consolidation.
-
-## 3. Consolidate the ledger
-
-Update `docs/pi-compatibilty.md`, preserving stable finding IDs and its maintainable structure:
-
-- Record review date, exact target, previous consolidated baseline/range, upstream versions/ref, Pi/dependency reference versions, methods, and limitations.
-- Update verdict, finding statuses/evidence/recheck conditions, per-workflow dependency mappings, installation routes/counts, coverage, source links, and remediation guidance where affected.
-- Add a new ID only for a new mismatch. Retain resolved findings with their resolving SHA/version and reason. Fork fixes do not resolve upstream findings.
-- Replace current-source links with target-pinned links; keep links explicitly labelled historical at their historical SHAs.
-- Record a concise range summary: added/changed/resolved findings, coverage changes, and changes with no Pi impact. If upstream changed but compatibility did not, still record the new baseline and that conclusion.
-
-This ledger supplies a compatibility drift list for maintaining the complete Pi port, including portable skills and newly incompatible dependencies. It does not classify this tree as upstream evidence, prove that an adaptation works here, or mark a remediation implemented.
-
-## 4. Verify, then advance the marker
-
-1. Re-read the updated ledger and check every current finding against target sources. Verify IDs, links, counts, coverage, dependency mappings, and disclosed test limits. Run `git diff --check` and relevant isolated checks.
-2. Confirm the document's `Upstream commit` equals the pinned target and the prior marker has not changed during this run. If another writer changed state, stop and reconcile instead of overwriting it.
-3. Only now write `<target-sha>\n` to `last-consolidated.sha`. Run the state checker again; it must exit 0. If final verification fails, restore the previous marker (or remove a newly created marker), retain/report partial document changes, and stop.
-4. Return previous SHA, target SHA, incremental/full/no-op outcome, finding changes, affected workflows, checks/untested behavior, and paths changed. Do not commit unless the caller explicitly asks; document and marker belong in the same caller-owned commit/PR.
-
-**Done:** the document is consolidated through the exact target, the marker agrees with its baseline, validation passes, and the caller has an evidence-backed drift list for its separate full-port update review.
+**Done:** the upstream skill snapshot is fully assessed, ledger and marker agree, and the sync coordinator has evidence for port review and enriched release notes. Do not change skills, the source manifest, or pending changesets, and do not commit, push, or open GitHub items without separate authority.

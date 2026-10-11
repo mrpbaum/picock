@@ -62,7 +62,9 @@ for (const path of ['skills/engineering/setup-matt-pocock-skills/SKILL.md', 'ski
 }
 assert.equal(read('skills/engineering/diagnosing-bugs/SKILL.md'), execFileSync('git', ['show', `${manifest.upstreamCommit}:skills/engineering/diagnosing-bugs/SKILL.md`], { cwd: root, encoding: 'utf8' }), 'Restore upstream debugging and secret-redaction behavior');
 assert.doesNotMatch(read('.pi/skills/sync-upstream/SKILL.md'), /--no-ff|Create a merge commit/);
-assert.equal(read('.pi/skills/assess-compatibilty/last-consolidated.sha').trim(), manifest.upstreamCommit);
+// Assessment provenance is independent of the skill snapshot actually ported.
+const assessmentPin = read('.pi/skills/assess-compatibilty/last-consolidated.sha').trim();
+execFileSync(process.execPath, [resolve(root, '.pi/skills/assess-compatibilty/scripts/check-state.mjs'), assessmentPin], { cwd: root, encoding: 'utf8' });
 
 // Exercise the actual shipped extension factory and registered handler without a model.
 const extension = read('skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.ts');

@@ -18,12 +18,14 @@
   },
   "scripts": {
     "changeset": "changeset",
-    "validate:skills": "node scripts/validate-skill-distribution.mjs && node scripts/validate-pi-docs.mjs && node scripts/validate-pi-subagents.mjs && node scripts/validate-port.mjs",
-    "version": "changeset version",
+    "validate:skills": "node scripts/validate-skill-distribution.mjs && node scripts/validate-pi-docs.mjs && node scripts/validate-pi-subagents.mjs && node scripts/validate-port.mjs && node scripts/validate-maintenance.mjs && node scripts/validate-changesets.mjs",
+    "version": "npm run validate:skills && changeset version",
+    "validate:changesets": "node scripts/validate-changesets.mjs",
+    "test:changesets": "node scripts/test-changesets.mjs",
+    "test:maintenance": "node scripts/test-maintenance.mjs && npm run test:changesets",
     "validate:pi-runtime": "node scripts/validate-pi-runtime.mjs"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.30.0"
   },
   "packageManager": "npm@10.9.4"

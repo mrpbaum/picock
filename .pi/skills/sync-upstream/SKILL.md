@@ -1,49 +1,55 @@
 ---
 name: sync-upstream
-description: Update the complete upstream skill port for Pi, preserve adaptations, validate parity, and prepare an origin-only PR when authorised.
+description: Refresh the one-to-one Pi skill snapshot, preserve required adaptations, and record upstream changes and Pi changes together in an enriched Changeset.
 disable-model-invocation: true
 ---
 
-# Sync Upstream
+# Refresh the Pi Skill Snapshot
 
-Maintain one corresponding Pi skill for every skill in a pinned `mattpocock/skills` snapshot. Portable copies remain upstream-faithful; adapted copies preserve upstream intent using Pi facilities. The source inventory is `docs/maintenance/upstream-port-manifest.json`.
+Maintain one Pi port for each skill in a reviewed `mattpocock/skills` snapshot, together with its required references and assets. Portable copies stay faithful; harness-dependent copies preserve upstream intent with Pi adaptations. This is a file-level snapshot update, not upstream ancestry tracking or a whole-repository merge.
+
+Read the repository instructions, complete setup skill, `docs/maintenance/upstream-port-manifest.json`, `docs/maintenance/changesets.md`, and `docs/pi-compatibilty.md`. Resolve these paths from the repository root. Maintenance tools remain under `.pi/skills/`, outside the distributed tree and public router.
 
 ## Boundaries
 
-- Upstream is read-only. Derive the destination repository from `origin`. Push or create a PR only when explicitly authorised, and only on origin.
-- Update files through reviewed ports, never by merging the whole upstream tree. This procedure does not run `git merge` against upstream or require a merge-commit PR strategy.
-- Preserve skill names, invocation policy, bundled dependencies, Pi adaptations, and unrelated local work. Report meaningful losses and capability blockers before destructive changes.
-- Repository automation is not skill parity. Inspect install/discovery surfaces as evidence without copying unrelated upstream administration.
-- Keep maintenance skills under `.pi/skills/`, outside package discovery, public listings, and routing. No SQLite index.
+- Upstream is read-only evidence. Derive publication destination from origin; push or open a PR only with explicit authority, never to upstream.
+- The copy boundary is skills and their dependency closure. Repository policy, marketplace metadata, issue forms, unrelated automation, and upstream's pending release queue are not imported.
+- Preserve names, invocation mode, behavior, required assets, Pi adaptations, and user work. Report meaningful losses or capability gaps before destructive action; no silent omissions, stubs, or fallback workflow changes.
+- Source SHAs/blobs establish reproducibility, not a requirement to preserve upstream ancestry. No upstream merge, SQLite index, or special PR merge mode.
 
-## 1. Pin evidence
+## 1. Pin and inventory
 
-1. Require clean working state. Report changes and stop rather than stashing.
-2. Read repository instructions, the complete setup skill, the provenance manifest, and `docs/pi-compatibilty.md`.
-3. Verify origin and upstream remotes; ask before adding or repairing a remote. Fetch upstream and resolve the requested ref or its discovered default branch to one full SHA. Hold that exact endpoint throughout the run.
-4. Read and follow `assess-compatibilty` against the exact endpoint, even on a no-change run. It compares upstream commits only. Failed or inconsistent consolidation blocks the update; never advance its marker manually.
-5. Inventory upstream skill additions, removals, renames, and all changed bundled references since the recorded sources. Read relevant history, including reverted changes. Compare each mapped file with the upstream path and source SHA/blob from which it was copied, not with this port as upstream evidence.
+1. Require clean working state; report changes and stop rather than stashing.
+2. Verify source/destination remotes and confirm repairs. Resolve the user's requested upstream ref, or the discovered default branch, to one full SHA. Obtain a separate pinned upstream checkout and hold that target through the run.
+3. Inventory every target `SKILL.md` and all references, scripts, assets, metadata, and cross-skill dependencies needed by those skills. Compare with the manifest's recorded source files, identifying additions, removals, renames, and source-content changes. The source snapshot is the authority for parity, not upstream's repository scaffolding or every intervening commit.
+4. Read and follow `assess-compatibilty` against the same target. It assesses relevant upstream skill/dependency evidence separately from implementation. A failed or inconsistent assessment blocks the update. Never manually advance its marker.
+5. Report a verified no-op only when source coverage, local adaptations, compatibility evidence, and required assets are current. A no-op creates no release record. If only compatibility evidence changes, report that as evidence-only work.
 
-**Done:** exact target, valid source provenance, complete skill/dependency delta, and upstream ledger consolidated through that target. If source files and evidence are already current, report the verified no-op.
+**Done:** pinned target, complete skill/dependency delta, valid provenance, consolidated compatibility evidence, and an explicit update/no-op/evidence-only outcome.
 
-## 2. Port the delta
+## 2. Port and record
 
-1. Create a normal update branch from the reviewed origin base, without merging upstream.
-2. For each mapped file, compare its recorded upstream source with the target source and inspect its Pi adaptation separately.
-3. Copy portable improvements faithfully. Port changes into adapted files by intent; never overwrite adaptations blindly. Follow unchanged cross-skill and bundled dependencies too.
-4. Add a corresponding Pi port for every new upstream skill. A concrete missing Pi capability is a blocker to report, not permission to omit the skill or write a stub.
-5. Report upstream removals, renamed commands, disappearing dependencies, and meaningful behavioral losses. Ask before removing important behavior or fork-only extras. A skill becoming portable remains shipped; only its unnecessary adaptation is retired after review.
-6. Update per-file provenance and classification, package discovery, bucket listings, promoted docs, router, and checks together. Identify Pi-only helpers separately. Keep the original copy source when a target file has not been reviewed/ported.
-7. If assessment changed the ledger/marker pair, include both together. Their inclusion does not certify adaptations in this branch.
+1. Create a normal update branch from the reviewed destination base without merging upstream.
+2. Compare each changed source file with the source SHA/blob recorded in the manifest, then port the change into the local copy. Copy portable improvements faithfully; preserve or retire Pi adaptations by evidence, not blind overwrite.
+3. Add corresponding ports and required dependencies for new upstream skills. Explain approved removals and renames, affected users, and retained extras. A skill becoming portable remains included; a missing Pi capability is a blocker to report.
+4. Update per-file provenance/classification, package discovery, bucket listings, promoted docs, router, and tests together. Record only source content actually reviewed and incorporated. Keep Pi-only helpers and approved extras distinct from upstream parity.
+5. Write one enriched `.changeset/<unique-id>.md` record for this completed update, following the release guide. Include:
+   - **Provenance:** previous source snapshot and exact reviewed target, with relevant source links.
+   - **Upstream changes:** skill/asset changes actually incorporated, not an upstream changelog pasted verbatim.
+   - **Pi adaptations:** translations made, preserved, or retired, compatibility IDs, and meaningful behavior differences.
+   - **Skill coverage:** affected skills/references, additions/removals/renames, dependency closure, parity counts, approved losses, and extras.
+   - **Verification:** actual outcomes, runtime versions, assessment changes, and tests not run.
+6. Choose this package's bump by user impact, not upstream's package version. Local-only adaptations keep both source SHAs unchanged. Evidence-only updates say no skill source refresh occurred. Do not queue inherited upstream notes or consume the real queue by versioning during sync.
+7. Include compatibility document/marker changes together with the manifest and their owning release record. Local fixes still do not close upstream findings.
 
-**Done:** complete target inventory accounted for, behavior preserved, blockers resolved, and provenance current for every ported file.
+**Done:** target skill parity and dependency closure, supported adaptations, accurate provenance, and a complete enriched pending release record. Unresolved blockers mean the update is not complete.
 
 ## 3. Verify and hand off
 
-1. Run `npm run validate:skills`, relevant runtime tests, the compatibility state checker for the target, and `git diff --check`. Do not require Claude plugin validation.
-2. Inspect complete upstream name/invocation parity, reference/dependency closure, Pi discovery with defaults disabled, session commands, context-file selection, and required subagent contracts. Static instruction checks are not runtime certification; disclose what was not exercised.
-3. Review the diff against the update branch's recorded base. Record changes per skill, adaptations preserved, removals approved, exact source SHAs, and test evidence.
-4. Commit only with authority. If publication is authorised, push the normal branch to origin and open a normal PR there. No upstream push or special merge mode is required.
-5. Return branch/commit or PR URL, target/source range, parity counts, blockers, tests, runtime limits, and remaining human gates.
+1. Run `npm run validate:skills`, `npm run test:maintenance`, relevant runtime tests, the compatibility state checker for the target, and `git diff --check`. Static checks are not model-driven runtime certification. Report unavailable verification explicitly.
+2. Inspect the local diff and source skill delta against the enriched record: every meaningful upstream skill change and Pi adaptation must be accounted for. Verify names, invocation, references, and unsupported capability handling. Check that no removed repository scaffolding or upstream release queue was reintroduced.
+3. Confirm the pending Changeset targets `picock`, has all five sections, and uses the source snapshot pins rather than Pi commits. Do not run `npm run version` except for an explicitly authorised release; test versioning only in disposable fixtures.
+4. Commit only with authority. Publish a normal origin-only branch/PR only when asked. No special merge mode or upstream push.
+5. Return target/source pins, coverage counts, branch/commit or PR, enriched record path, assessment changes, checks, runtime limits, approved losses, and remaining human gates.
 
-**Done:** a reviewable, validated port update with full provenance and no silent skill omissions. A PR being ready for review is not permission to merge it.
+**Done:** a reviewable snapshot update with complete provenance and enriched release evidence, without whole-repository tracking or silent skill loss.

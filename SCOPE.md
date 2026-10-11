@@ -1,23 +1,24 @@
 # Scope
 
-This fork consumes upstream skill improvements for Pi. Pi discovery, installation, invocation, tool compatibility, and safe orchestration are in scope. Upstream is a read-only source; branches, issues, and pull requests belong in the fork identified by `origin`.
+This repository distributes a one-to-one Pi port of a reviewed `mattpocock/skills` snapshot and the assets needed for those skills to work. Preserve upstream skill names, invocation modes, behavior, and dependency closure; adapt harness-specific instructions for Pi.
 
-## Feedback
+## In scope
 
-File Pi package and fork compatibility problems in this fork's Issues. Include the skill, Pi version, installation method, model, observed behavior, and expected behavior. General questions about upstream skill design can be discussed upstream, but Pi-specific support stays here.
+- Portable copies and justified Pi adaptations across the complete source skill inventory.
+- Pi discovery, installation, invocation, context-file selection, and required subagent workflows.
+- Provenance, compatibility evidence, enriched Changesets, validation, and necessary repository maintenance.
+- Explicitly documented retained extras where their compatibility value has been approved.
 
-Prefer evidence from a real session or a reproducible check. Fork remediations may include harness-specific instructions and fork-only skills when required for Pi consumption. Upstream's rejection of those changes is not a rejection by this fork.
+## Outside the copy boundary
 
-## Distribution
+Upstream ancestry, Claude plugin metadata, repository issue forms, publishing automation, inherited rejection policy, and upstream's pending release queue are not needed for skill parity. Read relevant upstream surfaces as evidence when necessary; do not import their repository administration.
 
-- `engineering/` and `productivity/` are promoted and distributed in the Pi package.
-- `in-progress/` is public beta content, excluded from the package and top-level README.
-- `misc/`, `deprecated/`, and `personal/` are excluded; manual use is not a supported package route.
+All actual skill buckets are distributed. Engineering/productivity are promoted daily workflows; beta/misc skills remain included without entering the top-level promoted listings.
 
-## Upstream policy records
+## Feedback and decisions
 
-The files under `.out-of-scope/` record upstream design choices. They are useful historical context, not binding fork policy when they conflict with Pi compatibility. Evaluate the concrete Pi impact instead of automatically closing a request because upstream rejected a similar concept.
+Report Pi port problems in this repository, naming the skill, Pi/backend versions, installation method, observed behavior, and a reproducible check where possible. Upstream design questions may be discussed upstream, but an upstream rejection is not this repository's policy.
 
-## Repository automation
+New local rejection records require a maintainer decision. The bundled triage skill may use `.out-of-scope/` in the project where it operates; this repository does not inherit upstream's rejection records. Removing the inherited files does not remove that skill capability.
 
-Upstream-only issue-management and publishing workflows are excluded. There is no automatic 14-day issue closure in this fork. Any future fork automation must demonstrably support Pi consumption and be introduced explicitly.
+Repository-specific GitHub issue forms are optional user-interface scaffolding, not skill templates. Wayfinder maps/tickets, specs, triage briefs, and tracker operations remain bundled with their skills and do not require `.github/ISSUE_TEMPLATE/`.

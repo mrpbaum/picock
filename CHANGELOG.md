@@ -1,4 +1,6 @@
-# mattpocock-skills
+# picock
+
+The entries through 1.3.1 below are inherited upstream release history, not Pi-port verification. New Pi releases preserve enriched port records covering source changes, adaptations, coverage, provenance, and checks.
 
 ## 1.3.1
 

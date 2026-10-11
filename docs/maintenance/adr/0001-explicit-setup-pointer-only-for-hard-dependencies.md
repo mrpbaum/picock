@@ -1,5 +1,7 @@
 # Explicit `setup-matt-pocock-skills` pointer only for hard dependencies
 
+Historical upstream rationale, retained for the hard/soft dependency distinction. The examples use the original names and are not a complete current dependency inventory. Actual skill instructions govern setup requirements.
+
 Engineering skills depend on per-repo config (issue tracker, triage label vocabulary, domain doc layout) seeded by the `setup-matt-pocock-skills` skill. Some skills cannot meaningfully function without that config because they have to publish to a specific issue tracker or apply a specific label string. Others only use it to sharpen output (vocabulary, ADR awareness) and degrade gracefully without it.
 
 We split these into **hard-dependency** and **soft-dependency** skills:
