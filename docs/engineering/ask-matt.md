@@ -2,7 +2,7 @@
 
 `ask-matt` recommends a **flow**, a path through skills, for the situation you describe. It recommends rather than starting the work, and reads a target skill's instructions before claiming what it does.
 
-The map covers this complete Pi port, including portable skills, explicitly non-promoted workflows, and retained extras. It is not a scanner or router for arbitrary skills from other packages. Repository-only maintenance skills stay outside the map.
+The map covers the 27 skills exposed by the pinned source plugin allowlist, not every retained file in the complete Pi port. Non-promoted skills, local-only extras, and repository-only maintenance skills stay outside the map. It is not a scanner or router for arbitrary skills from other packages.
 
 ## When to reach for it
 
@@ -38,7 +38,7 @@ The source ~150k-token smart-zone figure is a heuristic. Check the selected mode
 ## Common questions
 
 **It says a user-invoked skill is missing.**
-User-invoked skills are hidden from the automatic model catalogue. Check the installed directories and Pi discovery before concluding they are absent; use `/skill:<name>` to invoke them explicitly. Do not install a duplicate source copy to fix catalogue visibility.
+Exposed user-invoked skills are hidden from the automatic model catalogue but have explicit `/skill:<name>` commands. Check Pi discovery and the package allowlist before concluding they are absent. Retained non-promoted files and local-only extras are not registered by default, so file presence alone does not imply a command exists. Do not install a duplicate source copy to fix catalogue visibility.
 
 **It described a skill incorrectly.**
 The trace should show a read of that skill's `SKILL.md` before the claim. The router is a secondary source; the target instructions win when they disagree.
@@ -55,8 +55,8 @@ No. The map is maintained for this collection. Put standing project preferences 
 - Close alternatives are distinguished by your actual situation.
 - Claims about target behavior are preceded by reads of their instructions.
 - Session advice uses Pi commands and the actual context budget.
-- Beta workflows are identified as beta, not promoted implicitly.
+- Recommendations stay within the plugin-exposed allowlist rather than offering commands for retained, unregistered files.
 
 ## Where it fits
 
-This is a standalone router over the complete collection, not a build-chain step. Most daily routes lead to [grill-with-docs](https://aihero.dev/skills-grill-with-docs) or [triage](https://aihero.dev/skills-triage); the map then carries the work to implementation and review.
+This is a standalone router over the plugin-exposed collection, not a build-chain step. Most daily routes lead to [grill-with-docs](https://aihero.dev/skills-grill-with-docs) or [triage](https://aihero.dev/skills-triage); the map then carries the work to implementation and review.

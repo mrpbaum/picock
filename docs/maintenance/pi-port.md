@@ -6,7 +6,7 @@ This package ports all **38 source skills** at `49dd158d1076134a641b33efb0359465
 
 Picock is maintained independently. The source repository is read-only evidence, not a Git remote or ancestry relationship. The only remote here is picock's own origin. This pin does not claim to be the newest source HEAD; a newer snapshot requires reviewed copying and a fresh source assessment.
 
-Two local-only extras remain for existing users: `resolving-merge-conflicts` and `git-guardrails-pi`. They are not counted as source ports. The latter is an alias of the canonical Pi guardrail implementation under source's historical `git-guardrails-claude-code` name. Total Pi discovery is **40 skills**: 28 in the promoted buckets and 12 in beta/misc buckets. Promotion controls public listing structure, not availability.
+Two local-only extras remain as retained files: `resolving-merge-conflicts` and `git-guardrails-pi`. They are not counted as source ports. The latter is an alias of the canonical Pi guardrail implementation under source's historical `git-guardrails-claude-code` name. All **40 skill files** remain retained: 28 in the promoted buckets and 12 in beta/misc buckets. Default package discovery and global linking expose only the **27 paths** in the pinned source `.claude-plugin/plugin.json`: **11 automatic (model-invoked)** and **16 user-only**. The seven in-progress skills, four misc source skills, and two local-only extras are not registered by default. Retention preserves the full dependency closure and provenance; exposure is separate from file coverage and leaves source invocation flags unchanged.
 
 ## Runtime dependencies and naming
 
@@ -49,7 +49,7 @@ npm run validate:pi-runtime -- /path/to/node_modules/@earendil-works/pi-coding-a
 
 These checks were run against Pi `1.1.0`:
 
-- The actual skill loader found all 40 distributed skills with zero diagnostics, excluding repository maintenance.
+- The actual package resolver and skill loader exposed exactly 27 source-plugin skills (11 automatic and 16 user-only), excluding non-promoted skills, local extras, and repository maintenance. Direct full-tree loading separately verified all 40 retained skills with zero diagnostics.
 - User-invoked `ask-matt` was absent from the implicit prompt catalogue while model-invoked `tdd` was present.
 - The actual context loader selected the correct file for only-CLAUDE, only-AGENTS, coexistence, override, uppercase alternatives, and no-file cases. Setup remains prompt-driven; this verifies its specified loader contract, not a model's setup run.
 - Pi's actual extension loader loaded the bundled guardrail, and its event runner blocked synthetic push/reset calls while allowing status. No destructive git command or model was executed.

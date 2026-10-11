@@ -10,7 +10,7 @@ Invoke `/skill:ask-matt` when you don't remember which skill fits. Before statin
 
 Recommend `/skill:<name>` for human invocation. Load model-invoked dependencies by reading and following their instructions. User-invoked skills are recommendations to the human, not implicit calls.
 
-Pi delegation requires `@tintinweb/pi-subagents`; follow the [shared backend contract](../PI-SUBAGENTS.md). Stop when required capabilities are unavailable. Repository-maintenance skills are outside this public map.
+Pi delegation requires `@tintinweb/pi-subagents`; follow the [shared backend contract](../PI-SUBAGENTS.md). Stop when required capabilities are unavailable. Route only the 27 skills exposed by the pinned source plugin allowlist. Retained non-promoted files, local-only extras, and repository-maintenance skills are outside this public map.
 
 ## The main flow: idea → ship
 
@@ -69,21 +69,6 @@ Read [PHASE-BOUNDARIES.md](PHASE-BOUNDARIES.md) for the ordered decision tree. D
 - **`/skill:wait-what`:** re-pitch a message that did not land, adding missing context in the project's domain vocabulary.
 - **`/skill:teach`:** learn across sessions using the directory as a stateful teaching workspace.
 - **`/skill:writing-for-agents`:** reference for skills, context files, and documents agents follow.
-- **`/skill:resolving-merge-conflicts`:** retained local-only extra for tracing both sides' intent, resolving, and verifying an in-progress conflict.
-
-## Non-promoted skills
-
-These remain available in the complete Pi port, but are beta or specialist workflows, not the promoted daily flow. Read their instructions before recommending them.
-
-- **`/skill:chief-of-staff`:** pursue a long-running goal through background agents and optional session-scoped schedules.
-- **`/skill:claude-handoff`:** historical source name for launching a fresh Pi background worker from a redacted handoff file. Unlike `handoff`, it launches the receiving worker.
-- **`/skill:loop-me`:** grill a workflow specification into stateful `workflows/*.md` files.
-- **`/skill:setup-ts-deep-modules`:** enforce TypeScript package entry-point boundaries with dependency-cruiser.
-- **`/skill:writing-beats`, `/skill:writing-fragments`, `/skill:writing-shape`:** writing workflows; select the one whose artifact matches the request.
-- **`/skill:git-guardrails-claude-code`:** historical source name for installing opt-in Pi bash-call git guardrails. `git-guardrails-pi` is the retained local-only alias. Neither is a sandbox.
-- **`/skill:migrate-to-shoehorn`:** migrate the project to shoehorn where its prerequisites fit.
-- **`/skill:scaffold-exercises`:** scaffold exercises with its required project tooling.
-- **`/skill:setup-pre-commit`:** set up project pre-commit checks.
 
 ## Precondition
 

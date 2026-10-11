@@ -16,7 +16,7 @@ Every run reads and follows the repository-only `assess-compatibilty` skill agai
 
 The [provenance manifest](./source-port-manifest.json) records source paths and blobs for every ported file. Compare the recorded source with the target source, then port that delta into the local copy. Review unchanged dependencies as well as additions, removals, and renames.
 
-Keep skill names, invocation policy, behavior, bundled references, and Pi adaptations together. New skills need corresponding ports. Report missing capabilities and meaningful losses before changing behavior or deleting files. A skill becoming portable stays shipped; it does not move to a second installation.
+Keep skill names, invocation policy, behavior, bundled references, and Pi adaptations together. New skills need corresponding ports. Retain the complete skill/dependency closure and per-file provenance, but match default package discovery and global linking to an explicit allowlist of paths in the target source `.claude-plugin/plugin.json`. Read that file as exposure evidence without importing Claude plugin scaffolding. Retained non-promoted skills and local-only extras remain unregistered by default; the public router recommends only exposed skills. Source invocation flags remain unchanged. Report missing capabilities and meaningful losses before changing behavior or deleting files. A skill becoming portable stays retained; it does not move to a second installation.
 
 Repository-only administration is not part of skill parity. Do not copy unrelated source workflows, marketplace metadata, issue forms, rejection records, or pending release notes. Read relevant source surfaces as evidence only when required.
 
@@ -39,7 +39,7 @@ Explain the loss and its consumers before deleting important behavior. Retained 
 
 ## It's working if
 
-- Every target source skill and bundled dependency is accounted for.
+- Every target source skill and bundled dependency is retained and accounted for, with default discovery and linking matching the source-plugin allowlist.
 - Portable skills stay included, and adaptations survive reviewed updates.
 - Source provenance identifies the source content actually incorporated, not merely the newest fetched SHA.
 - `npm run validate:skills`, `npm run test:maintenance`, focused runtime checks, and whitespace checks pass, with untested behavior disclosed.

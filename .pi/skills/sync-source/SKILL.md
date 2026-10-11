@@ -13,7 +13,7 @@ Read the repository instructions, complete setup skill, `docs/maintenance/source
 ## Boundaries
 
 - Picock is an independent repository with only its own `origin` remote, not a Git fork workflow. Read the source URL from the manifest and inspect it in a separate checkout. Never add a source remote here. Derive publication destination from origin; push or open a PR only with explicit authority, never to the source repository.
-- The copy boundary is skills and their dependency closure. Repository policy, marketplace metadata, issue forms, unrelated automation, and source's pending release queue are not imported.
+- The copy boundary is all skills and their full dependency closure. Read the pinned source `.claude-plugin/plugin.json` as the authority for default Pi package discovery and global linking, using an explicit allowlist without importing Claude plugin scaffolding. Retain unexposed files and their provenance. Repository policy, marketplace metadata, issue forms, unrelated automation, and source's pending release queue are not imported.
 - Preserve names, invocation mode, behavior, required assets, Pi adaptations, and user work. Report meaningful losses or capability gaps before destructive action; no silent omissions, stubs, or fallback workflow changes.
 - Source SHAs/blobs establish reproducibility, not a requirement to preserve source ancestry. No source merge, SQLite index, or special PR merge mode.
 
@@ -32,7 +32,7 @@ Read the repository instructions, complete setup skill, `docs/maintenance/source
 1. Create a normal update branch from the reviewed destination base without merging source.
 2. Compare each changed source file with the source SHA/blob recorded in the manifest, then port the change into the local copy. Copy portable improvements faithfully; preserve or retire Pi adaptations by evidence, not blind overwrite.
 3. Add corresponding ports and required dependencies for new source skills. Explain approved removals and renames, affected users, and retained extras. A skill becoming portable remains included; a missing Pi capability is a blocker to report.
-4. Update per-file provenance/classification, package discovery, bucket listings, promoted docs, router, and tests together. Record only source content actually reviewed and incorporated. Keep Pi-only helpers and approved extras distinct from source parity.
+4. Update per-file provenance/classification, package discovery and linking allowlists, bucket listings, promoted docs, router, and tests together. Match default exposure to the target source plugin paths, while retaining the complete skill/dependency closure. Route and publicly list only exposed skills; retained non-promoted skills and local-only extras remain unregistered by default. Preserve source invocation flags. Record only source content actually reviewed and incorporated. Keep Pi-only helpers and approved extras distinct from source parity.
 5. Write one enriched `.changeset/<unique-id>.md` record for this completed update, following the release guide. Include:
    - **Provenance:** previous source snapshot and exact reviewed target, with relevant source links.
    - **Source changes:** skill/asset changes actually incorporated, not a source changelog pasted verbatim.

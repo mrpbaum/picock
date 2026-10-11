@@ -1,6 +1,6 @@
 # Writing Pi skill docs
 
-Every distributed skill in `skills/engineering/` and `skills/productivity/` has a human-facing page at `docs/<bucket>/<name>.md`. Re-sync it when behavior, naming, bucket, or invocation changes. Beta/misc/deprecated skills have bucket listings but no separate human docs page.
+Every retained skill in `skills/engineering/` and `skills/productivity/` has a human-facing page at `docs/<bucket>/<name>.md`. Re-sync it when behavior, naming, bucket, invocation, or default exposure changes. Mark pages for unregistered retained extras as archived from default exposure, rather than promising an available command. Beta/misc/deprecated skills have bucket listings but no separate human docs page.
 
 Docs orient a human choosing a skill; they do not repeat its runbook. State what distinguishes the skill, its trigger boundary, observable results, and nearby alternatives. The owning `SKILL.md` remains authoritative.
 
@@ -37,7 +37,7 @@ Use the skill's vocabulary: seam, deep module, tracer bullet, frontier, or porta
 
 ## Changes and removals
 
-Moves/renames update paths, bucket listings, top-level links, and router together. For an approved removal of a promoted skill, keep its human page marked archived with the release and replacement, if any. One-to-one coverage and migration impact belong in the enriched changeset, not only in documentation prose.
+Moves/renames update paths, bucket listings, top-level links, and router together. Top-level listings and the public router follow the default package allowlist; bucket listings inventory all retained files. For an approved removal of a promoted skill, keep its human page marked archived with the release and replacement, if any. One-to-one coverage and migration impact belong in the enriched changeset, not only in documentation prose.
 
 ## Done when
 

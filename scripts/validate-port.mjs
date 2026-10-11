@@ -51,9 +51,15 @@ for (const absolute of inventory(resolve(root, 'skills'))) {
   }
 }
 const router = read('skills/engineering/ask-matt/SKILL.md');
-for (const path of [...skillPaths, ...manifest.extras.filter(({ kind, path }) => kind === 'local-extra' && path.endsWith('/SKILL.md')).map(({ path }) => path)]) {
+const exposedPaths = JSON.parse(read('package.json')).pi.skills.map((path) => `${path.replace(/^\.\//, '')}/SKILL.md`);
+const exposedNames = new Set();
+for (const path of exposedPaths) {
   const name = read(path).match(/^name: (.+)$/m)[1];
+  exposedNames.add(name);
   assert.ok(router.includes(`/skill:${name}`) || router.includes(`\`${name}\``), `${name}: missing router coverage`);
+}
+for (const [, name] of router.matchAll(/\/skill:([a-z][a-z0-9-]*)/g)) {
+  assert.ok(exposedNames.has(name), `${name}: router recommends an unregistered command`);
 }
 for (const path of ['skills/engineering/setup-matt-pocock-skills/SKILL.md', 'skills/in-progress/setup-ts-deep-modules/SKILL.md']) {
   assert.ok(read(path).includes('`AGENTS.override.md`, `AGENTS.md`, `AGENTS.MD`, `CLAUDE.md`, `CLAUDE.MD`'), `${path}: wrong context candidate order`);

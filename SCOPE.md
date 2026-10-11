@@ -15,7 +15,7 @@ This repository distributes a one-to-one Pi port of a reviewed `mattpocock/skill
 
 Source ancestry, Claude plugin metadata, repository issue forms, publishing automation, inherited rejection policy, and source's pending release queue are not needed for skill parity. Read relevant source surfaces as evidence when necessary; do not import their repository administration.
 
-All actual skill buckets are distributed. Engineering/productivity are promoted daily workflows; beta/misc skills remain included without entering the top-level promoted listings.
+All actual skill buckets are retained with their dependency closure. Default Pi discovery and global linking match the pinned source Claude plugin's explicit skill list. Beta/misc skills and local-only extras remain retained but unregistered; top-level listings and the public router cover only exposed skills.
 
 ## Feedback and decisions
 

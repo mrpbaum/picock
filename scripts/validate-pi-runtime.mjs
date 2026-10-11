@@ -14,11 +14,22 @@ const { loadSkills, formatSkillsForPrompt } = await moduleAt('dist/core/skills.j
 const { loadProjectContextFiles } = await moduleAt('dist/core/resource-loader.js');
 const { loadExtensions } = await moduleAt('dist/core/extensions/loader.js');
 const { ExtensionRunner } = await moduleAt('dist/core/extensions/runner.js');
+const { DefaultPackageManager } = await moduleAt('dist/core/package-manager.js');
+const { SettingsManager } = await moduleAt('dist/core/settings-manager.js');
+const packageManifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
 const home = await mkdtemp(join(tmpdir(), 'picock-pi-runtime-'));
 try {
-  const loaded = loadSkills({ cwd: home, agentDir: home, skillPaths: [join(root, 'skills')], includeDefaults: false });
+  const manager = new DefaultPackageManager({ cwd: home, agentDir: home, settingsManager: SettingsManager.inMemory() });
+  const resources = await manager.resolveExtensionSources([root], { temporary: true });
+  const paths = resources.skills.filter(({ enabled }) => enabled).map(({ path }) => path);
+  const loaded = loadSkills({ cwd: home, agentDir: home, skillPaths: paths, includeDefaults: false });
   assert.deepEqual(loaded.diagnostics, []);
-  assert.equal(loaded.skills.length, 40);
+  assert.equal(loaded.skills.length, 27);
+  assert.deepEqual(loaded.skills.map(({ name }) => name).sort(), packageManifest.pi.skills.map((path) => basename(path)).sort());
+  const retained = loadSkills({ cwd: home, agentDir: home, skillPaths: [join(root, 'skills')], includeDefaults: false });
+  assert.deepEqual(retained.diagnostics, []);
+  assert.equal(retained.skills.length, 40);
+  assert.equal(loaded.skills.filter(({ disableModelInvocation }) => !disableModelInvocation).length, 11);
   assert.ok(!loaded.skills.some(({ name }) => ['sync-source', 'assess-compatibilty'].includes(name)));
   const maintenance = loadSkills({ cwd: home, agentDir: home, skillPaths: [join(root, '.pi/skills')], includeDefaults: false });
   assert.deepEqual(maintenance.diagnostics, []);
@@ -61,7 +72,7 @@ try {
   assert.equal((await runner.emitToolCall(event('git push --dry-run'))).block, true);
   assert.equal((await runner.emitToolCall(event('git -C /tmp reset HEAD --hard'))).block, true);
   assert.equal(await runner.emitToolCall(event('git status --short')), undefined);
-  console.log(`Pi ${version}: loaded 40 skills without diagnostics, checked invocation visibility, seven context states, and actual extension event-runner interception. No model or git command was executed.`);
+  console.log(`Pi ${version}: package exposes 27 skills (11 automatic), retains 40 without diagnostics, checked invocation visibility, seven context states, and actual extension event-runner interception. No model or git command was executed.`);
 } finally {
   await rm(home, { recursive: true, force: true });
 }

@@ -1,4 +1,4 @@
-> **Retained in this Pi port.** Source removed the skill in v1.3.0, but this port continues to distribute it for intent-based conflict resolution.
+> **Archived from default exposure.** Source removed the skill in v1.3.0. Its files remain retained in this Pi port, but the package and linking script no longer register it, matching the source plugin. There is no replacement skill in the default collection.
 
 ## What it does
 
@@ -8,9 +8,7 @@ It refuses to treat a conflict as a text problem. Before touching a hunk it trac
 
 ## When to reach for it
 
-In Pi, invoke `/skill:resolving-merge-conflicts`; in skills.sh-installed harnesses, use `/resolving-merge-conflicts`. The agent can also reach for it automatically during a merge or rebase conflict.
-
-Type `/resolving-merge-conflicts`, or the [agent](https://www.aihero.dev/ai-coding-dictionary/agent) reaches for it automatically when a task fits.
+This skill is not available through `/skill:resolving-merge-conflicts` or automatic model selection in the default installation. The description below documents the retained implementation, not an installed command.
 
 Reach for it when git has already stopped on conflicts it could not resolve itself. It is scoped to the conflict in front of you, not to anything either side of it:
 
@@ -52,4 +50,4 @@ Aborting throws away the resolution work and returns you to the same conflict, u
 
 ## Where it fits
 
-A reach-for-it-anytime standalone with no dependencies on any other skill: it starts when git stalls and ends when the tree is clean and committed. Its only real neighbour is [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs), which takes over at the point where a merge resolved cleanly but the merged code misbehaves: a diagnosis problem, not a conflict one. It is outside the main idea-to-ship flow, so [ask-matt](https://aihero.dev/skills-ask-matt) is the map for what runs before and after it.
+A reach-for-it-anytime standalone with no dependencies on any other skill: it starts when git stalls and ends when the tree is clean and committed. Its only real neighbour is [diagnosing-bugs](https://aihero.dev/skills-diagnosing-bugs), which takes over at the point where a merge resolved cleanly but the merged code misbehaves: a diagnosis problem, not a conflict one. It is outside the main idea-to-ship flow and no longer recommended by `ask-matt`, which maps only default-exposed skills.

@@ -9,6 +9,7 @@ const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const excluded = new Set(process.argv.slice(2));
 const read = (path) => readFile(resolve(root, path), 'utf8');
 const top = await read('README.md');
+const exposed = new Set(JSON.parse(await read('package.json')).pi.skills.map((path) => path.replace(/^\.\//, '')));
 let checked = 0;
 for (const bucket of ['engineering', 'productivity']) {
   const index = await read(`skills/${bucket}/README.md`);
@@ -16,7 +17,8 @@ for (const bucket of ['engineering', 'productivity']) {
     if (!entry.isDirectory()) continue;
     const name = entry.name;
     const skill = await read(`skills/${bucket}/${name}/SKILL.md`);
-    assert.ok(top.includes(`./skills/${bucket}/${name}/SKILL.md`), `${name}: top-level link missing`);
+    const publicLink = `./skills/${bucket}/${name}/SKILL.md`;
+    assert.equal(top.includes(publicLink), exposed.has(`skills/${bucket}/${name}`), `${name}: public listing must match package exposure`);
     assert.ok(index.includes(`./${name}/SKILL.md`), `${name}: bucket link missing`);
     const docs = await read(`docs/${bucket}/${name}.md`);
     if (!excluded.has(name)) {
