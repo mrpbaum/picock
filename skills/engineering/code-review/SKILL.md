@@ -59,7 +59,7 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 
 ### 4. Run two independent passes
 
-Verify the required backend before dispatch. Send two parallel `Agent` calls with `subagent_type: "general-purpose"` and `run_in_background: false`, one for Standards and one for Spec. Reviewers perform their own axis directly, without invoking this skill or delegating again.
+Verify the required backend before dispatch. Send two parallel `Agent` calls with `subagent_type: "general-purpose"`, `run_in_background: false`, and `inherit_context: false`, one for Standards and one for Spec. Use fresh sessions and do not share one reviewer's findings with the other. Keep reviewers in the source checkout without worktree isolation when reviewing uncommitted changes; worktrees copy only committed HEAD. Reviewers perform their own axis directly, without invoking this skill or delegating again.
 
 **Standards sub-agent prompt** should include:
 

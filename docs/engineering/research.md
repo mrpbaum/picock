@@ -60,7 +60,7 @@ The skill has no stopping criterion. This shows up as two complaints that look o
 
 **`/wayfinder` created research tickets. Do I resolve those myself?**
 
-No, it now fires them for you. In the unreleased changes since v1.1, a charting session spawns one `/research` subagent per research ticket and runs them in parallel. Each one records its findings on a throwaway `research/<name>` branch, with a [context pointer](https://www.aihero.dev/ai-coding-dictionary/context-pointer) from the ticket. Research tickets are the one exception to wayfinder's one-ticket-per-session rule, because they are [AFK](https://www.aihero.dev/ai-coding-dictionary/afk): nothing waits on you. One known problem: deleting the branch later breaks the context pointers in the tickets.
+No. In the Pi port, the wayfinder parent launches leaf research workers directly, one per research ticket. Each investigates and saves cited findings without invoking a second delegation workflow. Worktree results are preserved on returned `pi-agent-*` branches; the temporary worktree disappears. The parent verifies and pushes the preserved branch to the authorised project remote, then links the branch/file from the ticket. Research tickets are the exception to the one-ticket-per-session rule. Keep branches while tickets reference them, because deleting them breaks those pointers.
 
 ## It's working if
 

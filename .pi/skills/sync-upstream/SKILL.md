@@ -1,88 +1,49 @@
 ---
 name: sync-upstream
-description: Sync upstream skill improvements into this Pi fork, audit compatibility, and open sync and remediation pull requests.
+description: Update the complete upstream skill port for Pi, preserve adaptations, validate parity, and prepare an origin-only PR when authorised.
 disable-model-invocation: true
 ---
 
 # Sync Upstream
 
-Update this fork from `mattpocock/skills` for **Pi consumption**, preserving the fork's adaptations. The **compatibility gate** is complete only when every incoming file has evidence-backed classification and every confirmed gap has an owning remediation.
+Maintain one corresponding Pi skill for every skill in a pinned `mattpocock/skills` snapshot. Portable copies remain upstream-faithful; adapted copies preserve upstream intent using Pi facilities. The source inventory is `docs/maintenance/upstream-port-manifest.json`.
 
 ## Boundaries
 
-- **Upstream is read-only.** Fetch from `mattpocock/skills`; push branches and create issues/PRs only in the fork identified by `origin`. Derive its current owner/name rather than hardcoding a historical account name.
-- **Pi is the target.** Preserve Pi discovery, `/skill:<name>` invocation, harness-compatible tools, and installation instructions. Claude plugin surfaces matter only when they affect Pi docs, discovery, or validation. Run Pi validation, not `claude plugin validate`.
-- **Exclude upstream administration.** Remove incoming workflows used only for upstream issue management or publishing. Preserve existing fork workflows; retain incoming automation only when it demonstrably supports Pi consumption. Inspect purpose before deciding, and record exclusions in the audit.
-- **Preserve ancestry.** Use a real `--no-ff` upstream merge. Removing unwanted files from the resulting tree does not remove its upstream ancestry. The final sync PR must use GitHub's **Create a merge commit**, never squash or rebase.
-- Never merge, close, or retarget PRs. Never push to upstream.
+- Upstream is read-only. Derive the destination repository from `origin`. Push or create a PR only when explicitly authorised, and only on origin.
+- Update files through reviewed ports, never by merging the whole upstream tree. This procedure does not run `git merge` against upstream or require a merge-commit PR strategy.
+- Preserve skill names, invocation policy, bundled dependencies, Pi adaptations, and unrelated local work. Report meaningful losses and capability blockers before destructive changes.
+- Repository automation is not skill parity. Inspect install/discovery surfaces as evidence without copying unrelated upstream administration.
+- Keep maintenance skills under `.pi/skills/`, outside package discovery, public listings, and routing. No SQLite index.
 
-## 1. Establish the range
+## 1. Pin evidence
 
-1. Require a clean worktree; report local changes and stop rather than stashing.
-2. Read repository instructions and the complete `setup-matt-pocock-skills` skill.
-3. Inspect remotes and verify `origin` is the intended fork. Remotes live in each clone's `.git/config`, so another machine's `upstream` configuration does not carry over. When missing, add `https://github.com/mattpocock/skills.git` after user confirmation; confirm before repairing a different upstream fetch URL. Leave `origin` unchanged.
-4. Fetch and prune both remotes. Discover their default branches rather than assuming `main`.
-5. Record endpoint SHAs and commits in `origin/<default>..upstream/<default>`. Inventory incoming files from the merge-base to upstream, not a tip-to-tip diff that mistakes fork-only adaptations for upstream deletions. Also inspect upstream commits for changes later reverted.
-6. Use the complete `assess-compatibilty` skill against the exact upstream endpoint. Run it even when no upstream commits remain: it checks marker and document freshness, refreshes the ledger when stale, and reports already consolidated when current. A failed assessment or an inconsistent marker blocks sync; do not reset the marker manually.
+1. Require clean working state. Report changes and stop rather than stashing.
+2. Read repository instructions, the complete setup skill, the provenance manifest, and `docs/pi-compatibilty.md`.
+3. Verify origin and upstream remotes; ask before adding or repairing a remote. Fetch upstream and resolve the requested ref or its discovered default branch to one full SHA. Hold that exact endpoint throughout the run.
+4. Read and follow `assess-compatibilty` against the exact endpoint, even on a no-change run. It compares upstream commits only. Failed or inconsistent consolidation blocks the update; never advance its marker manually.
+5. Inventory upstream skill additions, removals, renames, and all changed bundled references since the recorded sources. Read relevant history, including reverted changes. Compare each mapped file with the upstream path and source SHA/blob from which it was copied, not with this port as upstream evidence.
 
-**Done:** clean worktree, exact endpoints, commit range, incoming file inventory, and a compatibility ledger consolidated through the exact upstream endpoint. If no upstream commits remain and the ledger is current, report current and stop without branches or GitHub items.
+**Done:** exact target, valid source provenance, complete skill/dependency delta, and upstream ledger consolidated through that target. If source files and evidence are already current, report the verified no-op.
 
-## 2. Prepare the draft sync
+## 2. Port the delta
 
-1. Branch from the recorded origin endpoint as `sync/upstream-<YYYY-MM-DD>`, adding a numeric suffix on collision.
-2. Merge the recorded upstream endpoint with `--no-ff`. Resolve conflicts by intent: retain upstream improvements and Pi adaptations together. Trace primary sources for ambiguous conflicts. Exclude upstream-only administration before pushing.
-3. Run `npm run validate:skills`, relevant focused checks, and `git diff --check`. Record failures honestly; distribution validation alone is not a compatibility audit.
-4. Push only to the fork and open a draft PR against its default branch. Include endpoints, commit range, conflict resolutions, excluded automation, checks, and: **merge this PR with GitHub's "Create a merge commit" option only**.
+1. Create a normal update branch from the reviewed origin base, without merging upstream.
+2. For each mapped file, compare its recorded upstream source with the target source and inspect its Pi adaptation separately.
+3. Copy portable improvements faithfully. Port changes into adapted files by intent; never overwrite adaptations blindly. Follow unchanged cross-skill and bundled dependencies too.
+4. Add a corresponding Pi port for every new upstream skill. A concrete missing Pi capability is a blocker to report, not permission to omit the skill or write a stub.
+5. Report upstream removals, renamed commands, disappearing dependencies, and meaningful behavioral losses. Ask before removing important behavior or fork-only extras. A skill becoming portable remains shipped; only its unnecessary adaptation is retired after review.
+6. Update per-file provenance and classification, package discovery, bucket listings, promoted docs, router, and checks together. Identify Pi-only helpers separately. Keep the original copy source when a target file has not been reviewed/ported.
+7. If assessment changed the ledger/marker pair, include both together. Their inclusion does not certify adaptations in this branch.
 
-Use `GH_TOKEN="$PI_GITHUB_PAT" gh ...` when token authentication is needed. Keep credentials out of logs and remote URLs. If GitHub rejects workflow changes, inspect the fork-relative final workflow diff before requesting broader permission. Report the actual rejection; do not assume preserving ancestry necessarily requires retaining workflow files or a broader PAT.
+**Done:** complete target inventory accounted for, behavior preserved, blockers resolved, and provenance current for every ported file.
 
-If assessment changed `docs/pi-compatibilty.md` and `.pi/skills/assess-compatibilty/last-consolidated.sha`, include both together in this draft sync. Do not commit either alone, and do not advance the marker independently of its ledger. Their inclusion does not make the ledger a fork-adaptation audit.
+## 3. Verify and hand off
 
-**Done:** draft fork PR containing the real upstream merge, with provenance and validation recorded. On authentication failure, preserve local work and report the blocker.
+1. Run `npm run validate:skills`, relevant runtime tests, the compatibility state checker for the target, and `git diff --check`. Do not require Claude plugin validation.
+2. Inspect complete upstream name/invocation parity, reference/dependency closure, Pi discovery with defaults disabled, session commands, context-file selection, and required subagent contracts. Static instruction checks are not runtime certification; disclose what was not exercised.
+3. Review the diff against the update branch's recorded base. Record changes per skill, adaptations preserved, removals approved, exact source SHAs, and test evidence.
+4. Commit only with authority. If publication is authorised, push the normal branch to origin and open a normal PR there. No upstream push or special merge mode is required.
+5. Return branch/commit or PR URL, target/source range, parity counts, blockers, tests, runtime limits, and remaining human gates.
 
-## 3. Audit the compatibility gate
-
-Audit the incoming inventory, reading enough surrounding code and fork history to establish effects. Delegate independent read-only areas when available, then verify their evidence.
-
-Check:
-
-- `package.json` discovery, promoted/excluded buckets, linking and distribution validation.
-- Top-level/bucket READMEs, promoted docs, invocation metadata, and `ask-matt` routing.
-- Tool assumptions: Claude-only APIs, subagents, hooks, browser access, paths, and authentication.
-- Installation/setup changes against `setup-matt-pocock-skills`.
-- Existing adaptations and their intent, using history and the freshly consolidated `docs/pi-compatibilty.md`. Use its current findings to focus the fork audit, then verify each affected adaptation against the merged tree. The ledger is upstream evidence, not proof that a fork fix survived or covers the change.
-- Cross-cutting renames across all active readers/writers and pointers. Preserve historical references where explicitly historical; record migration requirements for consumers.
-
-Classify **every incoming file** in the draft PR body:
-
-| Classification | Required evidence |
-| --- | --- |
-| Compatible | Why no Pi adaptation is needed. Include deliberately excluded upstream-only administration here, with the exclusion rationale. |
-| Already adapted | Which existing fork behavior covers the change, and evidence it survived the merge. |
-| Remediation required | Concrete Pi impact and checkable acceptance criteria. |
-
-**Done:** complete file-by-file table with evidence and acceptance criteria for every confirmed gap. Uncertainty stays in the audit until investigated, not in speculative issues.
-
-## 4. Own and implement remediations
-
-For each independent confirmed gap:
-
-1. Search open and closed fork issues/PRs; reuse an exact existing item rather than duplicating it.
-2. Create or update the owning issue with upstream trigger, Pi impact, evidence, and acceptance criteria.
-3. Branch from the sync branch, implement only that remediation, and run focused checks plus distribution validation. Keep dependent writes sequential; stack dependencies explicitly.
-4. Push to the fork and open a PR targeting the sync branch (or its dependency branch), with `Closes #<issue>` and why the adaptation belongs in this fork.
-
-**Done:** exactly one owning issue and implementation PR per gap, with dependencies and checks explicit.
-
-## 5. Hand off the gate
-
-Re-run the `assess-compatibilty` skill against the same upstream endpoint before handoff. If it reports already consolidated, continue. If it reports stale state, consolidate it and include the resulting document/marker pair before proceeding. If it cannot consolidate, keep the sync draft and report the blocker.
-
-Update the sync PR with final classifications, remediation links, and the compatibility marker/baseline. Mark ready only after the audit is complete, checks are reported, the marker matches the upstream endpoint and document baseline, and every gap has an implementation PR on a branch feeding the sync branch. Ready for review does not mean remediation PRs have already merged.
-
-Return the sync URL, endpoints/range, compatibility summary, issue/PR pairs, checks, and merge-order checklist:
-
-1. Dependency remediation PRs.
-2. Remaining remediation PRs into the sync branch.
-3. Revalidate the integrated sync branch.
-4. Sync PR last, using **Create a merge commit** only.
+**Done:** a reviewable, validated port update with full provenance and no silent skill omissions. A PR being ready for review is not permission to merge it.

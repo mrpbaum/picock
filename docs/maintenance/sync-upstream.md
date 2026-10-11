@@ -1,52 +1,45 @@
-# Sync upstream (repository maintenance)
+# Update the upstream Pi port
 
-This guide and the [repository-local skill](../../.pi/skills/sync-upstream/SKILL.md) are for maintaining this fork. They are not part of the distributed skill collection.
+This guide and the [repository-local skill](../../.pi/skills/sync-upstream/SKILL.md) maintain the complete Pi port. They are not distributed skills.
 
 ## What it does
 
-`sync-upstream` brings skill improvements from `mattpocock/skills` into this Pi fork and opens a draft sync pull request. Upstream is read-only; branches, issues, and PRs are created only in the fork identified by `origin`. Upstream-only issue-management and publishing workflows are excluded, while Pi-facing improvements and upstream ancestry are preserved. It treats Pi compatibility as a gate: upstream changes are classified before the sync is declared ready, and confirmed gaps become linked issue/PR pairs rather than notes left for later.
+`sync-upstream` pins an upstream snapshot, reviews its skill and dependency changes against recorded sources, and ports them without overwriting Pi adaptations. Portable skills remain included. It prepares a normal branch and, only when authorised, an origin-only PR. It does not merge the whole upstream tree or impose a merge-commit strategy.
 
 ## When to reach for it
 
-Start Pi in this repo, trust its project resources, and invoke `/skill:sync-upstream`. Run `/reload` if Pi was already open when the skill moved. Pi discovers it from `.pi/skills/`; package installation and global skill linking do not expose it elsewhere. The agent won't reach for it on its own.
+Start Pi in this trusted repository and run `/skill:sync-upstream`. Reach for it when upstream has skill improvements to review. Require clean working state and verified remotes; remotes are per-clone configuration, so missing or incorrect remotes need confirmation.
 
-Every run uses the repository-only `assess-compatibilty` skill. It compares the upstream endpoint with `.pi/skills/assess-compatibilty/last-consolidated.sha` and `docs/pi-compatibilty.md`, refreshes the ledger when stale, and advances the marker only after validation. A current marker is a successful no-op, not a skipped check.
+Every run reads and follows the repository-only `assess-compatibilty` skill against the exact target SHA. The assessment compares upstream with upstream, not with this port. A current ledger/marker is a verified no-op; stale or inconsistent evidence blocks the update until consolidated.
 
-Reach for it whenever this fork needs to catch up with upstream while preserving its Pi-specific distribution and harness adaptations.
+## The review boundary
 
-## Prerequisites
+The [provenance manifest](./upstream-port-manifest.json) records upstream source paths and blobs for every ported file. Compare the recorded source with the target source, then port that delta into the local copy. Review unchanged dependencies as well as additions, removals, and renames.
 
-Run it in this fork with clean working state, `origin` pointing to the fork, and GitHub access capable of pushing branches and creating issues and pull requests. If the local clone lacks `upstream`, the skill offers to add `https://github.com/mattpocock/skills.git` after confirmation.
+Keep skill names, invocation policy, behavior, bundled references, and Pi adaptations together. New skills need corresponding ports. Report missing capabilities and meaningful losses before changing behavior or deleting files. A skill becoming portable stays shipped; it does not move to a second installation.
 
-## The compatibility gate
-
-The upstream merge first becomes a draft PR. Every changed file is then classified as compatible, already adapted, or requiring remediation. The freshly consolidated compatibility ledger focuses that audit, but fork history and the merged tree remain the evidence for whether an adaptation survived. The audit covers skill discovery, invocation syntax, manifests, linking, setup behavior, tool assumptions, and prior Pi adaptations.
-
-Confirmed gaps receive separate issues and implementation PRs stacked into the sync branch. The merge order is deliberate: remediation PRs first, sync PR last.
-
-The final sync PR must be merged with GitHub's **Create a merge commit** option. Squash-merge or rebase-merge can copy upstream's files without preserving upstream's commit ancestry, which leaves GitHub's fork UI saying the fork is still behind upstream.
+Repository-only administration is not part of skill parity. Do not copy unrelated upstream workflows merely to preserve fork ancestry.
 
 ## Common questions
 
-**Why is `upstream` missing on another machine?**
-Git remotes are per-clone configuration in `.git/config`, not shared repository content. The skill checks each clone and offers to configure the missing remote.
+**Does this push to upstream?**
+No. Upstream is read-only. The user must authorise publication; branches and PRs go only to the repository identified by origin.
 
-**Does this push anything to upstream or install its administration workflows?**
-No. It fetches upstream improvements and pushes only to your fork. Incoming issue-management or publishing workflows are excluded unless they demonstrably support Pi consumption. Existing fork automation is preserved.
+**Does a compatibility fix close a ledger finding?**
+No. `docs/pi-compatibilty.md` describes upstream versus Pi. This port's implementation and verification live separately.
 
-**Do we lose upstream history when unwanted workflows are removed?**
-No. A merge commit preserves upstream ancestry independently of the files retained in its final tree. The final PR must still use GitHub's Create a merge commit option.
+**What about removed upstream skills or fork-only extras?**
+Explain the loss and its consumers before deleting important behavior. Retained extras are explicitly distinguished from one-to-one upstream ports.
 
 ## It's working if
 
-- The sync PR names the exact upstream commit range.
-- Every changed file has an evidence-backed compatibility classification.
-- Each real compatibility gap has one issue and one focused PR.
-- The sync remains draft until the compatibility gate is complete.
-- The compatibility ledger and consolidation marker agree on the exact upstream endpoint, including runs with no new upstream commits.
-- Only the fork receives pushed branches and PRs; upstream-only administration is absent from the resulting tree.
-- After the sync PR is merged with a merge commit, the recorded upstream endpoint is an ancestor of the fork's default branch.
+- Every target upstream skill and bundled dependency is accounted for.
+- Portable skills stay included, and adaptations survive reviewed updates.
+- Source provenance identifies the upstream content actually incorporated, not merely the newest fetched SHA.
+- `npm run validate:skills`, focused runtime checks, and whitespace checks pass, with untested behavior disclosed.
+- The ledger and marker agree on the exact upstream evidence endpoint.
+- The result is a normal reviewable branch or origin-only PR, with no automatic whole-tree merge.
 
 ## Where it fits
 
-This is periodic fork maintenance rather than feature delivery. It checks [setup-matt-pocock-skills](../../skills/engineering/setup-matt-pocock-skills/SKILL.md) as one of the compatibility surfaces being protected. It is deliberately absent from the public `ask-matt` router and skill listings.
+This is repository maintenance, deliberately absent from public package discovery and `ask-matt`. Its full procedure lives in `.pi/skills/sync-upstream/SKILL.md`.

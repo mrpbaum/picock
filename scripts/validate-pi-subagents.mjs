@@ -13,11 +13,14 @@ const files = [
   'skills/engineering/code-review/SKILL.md',
   'skills/engineering/codebase-design/SKILL.md',
   'skills/engineering/codebase-design/DESIGN-IT-TWICE.md',
+  'skills/engineering/implement/SKILL.md',
   'skills/engineering/implement-spec/SKILL.md',
   'skills/engineering/improve-codebase-architecture/SKILL.md',
   'skills/engineering/research/SKILL.md',
   'skills/engineering/wayfinder/SKILL.md',
   'skills/productivity/grilling/SKILL.md',
+  'skills/in-progress/chief-of-staff/SKILL.md',
+  'skills/in-progress/claude-handoff/SKILL.md',
 ];
 for (const path of files) {
   const text = read(path);

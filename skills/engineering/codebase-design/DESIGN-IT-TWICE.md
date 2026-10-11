@@ -20,7 +20,7 @@ Show this to the user, then immediately proceed to Step 2.
 
 Produce 3+ **radically different** interfaces for the deepened module.
 
-In Pi, follow the [required subagent backend contract](../PI-SUBAGENTS.md); stop if unavailable. Send all design passes as parallel `Agent` calls with `subagent_type: "general-purpose"`, `run_in_background: false`, and an independent prompt for each constraint.
+In Pi, follow the [required subagent backend contract](../PI-SUBAGENTS.md); stop if unavailable. Send all design passes as parallel `Agent` calls with `subagent_type: "general-purpose"`, `run_in_background: false`, `inherit_context: false`, and an independent prompt for each constraint. Use fresh sessions without sharing competing designs between workers; provide verified absolute vocabulary/reference paths.
 
 Give each pass the same technical brief (file paths, coupling details, dependency category from [DEEPENING.md](DEEPENING.md), what sits behind the seam) but a different design constraint:
 

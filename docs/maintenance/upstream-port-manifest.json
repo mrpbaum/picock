@@ -1,0 +1,787 @@
+{
+  "schemaVersion": 1,
+  "upstreamRepository": "https://github.com/mattpocock/skills",
+  "upstreamCommit": "49dd158d1076134a641b33efb035946536778336",
+  "upstreamSkillCount": 38,
+  "notes": "Source commits identify incorporated upstream content, not runtime certification. Adapted files differ for Pi; retained extras are not upstream parity. Regenerate only after reviewing every mapped source at the supplied SHA.",
+  "files": [
+    {
+      "path": "skills/deprecated/README.md",
+      "upstreamPath": "skills/deprecated/README.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "aa1242c27b1f5e3f762bd5743affbd966811b5b4",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/README.md",
+      "upstreamPath": "skills/engineering/README.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "381c82ac4e54427ba73d0569fdf712187ddcc724",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/ask-matt/PHASE-BOUNDARIES.md",
+      "upstreamPath": "skills/engineering/ask-matt/PHASE-BOUNDARIES.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "fb58ef9febcfd558cdb4517e370f19034869ba26",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/ask-matt/SKILL.md",
+      "upstreamPath": "skills/engineering/ask-matt/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "4bfeeb61dae548b8b7754c4fba7bd40ab3926099",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/ask-matt/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/ask-matt/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "5c60d51b5b1248d7210bff8c6b42a5a06524b8a4",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/code-review/SKILL.md",
+      "upstreamPath": "skills/engineering/code-review/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "373a4f26e6cfa3617778397945bb069d9cb184bc",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/code-review/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/code-review/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "9076774ba327f49068db9273feceda03bfe940fa",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/codebase-design/DEEPENING.md",
+      "upstreamPath": "skills/engineering/codebase-design/DEEPENING.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "cd94075cfd754d147555c5d747a16431ed4c7dd8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+      "upstreamPath": "skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "d0990138c35c800bd821289a73115e52680c1620",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/codebase-design/SKILL.md",
+      "upstreamPath": "skills/engineering/codebase-design/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3f63c8146dd2604b419c929e9876b90c30d410e9",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/codebase-design/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/codebase-design/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3180715edb37f6e96bec42f92f00169faa8886ef",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "upstreamPath": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "d039541ddd1c46e6ddbd662fe99d49b686fc5e12",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/diagnosing-bugs/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/diagnosing-bugs/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a13a755a77634ce61a649a3a0d905a66d3865b35",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "upstreamPath": "skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "243198464a8401a7ba1d63b3708fa43c3d067665",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/domain-modeling/ADR-FORMAT.md",
+      "upstreamPath": "skills/engineering/domain-modeling/ADR-FORMAT.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "d7e61f30a9fd8ca70d9ee68f019c2a9ebf2d13f7",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/domain-modeling/GLOSSARY-FORMAT.md",
+      "upstreamPath": "skills/engineering/domain-modeling/GLOSSARY-FORMAT.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "9c0b4c7a2e8507c23cbb5e0baa66d81699321cc6",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/domain-modeling/SKILL.md",
+      "upstreamPath": "skills/engineering/domain-modeling/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a4438c6879c517d1a08e2b5fbca049b632688dfe",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/domain-modeling/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/domain-modeling/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "7f1522d2f11506ee205275ab7c282aa52366ecf6",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/grill-with-docs/SKILL.md",
+      "upstreamPath": "skills/engineering/grill-with-docs/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "62b9efb6f991d1b229adee7506962f13ced0c499",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/grill-with-docs/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/grill-with-docs/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "5dbe2780a51be3e9b118bd7758a73e54a9384e11",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/implement-spec/SKILL.md",
+      "upstreamPath": "skills/engineering/implement-spec/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "183923797ab58f1b3ef09e03bc1f1f203c309f37",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/implement-spec/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/implement-spec/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "f5e91af21e38eb1a167ea5aa93dfc7da3c4637b4",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/implement/SKILL.md",
+      "upstreamPath": "skills/engineering/implement/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "bd49e472984c7b99aac40286fdae749bb955a842",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/implement/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/implement/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "f8794dc153b409052a9167baf10858cf01b36175",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/improve-codebase-architecture/HTML-REPORT.md",
+      "upstreamPath": "skills/engineering/improve-codebase-architecture/HTML-REPORT.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "e39e8255b8797cf8257d014fb6658fb533f3a399",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "upstreamPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "44cc7d3136c44534d68ac523fa6cd37e759d2846",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/improve-codebase-architecture/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/improve-codebase-architecture/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "706fdca096da5937fe57875a9154017d50668c42",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/pr/CREDITS.md",
+      "upstreamPath": "skills/engineering/pr/CREDITS.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "5314bda2fa6005e264c9b5c1de7c425e719dc91f",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/pr/SKILL.md",
+      "upstreamPath": "skills/engineering/pr/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "84dd4fb2f068e9f6282690235d20dd505b418119",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/pr/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/pr/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "48286f48f53b937cc19c0e39899b5f956271a98d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/prototype/LOGIC.md",
+      "upstreamPath": "skills/engineering/prototype/LOGIC.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "32be86a0a5d9928db84b3988e55f9debe476ab40",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/prototype/SKILL.md",
+      "upstreamPath": "skills/engineering/prototype/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a0044501fe0d385b4d8575b610188ede9b236ccf",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/prototype/UI.md",
+      "upstreamPath": "skills/engineering/prototype/UI.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3977951663490882c2632b40695d9f59a2fe2408",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/prototype/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/prototype/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "1618b147965bc729b7bf3e8da5f130132067aadc",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/research/SKILL.md",
+      "upstreamPath": "skills/engineering/research/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "fecee97e9457ba039678d2fcf1b1bc9fca78307d",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/research/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/research/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "e18b96ca0ccc1003889d5d6991386207c2454bc2",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/retro/SKILL.md",
+      "upstreamPath": "skills/engineering/retro/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "12149acf2dd23b4514dec57b04a6293eaa1352fa",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/retro/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/retro/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a2f0bac3f9cebf29beee2e79960cb876e0adc65d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "upstreamPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "293c25b75590119794af03b037ba4288054a32b3",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/setup-matt-pocock-skills/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/setup-matt-pocock-skills/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "65a0da8128c98051183235e490767a8065310868",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/setup-matt-pocock-skills/domain.md",
+      "upstreamPath": "skills/engineering/setup-matt-pocock-skills/domain.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "4032de016c1e91119d33d477633e2b8f265f4195",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-github.md",
+      "upstreamPath": "skills/engineering/setup-matt-pocock-skills/issue-tracker-github.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a63510f74038300d8da354553f9d31d1bd954d94",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+      "upstreamPath": "skills/engineering/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "81499dca459e8097d560b641f8ba7c2e1c7c9da4",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md",
+      "upstreamPath": "skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "0209a19af92c9c485cf3acc3d9e253171517ea17",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/setup-matt-pocock-skills/triage-labels.md",
+      "upstreamPath": "skills/engineering/setup-matt-pocock-skills/triage-labels.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "5276464244857a3cc29890ff4a978a197b21f3fc",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/tdd/SKILL.md",
+      "upstreamPath": "skills/engineering/tdd/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "01eadaa34e7c9a63a67d6dc3cce1cc81b0e49985",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/tdd/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/tdd/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "651b838a7663e027b1b8884491e867f26bb9a021",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/tdd/mocking.md",
+      "upstreamPath": "skills/engineering/tdd/mocking.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "71cbfee674d93244ce81d1830b930ca9a69200bd",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/tdd/tests.md",
+      "upstreamPath": "skills/engineering/tdd/tests.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "7ab86479f925a1f9e8ba680af33cb3b12e015381",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/to-spec/SKILL.md",
+      "upstreamPath": "skills/engineering/to-spec/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3f52599ae2a4347aee5a07432c2707518e691a7f",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/to-spec/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/to-spec/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "549e6f76f020a1b9ba65f52ccda336566ee6222a",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/to-tickets/SKILL.md",
+      "upstreamPath": "skills/engineering/to-tickets/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "9b77a01db9460c99c22d03c910c349f890f12c0e",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/to-tickets/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/to-tickets/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "24605a5db64e4fc750b999aa94aea126bee814ee",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/triage/AGENT-BRIEF.md",
+      "upstreamPath": "skills/engineering/triage/AGENT-BRIEF.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "1462fcd9e8cc21921158c296149dc05d9be39d20",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/triage/OUT-OF-SCOPE.md",
+      "upstreamPath": "skills/engineering/triage/OUT-OF-SCOPE.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "c9fba2f77ee0619975ec8488c0d4861a0c7e3151",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/triage/SKILL.md",
+      "upstreamPath": "skills/engineering/triage/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3fd5617e906cf9b71a6b17424791adb905fc248b",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/triage/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/triage/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "acb366cf0f2527e8925ff1223b77610ac0b1be4c",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/wayfinder/SKILL.md",
+      "upstreamPath": "skills/engineering/wayfinder/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "e28cf3018906d6d60fc5b25390b4eeea035dd290",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/engineering/wayfinder/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/wayfinder/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "b37544751e0570f9df8de6c02aef238de8c3e1e0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/wizard/SKILL.md",
+      "upstreamPath": "skills/engineering/wizard/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "c4294ad8298b9b95fc727496b1b802b1f7363fba",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/wizard/agents/openai.yaml",
+      "upstreamPath": "skills/engineering/wizard/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "b601bdf3a321e7d32d5714681540b811287d3988",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/engineering/wizard/template.sh",
+      "upstreamPath": "skills/engineering/wizard/template.sh",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "081ed3da860729c5e6fb1e7126c86b07b0ed56f0",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/README.md",
+      "upstreamPath": "skills/in-progress/README.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "792ebaa0aecbc24bf02742558df8873c9df72af2",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/in-progress/chief-of-staff/SKILL.md",
+      "upstreamPath": "skills/in-progress/chief-of-staff/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "97da622d09acaaacebbb4482663c907e241f4594",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/in-progress/chief-of-staff/agents/openai.yaml",
+      "upstreamPath": "skills/in-progress/chief-of-staff/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "080598b44ad9c843dc3457b6e0e32368aaeec84d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/claude-handoff/SKILL.md",
+      "upstreamPath": "skills/in-progress/claude-handoff/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "77f82fc59c89c3a83ed5a92521dc2869f0533724",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/in-progress/claude-handoff/agents/openai.yaml",
+      "upstreamPath": "skills/in-progress/claude-handoff/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "0a7aa5da50d0e73248fc17fb8fe82409ec071eaf",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/loop-me/SKILL.md",
+      "upstreamPath": "skills/in-progress/loop-me/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "e58a474ca80feffdeb28842bc3bdee37da6510e7",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/in-progress/loop-me/agents/openai.yaml",
+      "upstreamPath": "skills/in-progress/loop-me/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "1a4f4111192ff75b4771e8a248c603994d5eafdc",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
+      "upstreamPath": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "7e30047eaeda175de5d93886596a37baf365bb90",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/in-progress/setup-ts-deep-modules/agents/openai.yaml",
+      "upstreamPath": "skills/in-progress/setup-ts-deep-modules/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "5d0581bdd4f9337cfb1e13feb7e1e18f43ea9db1",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/setup-ts-deep-modules/dependency-cruiser.config.cjs",
+      "upstreamPath": "skills/in-progress/setup-ts-deep-modules/dependency-cruiser.config.cjs",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "54030ede7d36b7f72fc0f645fa414efa9b6f63ed",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/writing-beats/SKILL.md",
+      "upstreamPath": "skills/in-progress/writing-beats/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3d3b25b605491adc5c62ae5423127717a94b9632",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/writing-beats/agents/openai.yaml",
+      "upstreamPath": "skills/in-progress/writing-beats/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "e8eaa188d4c70b582eed2d1775fe4c4ea3562b25",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/writing-fragments/SKILL.md",
+      "upstreamPath": "skills/in-progress/writing-fragments/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "c7c889b880cf9c8d289119dea5ff240641b615ca",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/writing-fragments/agents/openai.yaml",
+      "upstreamPath": "skills/in-progress/writing-fragments/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "be3713e91e3ddc6c71e04e6b512b6ad6502d7cc8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/writing-shape/SKILL.md",
+      "upstreamPath": "skills/in-progress/writing-shape/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "02f2866d13e72504e010f2ad3458eb9b36b876db",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/in-progress/writing-shape/agents/openai.yaml",
+      "upstreamPath": "skills/in-progress/writing-shape/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "87e0c736be148002f9db275258cd2f405643ad7b",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/README.md",
+      "upstreamPath": "skills/misc/README.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "6b169d22be12c078f1e70763d367fe693de342e2",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/misc/git-guardrails-claude-code/SKILL.md",
+      "upstreamPath": "skills/misc/git-guardrails-claude-code/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "58bcdd875b164093b95f436fa32a65c6cb5eb572",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/misc/git-guardrails-claude-code/agents/openai.yaml",
+      "upstreamPath": "skills/misc/git-guardrails-claude-code/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3f5d756f1b9b97d94cef1473fb480ccda5fdfbc1",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.sh",
+      "upstreamPath": "skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.sh",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "c40b59cb47880fc9da8fe4179bd742f51f09d17d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/migrate-to-shoehorn/SKILL.md",
+      "upstreamPath": "skills/misc/migrate-to-shoehorn/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "ae4f965e204fc93cedbc4e2c306e92829d93f800",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/migrate-to-shoehorn/agents/openai.yaml",
+      "upstreamPath": "skills/misc/migrate-to-shoehorn/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3bd79ee2b502075c6d1fe40e6fe98f4fe3f3c5f5",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/scaffold-exercises/SKILL.md",
+      "upstreamPath": "skills/misc/scaffold-exercises/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "d87df28e7d8abb4e57ecc6e47d71c274d16054c7",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/scaffold-exercises/agents/openai.yaml",
+      "upstreamPath": "skills/misc/scaffold-exercises/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "963723a58973effa256cbfe0f23a7bcc03a374b8",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/setup-pre-commit/SKILL.md",
+      "upstreamPath": "skills/misc/setup-pre-commit/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "1b9708168263067adb4684d06ebb8f4ccfe9682c",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/misc/setup-pre-commit/agents/openai.yaml",
+      "upstreamPath": "skills/misc/setup-pre-commit/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "e5a1c63df9e0703893cdad799bd5e2a6b5e6939d",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/README.md",
+      "upstreamPath": "skills/productivity/README.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "6fd3754541f59ef90b420f51603cc061f92f9b7e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/grill-me/SKILL.md",
+      "upstreamPath": "skills/productivity/grill-me/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3947ff9c4ad980d14fc07fccbf659d47c114e81d",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/productivity/grill-me/agents/openai.yaml",
+      "upstreamPath": "skills/productivity/grill-me/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "4d6fb0c746c5d21364dce5d0cf8c51eab9712e7b",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/grilling/SKILL.md",
+      "upstreamPath": "skills/productivity/grilling/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "df69d9936880cd3314c28858c6c52f48db23b856",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/productivity/grilling/agents/openai.yaml",
+      "upstreamPath": "skills/productivity/grilling/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "ddbdb96139c0c1dfe6bca698f39d0465674b8a39",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/handoff/SKILL.md",
+      "upstreamPath": "skills/productivity/handoff/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a224edc643a20ddb989f9bca1547440169159810",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/productivity/handoff/agents/openai.yaml",
+      "upstreamPath": "skills/productivity/handoff/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "6e1d8da121beceddc2f9ec7fa8714c1d914dd11a",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/teach/GLOSSARY-FORMAT.md",
+      "upstreamPath": "skills/productivity/teach/GLOSSARY-FORMAT.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "fdd7e366ad9760588b28981e42b3d3b561e56aca",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/teach/LEARNING-RECORD-FORMAT.md",
+      "upstreamPath": "skills/productivity/teach/LEARNING-RECORD-FORMAT.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "953c61422776b47612c3c945920358ad7b5daee7",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/teach/MISSION-FORMAT.md",
+      "upstreamPath": "skills/productivity/teach/MISSION-FORMAT.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "45250bb1bad70988bf381625931df64645e10246",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/teach/RESOURCES-FORMAT.md",
+      "upstreamPath": "skills/productivity/teach/RESOURCES-FORMAT.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "18b588c8b6f96a50ae2352f264928c643d2782e4",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/teach/SKILL.md",
+      "upstreamPath": "skills/productivity/teach/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "493fa3bae0dada971c4dfb965790e56920b1dced",
+      "kind": "adapted"
+    },
+    {
+      "path": "skills/productivity/teach/agents/openai.yaml",
+      "upstreamPath": "skills/productivity/teach/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "3452a850e3b0c1f0a3d41b2bfd45164d2d38d7f6",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/to-questionnaire/SKILL.md",
+      "upstreamPath": "skills/productivity/to-questionnaire/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "dadd0c00d6a350acaa15bb9ca1b96b20ead684ca",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/to-questionnaire/agents/openai.yaml",
+      "upstreamPath": "skills/productivity/to-questionnaire/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a58d14765beb4acb4c9708b516310558e1308a22",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/wait-what/SKILL.md",
+      "upstreamPath": "skills/productivity/wait-what/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "9b15cd1a7dda0854ca093e29e3e0de57e241b2ac",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/wait-what/agents/openai.yaml",
+      "upstreamPath": "skills/productivity/wait-what/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "6f7a9c33f99ec4ba70d986d6fc0de06c8b811bc3",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/writing-for-agents/SKILL-MECHANICS.md",
+      "upstreamPath": "skills/productivity/writing-for-agents/SKILL-MECHANICS.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "9cdbdb22aadc438755392216e75ad9a14cc9832e",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/writing-for-agents/SKILL.md",
+      "upstreamPath": "skills/productivity/writing-for-agents/SKILL.md",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "a37608daf6e835e767deecfb498facecaaba82ba",
+      "kind": "unchanged"
+    },
+    {
+      "path": "skills/productivity/writing-for-agents/agents/openai.yaml",
+      "upstreamPath": "skills/productivity/writing-for-agents/agents/openai.yaml",
+      "sourceCommit": "49dd158d1076134a641b33efb035946536778336",
+      "sourceBlob": "079c933b75743dec18b5d0c01006def20b6aad26",
+      "kind": "unchanged"
+    }
+  ],
+  "extras": [
+    {
+      "path": "skills/engineering/PI-SUBAGENTS.md",
+      "kind": "pi-helper"
+    },
+    {
+      "path": "skills/engineering/resolving-merge-conflicts/SKILL.md",
+      "kind": "fork-only-extra"
+    },
+    {
+      "path": "skills/engineering/resolving-merge-conflicts/agents/openai.yaml",
+      "kind": "fork-only-extra"
+    },
+    {
+      "path": "skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.ts",
+      "kind": "pi-helper"
+    },
+    {
+      "path": "skills/misc/git-guardrails-pi/SKILL.md",
+      "kind": "fork-only-extra"
+    }
+  ]
+}

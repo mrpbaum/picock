@@ -1,30 +1,26 @@
 {
-  "name": "mattpocock-skills",
+  "name": "picock",
   "version": "1.3.1",
   "private": true,
-  "description": "Matt Pocock's agent skills for real engineering",
+  "description": "A complete Pi port of Matt Pocock's agent skills",
   "keywords": [
     "pi-package"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mattpocock/skills"
+    "url": "https://github.com/mrpbaum/picock"
   },
   "license": "MIT",
   "pi": {
     "skills": [
-      "./skills",
-      "!skills/deprecated/**",
-      "!skills/in-progress/**",
-      "!skills/misc/**",
-      "!skills/personal/**"
+      "./skills"
     ]
   },
   "scripts": {
     "changeset": "changeset",
-    "validate:skills": "node scripts/validate-skill-distribution.mjs",
-    "version": "changeset version && node scripts/sync-plugin-version.mjs",
-    "check-plugin-version": "node scripts/sync-plugin-version.mjs --check"
+    "validate:skills": "node scripts/validate-skill-distribution.mjs && node scripts/validate-pi-docs.mjs && node scripts/validate-pi-subagents.mjs && node scripts/validate-port.mjs",
+    "version": "changeset version",
+    "validate:pi-runtime": "node scripts/validate-pi-runtime.mjs"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",

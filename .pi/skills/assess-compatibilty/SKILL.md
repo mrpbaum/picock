@@ -59,7 +59,7 @@ Update `docs/pi-compatibilty.md`, preserving stable finding IDs and its maintain
 - Replace current-source links with target-pinned links; keep links explicitly labelled historical at their historical SHAs.
 - Record a concise range summary: added/changed/resolved findings, coverage changes, and changes with no Pi impact. If upstream changed but compatibility did not, still record the new baseline and that conclusion.
 
-This ledger tells `sync-upstream` where to focus its fork audit. It does not classify a fork change as already adapted, prove that an adaptation survived a merge, or mark a remediation implemented.
+This ledger supplies a compatibility drift list for maintaining the complete Pi port, including portable skills and newly incompatible dependencies. It does not classify this tree as upstream evidence, prove that an adaptation works here, or mark a remediation implemented.
 
 ## 4. Verify, then advance the marker
 
@@ -68,4 +68,4 @@ This ledger tells `sync-upstream` where to focus its fork audit. It does not cla
 3. Only now write `<target-sha>\n` to `last-consolidated.sha`. Run the state checker again; it must exit 0. If final verification fails, restore the previous marker (or remove a newly created marker), retain/report partial document changes, and stop.
 4. Return previous SHA, target SHA, incremental/full/no-op outcome, finding changes, affected workflows, checks/untested behavior, and paths changed. Do not commit unless the caller explicitly asks; document and marker belong in the same caller-owned commit/PR.
 
-**Done:** the document is consolidated through the exact target, the marker agrees with its baseline, validation passes, and the caller has an evidence-backed focus list for its separate fork audit.
+**Done:** the document is consolidated through the exact target, the marker agrees with its baseline, validation passes, and the caller has an evidence-backed drift list for its separate full-port update review.

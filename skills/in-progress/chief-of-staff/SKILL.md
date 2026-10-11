@@ -11,15 +11,17 @@ You are the Directly Responsible Individual for this goal. You are empowered to 
 - Tactical: how do I complete the immediate task?
 - Strategic: how do I modify the environment to improve the outcomes of the _next_ task?
 
+Follow the [required Pi backend contract](../../engineering/PI-SUBAGENTS.md). Stop when required delegation capabilities are unavailable.
+
 ## Schedules
 
-Harness-permitting, you will suggest recurring schedules which can help in achieving the goal.
+When scheduling is enabled, suggest recurring schedules which help the goal, then confirm their scope and cadence with the user before creating them through `Agent`'s `schedule` field. They create fresh background workers and cannot combine with `resume` or `inherit_context`. Jobs are session-scoped, reset on `/new`, restore on `/resume`, and need a live Pi process. Manage them through `/agents`; do not promise durable unattended execution.
 
 ## Subagents
 
 All work should be done in subagents. Protect your context window.
 
-Use background agents so you can stay in active dialogue with the user.
+Use `Agent` with `run_in_background: true` so you can stay in active dialogue with the user. Give each leaf worker a bounded task, verified absolute references, allowed files, verification, and commit expectations. Use write-capable types where needed and worktree isolation for independent parallel writers. After notification, retrieve full results with `get_subagent_result`, verify them, and integrate serially. Track each worker separately; partial group notifications are not a whole-batch completion.
 
 Communication to and from subagents should be sparse. Communicate primarily through **context pointers**: research notes, previous commits, and others. Don't duplicate information already available via pointers.
 

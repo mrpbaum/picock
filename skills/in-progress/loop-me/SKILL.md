@@ -6,8 +6,12 @@ argument-hint: "A workflow to design, or nothing to go find one"
 ---
 
 
-Run a stateful `/grilling` session whose only output is **workflow** specs. Use the grilling discipline (relentless, a round of questions at a time, a recommended answer attached to each) aimed at the vocabulary and goal below. Create, edit, and delete specs as the grilling resolves things.
+Read and follow the available `grilling` skill for a stateful interview whose only output is **workflow** specs. Use the grilling discipline (relentless, a round of questions at a time, a recommended answer attached to each) aimed at the vocabulary and goal below. Create, edit, and delete specs as the grilling resolves things.
 
+
+## Usage
+
+Invoke `/skill:loop-me design a release workflow`, or omit the focus to discover which workflow to specify. The focus comes from the request, not Pi support for `argument-hint`.
 
 ## The loop lens
 

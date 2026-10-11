@@ -8,11 +8,9 @@
   </a>
 </p>
 
-# Skills For Real Engineers
+# Picock: upstream skills ported to Pi
 
-[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)
-
-My agent skills that I use every day to do real engineering - not vibe coding.
+A complete one-to-one Pi port of [Matt Pocock's skills](https://github.com/mattpocock/skills). Portable skills stay included; harness-specific instructions are adapted for Pi. You do not need a separate upstream skill installation. Upstream's engineering principles below remain the basis of the collection.
 
 Developing real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.
 
@@ -24,18 +22,20 @@ If you want to keep up with changes to these skills, and any new ones I create, 
 
 ## Install, update, and invoke in Pi
 
-This fork is distributed for Pi. It is not intended to be installed into Claude Code, and Claude Code plugin references from upstream can be ignored for this fork.
+This package targets Pi 1.1.0 or newer, not Claude Code. The reviewed upstream snapshot contains 38 skills; this package retains all of them plus two documented fork-only extras. See the [port inventory and verification limits](./docs/maintenance/pi-port.md) and [per-file provenance](./docs/maintenance/upstream-port-manifest.json).
 
 Install the package and its **required subagent backend**, [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents). This is the sole supported Pi subagent extension for this fork, not an optional alternative. Review, exploration, parallel design, research, and spec implementation use its `Agent` tools:
 
 ```bash
-pi install git:github.com/p-baum/picock
-pi install npm:@tintinweb/pi-subagents
+pi install git:github.com/mrpbaum/picock
+pi install npm:@tintinweb/pi-subagents@0.20.0
 ```
 
 The subagent dependency is installed separately, not automatically by this skills package. If it is missing or unavailable, affected workflows stop with installation instructions rather than silently running sequentially or switching backends. See the [shared backend contract](./skills/engineering/PI-SUBAGENTS.md).
 
-The Pi package manifest discovers skills broadly while excluding the `deprecated`, `in-progress`, `misc`, and `personal` buckets. Skills in those excluded buckets, including `git-guardrails-pi`, are manual-only and are not installed with the package.
+The Pi manifest distributes the entire `skills/` tree, including beta and miscellaneous skills. Promotion describes the daily-work listings below, not package discovery. The bucket READMEs list non-promoted workflows. Repository-only `.pi/skills/` maintenance skills are not distributed or globally linked.
+
+Remove duplicate upstream or independently linked copies before loading this package: Pi keeps the first discovered skill name, so a collision can shadow the port. Install either the Pi package or local links, not both.
 
 Update unpinned Pi packages with:
 
@@ -45,7 +45,7 @@ pi update --extensions
 
 After installing or updating, run `/reload` in an existing Pi session or restart Pi. Pi registers skill commands as `/skill:<name>`, so run setup with `/skill:setup-matt-pocock-skills` and invoke any other skill the same way, for example `/skill:grill-with-docs`.
 
-The `npx skills` commands elsewhere in these docs are explicitly for skills.sh-supported installation flows. Bare commands such as `/grill-with-docs` are for harnesses where skills.sh installs them; neither is the Pi package workflow.
+Inspect installed packages with `pi list` and resources with `pi config`. `pi update --extensions` updates unpinned packages; bare `pi update` updates Pi itself. A pinned git ref or npm version does not advance automatically: change it deliberately after reviewing a new release. The backend reference is pinned here for reproducibility, not installed automatically.
 
 ## Why These Skills Exist
 

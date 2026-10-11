@@ -54,7 +54,7 @@ The whole map at low resolution, loaded once per session. Open tickets are **not
 
 ### Tickets
 
-Each ticket is a **child issue** of the map; the tracker's issue id is its identity. Its body is the question, sized to one 100K token agent session:
+Each ticket is a **child issue** of the map; the tracker's issue id is its identity. Its body is the question, sized to one agent session. A 100K-token budget is only a sizing heuristic; use the selected model's actual context limits:
 
 ```markdown
 ## Question
@@ -75,9 +75,9 @@ The answer isn't part of the body; it's recorded on resolution (see [Work throug
 Every ticket is either **HITL** (human in the loop, worked _with_ a human who speaks for themselves) or **AFK**, driven by the agent alone. A HITL ticket only resolves through that live exchange; the agent never stands in for the human's side of it (a grilling agent that answers its own questions has broken this).
 
 
-- **Research** (AFK): Reading documentation, third-party APIs, or local resources like knowledge bases to surface a fact a decision waits on. Resolved by the `research` skill (`/skill:research` in Pi, `/research` in Claude Code/skills.sh harnesses) as a **subagent**. Use when knowledge outside the current working directory is required.
+- **Research** (AFK): Reading documentation, third-party APIs, or local resources like knowledge bases to surface a fact a decision waits on. Resolved by a **leaf research subagent** launched directly by the parent. Read the `research` skill for its source and artifact discipline, but give the worker the investigation itself, not its delegation step. Use when knowledge outside the current working directory is required.
 - **Prototype** (HITL): Raise the fidelity of the discussion by making a cheap, rough, concrete artifact to react to, such as an outline, a rough take, a stub, or UI/logic code via the `prototype` skill (`/skill:prototype` in Pi, `/prototype` in Claude Code/skills.sh harnesses). Links the prototype as an asset. Use when "how should it look" or "how should it behave" is the key question.
-- **Grilling** (HITL): Conversation. The default case. Always invoke the `grilling` and `domain-modeling` skills (`/skill:grilling` and `/skill:domain-modeling` in Pi; `/grilling` and `/domain-modeling` in Claude Code/skills.sh harnesses).
+- **Grilling** (HITL): Conversation. The default case. Read and follow the available `grilling` and `domain-modeling` skills' `SKILL.md` files in the current session.
 - **Task** (HITL or AFK): Manual work that must happen before a _decision_ can be made: nothing to decide, prototype, or research, but the discussion is blocked until it's done. Signing up for a service so its API can be judged, provisioning access, moving data so its shape can be seen. This is the one type that _does_ rather than decides, and it earns its place by unblocking a decision, not by delivering the destination. The agent drives it alone where it can (AFK); otherwise it hands the human a precise checklist (HITL). Resolved when the work is done; the answer records what was done and any resulting facts (credentials location, new URLs, row counts) later tickets depend on.
 
 
@@ -110,11 +110,11 @@ Two modes. Either way, **never resolve more than one ticket per session**, with 
 
 User invokes with a loose idea.
 
-1. **Name the destination.** Run a session using the `grilling` and `domain-modeling` skills to pin down what this map is finding its way to: the spec, decision, or change. The destination fixes the scope, so it's settled first.
+1. **Name the destination.** Read and follow the available `grilling` and `domain-modeling` skill instructions in this session to pin down what this map is finding its way to: the spec, decision, or change. The destination fixes the scope, so it's settled first.
 2. **Map the frontier.** Grill again, **breadth-first** this time: fan out across the whole space rather than deep on any one thread, surfacing the open decisions and the first steps takeable now. **If this surfaces no fog** (the way to the destination is already clear, the whole journey small enough for one session), you don't need a map. Stop and ask the user how they'd like to proceed.
 3. **Create the map** (label `wayfinder:map`): Destination and Notes filled in, Decisions-so-far empty, the fog sketched into **Not yet specified**.
 4. **Create the tickets you can specify now** as child issues of the map, then wire blocking edges in a **second pass** (issues need ids before they can reference each other). Write cross-references in that pass too, with real ids: a placeholder `#<n>` auto-links to an unrelated issue. Wiring sorts them into the frontier and the blocked; everything you can't yet specify stays in the fog: the **Not yet specified** section.
-5. **Fire the research subagents.** In Pi, follow the [required backend contract](../PI-SUBAGENTS.md); stop if unavailable. For each `research` ticket you just created, spin up a subagent using the `research` skill to resolve it in parallel, capturing its findings on a throwaway `research/<name>` branch with a context pointer from the ticket. Push the branch but open no PR: it is never merged.
+5. **Fire the research subagents.** In Pi, follow the [required backend contract](../PI-SUBAGENTS.md); stop if unavailable. For each `research` ticket, the parent launches a write-capable `general-purpose` worker directly with `run_in_background: true`, `inherit_context: false`, and `isolation: "worktree"`. Give it the source/artifact discipline from `research`, verified absolute reference paths, and a bounded instruction to investigate and save cited findings itself, without launching another agent. Verify the committed base and enabled worktree isolation before launch. After each completion, retrieve its full result, inspect the findings on the returned `pi-agent-*` branch, and push that preserved branch only to the project's authorized remote. Link the branch and file from the ticket; never link the removed worktree or guess a branch name. Open no PR: research branches are never merged. Preserve branches while tickets reference them. Stop and report failed or partial workers rather than closing their tickets.
 6. Stop: charting is one session's work; it hand-resolves nothing.
 
 ### Work through the map
@@ -123,7 +123,7 @@ User invokes with a map (URL or number). A ticket is **optional**: without one, 
 
 1. Load the **map**: the low-res view, not every ticket body.
 2. Choose the ticket. If the user named one, use it. Otherwise take the first frontier ticket in order. **Claim it**: assign it to yourself before any work.
-3. Resolve it as the type its `wayfinder:<type>` label names (see [Ticket Types](#ticket-types)). Read the label, not just the body: the body never states the type. **Zoom as needed**: fetch the full body of any related or closed ticket on demand; invoke whichever skills the `## Notes` block names. If in doubt, use the `grilling` and `domain-modeling` skills.
+3. Resolve it as the type its `wayfinder:<type>` label names (see [Ticket Types](#ticket-types)). Read the label, not just the body: the body never states the type. **Zoom as needed**: fetch the full body of any related or closed ticket on demand; read and follow model-invoked skills the `## Notes` block names; recommend user-invoked ones to the human with `/skill:<name>`. If in doubt, read and follow `grilling` and `domain-modeling`.
 4. Record the resolution: post the answer as a **resolution comment**, **close** the issue, and **append a context pointer** to the map's Decisions-so-far.
 5. Add newly-surfaced tickets (create-then-wire); graduate any fog the answer has made specifiable, clearing each graduated patch from **Not yet specified** so it lives only as its new ticket. If the answer reveals that a ticket (this one or another) sits beyond the destination, **rule it out of scope** rather than resolving it on the route. If the decision invalidates other parts of the map, update or delete those tickets.
 

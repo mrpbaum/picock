@@ -3,16 +3,18 @@ Skills are organized into bucket folders under `skills/`:
 - `engineering/`: daily code work
 - `productivity/`: daily non-code workflow tools
 - `misc/`: kept around but rarely used, not promoted
-- `in-progress/`: beta: public on purpose, feedback wanted, not shipped in the plugin
+- `in-progress/`: beta: public on purpose, feedback wanted, distributed but not promoted
 - `deprecated/`: no longer used
 
-Repository-maintenance skills live in `.pi/skills/`, outside the distributed `skills/` tree. Keep them out of package manifests, global skill linking, public skill listings, and the `ask-matt` router. `sync-upstream` is available only when working in this repo: invoke `/skill:sync-upstream`. It uses the repository-only `assess-compatibilty` skill to keep `docs/pi-compatibilty.md` and `.pi/skills/assess-compatibilty/last-consolidated.sha` current before auditing the fork. See [the maintenance guide](./docs/maintenance/sync-upstream.md).
+Repository-maintenance skills live in `.pi/skills/`, outside the distributed `skills/` tree. Keep them out of package manifests, global skill linking, public skill listings, and the `ask-matt` router. `sync-upstream` is available only when working in this repo: invoke `/skill:sync-upstream`. It uses the repository-only `assess-compatibilty` skill to keep `docs/pi-compatibilty.md` and `.pi/skills/assess-compatibilty/last-consolidated.sha` current before reviewing port updates. See [the maintenance guide](./docs/maintenance/sync-upstream.md).
 
 The `engineering/setup-matt-pocock-skills` skill contains remediations for installing on non claude agents. Before making code changes to improve pi compatibilty always check if this skill impacts the changes being considered.
 
 Every skill in `engineering/` or `productivity/` (the **promoted** buckets) must have a reference in the top-level `README.md`. Skills in `misc/`, `personal/`, `in-progress/`, and `deprecated/` must not appear there.
 
-This fork is distributed for Pi, not Claude Code. Ignore upstream Claude Code plugin/marketplace surfaces (`.claude-plugin/*`) unless a change leaks into Pi-facing docs, package discovery, or validation. Do not run or require `claude plugin validate . --strict` for this fork.
+This repository maintains a complete one-to-one Pi port of the pinned upstream skills, including portable and non-promoted skills. Preserve upstream names, behavior, invocation policy, and bundled dependencies; adapt only harness mismatches. Record every upstream-derived skill file in `docs/maintenance/upstream-port-manifest.json`, with Pi-only helpers and fork-only extras identified separately. Package discovery includes the full `skills/` tree, never `.pi/skills/`.
+
+This port is distributed for Pi, not Claude Code. Ignore upstream Claude Code plugin/marketplace surfaces (`.claude-plugin/*`) unless a change leaks into Pi-facing docs, package discovery, or validation. Do not run or require `claude plugin validate . --strict` for this fork.
 
 Install commands for upstream Claude/skills.sh surfaces are copied verbatim from [.agents/install-block.md](./.agents/install-block.md), but Pi-facing docs must describe the Pi package workflow and `/skill:<name>` invocation.
 
@@ -24,7 +26,7 @@ Skills in `engineering/` and `productivity/` also have a human-facing docs page 
 
 Every `SKILL.md` is either user-invoked (`disable-model-invocation: true` plus `policy.allow_implicit_invocation: false` in `agents/openai.yaml`, reachable only by the human) or model-invoked (model- or user-reachable). See [.agents/invocation.md](./.agents/invocation.md).
 
-[`ask-matt`](./skills/engineering/ask-matt/SKILL.md) is the router that maps every user-reachable skill and how they relate. The same trigger that re-syncs a docs page applies to it: whenever you add, rename, remove, or change how a user-reachable skill fits the flows, re-read `ask-matt`'s `SKILL.md` and update it so the map stays accurate: a new skill it never mentions, or a stale one it still routes to, is a router that lies.
+[`ask-matt`](./skills/engineering/ask-matt/SKILL.md) is the router that maps every distributed user-reachable skill and how they relate. The same trigger that re-syncs a docs page applies to it: whenever you add, rename, remove, or change how a user-reachable skill fits the flows, re-read `ask-matt`'s `SKILL.md` and update it so the map stays accurate: a new skill it never mentions, or a stale one it still routes to, is a router that lies.
 
 To (re)link every skill into local non-Claude harness skill directories such as `~/.agents/skills`, run `scripts/link-skills.sh`. Each entry is a symlink into this repo, so a `git pull` keeps installed skills current; re-run the script after adding, removing, or renaming a skill.
 

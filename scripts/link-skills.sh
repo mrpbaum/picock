@@ -5,18 +5,15 @@ set -euo pipefail
 # It is not a supported installer. Modifications to it, or requests for
 # modifications, will not be approved.
 #
-# Links all skills except those in blacklisted buckets into the local skill
-# directories used by each agent harness:
-#   - ~/.claude/skills: Claude Code
-#   - ~/.agents/skills: Codex and other Agent Skills-compatible harnesses
+# Links the complete distributed Pi port into ~/.agents/skills.
+# Repository-only .pi/skills are deliberately outside this tree.
 # Each entry is a symlink into this repo, so a `git pull` is all that's needed
 # to keep installed skills up to date.
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
-DESTS=("$HOME/.claude/skills" "$HOME/.agents/skills")
+DESTS=("$HOME/.agents/skills")
 
-# Keep this blacklist in sync with package.json's pi.skills exclusions. Skills
-# in any other bucket are discovered automatically.
+# Match package.json's complete skills/ discovery, including beta and misc.
 names=()
 srcs=()
 while IFS= read -r -d '' skill_md; do
@@ -25,10 +22,6 @@ while IFS= read -r -d '' skill_md; do
   srcs+=("$src")
 done < <(find "$REPO/skills" -name SKILL.md \
   -not -path '*/node_modules/*' \
-  -not -path '*/deprecated/*' \
-  -not -path '*/in-progress/*' \
-  -not -path '*/misc/*' \
-  -not -path '*/personal/*' \
   -print0)
 
 for DEST in "${DESTS[@]}"; do
@@ -54,7 +47,8 @@ for DEST in "${DESTS[@]}"; do
     target="$DEST/$name"
 
     if [ -e "$target" ] && [ ! -L "$target" ]; then
-      rm -rf "$target"
+      echo "error: refusing to replace non-symlink $target" >&2
+      exit 1
     fi
 
     ln -sfn "$src" "$target"

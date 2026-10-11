@@ -1,6 +1,6 @@
 ---
 name: implement-spec
-description: "Implement the result of /to-spec and /to-tickets in code."
+description: "Implement the result of to-spec and to-tickets in code."
 disable-model-invocation: true
 ---
 
@@ -20,16 +20,16 @@ Follow the [required Pi subagent backend contract](../PI-SUBAGENTS.md). Stop if 
 
 1. Fetch the spec and tickets through the configured tracker and understand the task graph. Compute the in-run frontier from tickets verified and integrated on the integration branch, not just tracker closure counts: PR-linked tickets may stay open until final merge.
 
-2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets **implementer subagents** focus on implementation rather than exploration.
+2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Use a write-capable `general-purpose` agent with explicit output authority rather than the read-oriented `Explore` type. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets **implementer subagents** focus on implementation rather than exploration.
 
 3. Create the integration branch from the project's intended base. If the configured tracker provides a review-request surface, or the user asks for one, open a draft PR or merge request after the first integration in step 5. Use the tracker's linking/closing syntax. Otherwise record the branch in the tracker without inventing a PR surface.
 
-4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
+4. Check out and commit the current integration tip before launching each new frontier. The backend copies the spawning checkout's committed HEAD, not an arbitrary branch or uncommitted files. Verify `worktreeIsolation` is enabled and effective agent frontmatter allows it. Use **implementer subagents** with `subagent_type: "general-purpose"`, `run_in_background: true`, `inherit_context: false`, and `isolation: "worktree"`. Give verified absolute skill/reference pointers. Each implementer subagent:
    - starts from the recorded committed integration-branch tip in its own worktree; if the base is wrong, reports it to the coordinator instead of resetting potentially dirty work;
    - reads and applies the `tdd` skill to build the ticket;
-   - merges the current integration tip into its own branch, runs the ticket's checks, and reports its base/head SHAs and verification evidence. The backend auto-commits worktree changes on completion; verify the resulting branch/head before integration.
+   - works only within its assigned copy, runs the ticket's checks, and reports its base/head SHAs and verification evidence; it does not merge, push, or launch reviewers. The backend preserves changed work on a returned `pi-agent-*` branch and removes the temporary worktree. Automatic commits skip hooks, so they are not verification evidence. Inspect the returned branch/head, not a guessed branch or vanished path.
 
-5. Once an implementer completes, use a merger subagent to inspect its diff and evidence, integrate it on the integration branch, and run relevant checks. Run one merger at a time, with explicit authority to write the integration branch. Reconcile conflicts against the current integration tip; parallel results are not guaranteed fast-forwards.
+5. After each completion notification, retrieve the full result with `get_subagent_result`. Treat errors, cancellations, and turn-limit outcomes as partial until verified. Once an implementer completes, use a merger subagent to inspect its diff and evidence, integrate it on the integration branch, and run relevant checks. Run one merger at a time, with explicit authority to write the integration branch. Reconcile conflicts against the current integration tip; parallel results are not guaranteed fast-forwards.
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
@@ -37,4 +37,4 @@ Follow the [required Pi subagent backend contract](../PI-SUBAGENTS.md). Stop if 
 
 8. Follow the configured completion gates. Mark an existing PR or merge request ready only after verification; leave PR-linked issues open until its merge. For local/custom trackers, record completion and evidence before any allowed closure. Report the integration branch and remaining human gates.
 
-9. After all implementers have exited and integration is verified, clean up worktrees using the required backend's documented lifecycle. Preserve dirty/unintegrated work; report any retained workspace.
+9. The backend normally removes temporary worktrees after preserving changed work on returned branches. After all implementers have exited and integration is verified, inspect any failed cleanup and preserve dirty/unintegrated artifacts. Delete preserved branches only after successful integration and explicit cleanup authority. Report remaining artifacts.

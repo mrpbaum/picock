@@ -12,7 +12,7 @@ In Pi, invoke `/skill:implement-spec`. In harnesses where skills.sh installs bar
 
 | Your situation | Reach for |
 | --- | --- |
-| A spec, split into tickets with blocking edges, that you want landed in one run | `/implement-spec` |
+| A spec, split into tickets with blocking edges, that you want landed in one run | `/skill:implement-spec` |
 | One ticket at a time, in your own [context window](https://www.aihero.dev/ai-coding-dictionary/context-window), [clearing](https://www.aihero.dev/ai-coding-dictionary/clearing) between tickets | [implement](https://aihero.dev/skills-implement) |
 | A spec that isn't split into tickets yet | [to-tickets](https://aihero.dev/skills-to-tickets) first |
 | A small piece of work with no real graph to it | [implement](https://aihero.dev/skills-implement) directly |
@@ -29,7 +29,9 @@ Everything lands on one branch. Each implementer:
 
 1. confirms its worktree is based on the integration branch before it starts,
 2. builds its ticket with [tdd](https://aihero.dev/skills-tdd), red-green one slice at a time,
-3. merges the current integration tip into its branch, runs its checks, and reports base/head SHAs and evidence. The supported backend auto-commits isolated worktree changes on completion.
+3. runs its checks and reports base/head SHAs and evidence. The backend preserves work on its returned `pi-agent-*` branch, then removes the temporary worktree. Automatic commits skip hooks and are not test evidence.
+
+Before launching a new frontier, the parent checks out and commits the intended integration tip. Worktrees copy that committed HEAD, not uncommitted parent changes. Leaf implementers do not merge or launch reviewers; the parent retrieves full results and coordinates those steps.
 
 A merger subagent verifies each diff, integrates it, and checks the integrated result. Only one merger writes the integration branch at a time. Parallel branches can conflict, so fast-forward merges are not guaranteed. Dirty work is preserved rather than reset.
 
@@ -69,7 +71,7 @@ No. People ask because the skills now reach into implementation: "is Sandcastle 
 
 **A ticket's key test was skipped inside its worktree, and it reported green.**
 
-A worktree holds only what git tracks. Tests that read gitignored fixtures, local databases, or credentials can silently skip there. For a ticket whose verification depends on untracked material, tell the orchestrator to run it in the main checkout instead.
+A worktree holds only what git tracks. Tests that read gitignored fixtures, local databases, or credentials can silently skip there. For a ticket whose verification depends on untracked material, provision an approved fixture in the worktree or have the coordinator run that verification serially in the main checkout. Do not downgrade parallel writers to a shared checkout.
 
 ## It's working if
 

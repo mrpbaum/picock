@@ -1,97 +1,30 @@
 ---
 name: git-guardrails-claude-code
-description: Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent destructive git operations, add git safety hooks, or block git push/reset in Claude Code.
+description: Set up Pi tool-call guardrails to block dangerous git commands (push, reset --hard, clean, branch -D, checkout/restore .) before bash executes them. Use when the user wants git safety guardrails. The upstream name is retained, but this installs a Pi extension.
 ---
 
-# Setup Git Guardrails
+# Setup Git Guardrails for Pi
 
-> **Claude Code only.** These hooks do not run in Pi. Pi users must use the [`git-guardrails-pi`](../git-guardrails-pi/SKILL.md) skill, which installs a Pi `tool_call` extension instead.
+Preserve the upstream command-level safety workflow using Pi's `tool_call` event. The historical skill name does not require Claude Code or configure Claude hooks.
 
-Sets up a PreToolUse hook that intercepts and blocks dangerous git commands before Claude executes them.
+## What gets blocked
 
-## What Gets Blocked
-
-- `git push` (all variants including `--force`)
+- `git push`, including force variants
 - `git reset --hard`
-- `git clean -f` / `git clean -fd`
-- `git branch -D`
+- `git clean -f` / `git clean -fd` / `--force`
+- `git branch -D`, or `--delete --force`
 - `git checkout .` / `git restore .`
 
-When blocked, Claude sees a message telling it that it does not have authority to access these commands.
+This is an opt-in bash-call guardrail, **not a sandbox or comprehensive shell parser**. It inspects literal commands, including common git global options and compound commands. It cannot prevent scripts, git aliases, dynamically constructed commands, other tools, external terminals, or a child session where the extension is not loaded. Conservative token matching may block safe text containing literal git command tokens. Explain these limits before installation; if stronger enforcement is required, stop and discuss an external authority boundary.
 
-## Steps
+## Process
 
-### 1. Ask scope
+1. **Ask scope:** this project (`.pi/extensions/block-dangerous-git.ts`) or all projects (`<agent-dir>/extensions/block-dangerous-git.ts`, normally `~/.pi/agent/extensions/`). Resolve `PI_CODING_AGENT_DIR` for a custom agent directory. Project extensions load only after project trust.
+2. **Install:** read the bundled [scripts/block-dangerous-git.ts](scripts/block-dangerous-git.ts), then copy it to the confirmed destination. Preserve an existing extension: inspect it and merge only with confirmation rather than overwriting unrelated policy. No Claude settings or executable shell hook is needed.
+3. **Customise:** ask whether to add or remove blocked command patterns. Preserve the chosen scope and document deviations. The bundled shell hook is retained only as upstream reference material, not the Pi installation.
+4. **Reload:** ask the human to run `/reload` or restart Pi. Confirm the extension loads without diagnostics and is bound in any child sessions expected to be protected.
+5. **Verify interception:** in a trusted disposable repository, use the loaded Pi `bash` tool to attempt `git push --dry-run`, which must return the guardrail's block reason before git runs. Test a safe `git status --short` call too. For destructive-command testing, invoke the registered handler with synthetic events; do not run destructive commands against the user's repository. A direct matcher or shell-script test is not proof the extension is loaded.
 
-Ask the user: install for **this project only** (`.claude/settings.json`) or **all projects** (`~/.claude/settings.json`)?
+Report scope, destination, matched commands, customisations, and which checks actually ran. Do not claim active protection before reload and live interception verification.
 
-### 2. Copy the hook script
-
-The bundled script is at: [scripts/block-dangerous-git.sh](scripts/block-dangerous-git.sh)
-
-Copy it to the target location based on scope:
-
-- **Project**: `.claude/hooks/block-dangerous-git.sh`
-- **Global**: `~/.claude/hooks/block-dangerous-git.sh`
-
-Make it executable with `chmod +x`.
-
-### 3. Add hook to settings
-
-Add to the appropriate settings file:
-
-**Project** (`.claude/settings.json`):
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-dangerous-git.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-**Global** (`~/.claude/settings.json`):
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/block-dangerous-git.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-If the settings file already exists, merge the hook into the existing `hooks.PreToolUse` array. Don't overwrite other settings.
-
-### 4. Ask about customization
-
-Ask if user wants to add or remove any patterns from the blocked list. Edit the copied script accordingly.
-
-### 5. Verify
-
-Run a quick test:
-
-```bash
-echo '{"tool_input":{"command":"git push origin main"}}' | <path-to-script>
-```
-
-Should exit with code 2 and print a BLOCKED message to stderr.
+Example: `/skill:git-guardrails-claude-code set up project-local git guardrails`.

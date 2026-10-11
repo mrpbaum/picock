@@ -6,106 +6,85 @@ disable-model-invocation: true
 
 # Ask Matt
 
-You don't remember every skill, so ask.
+Invoke `/skill:ask-matt` when you don't remember which skill fits. Before stating what a skill does or recommending a step be skipped, read its `SKILL.md`: this map is orientation, not the procedure.
 
-Before stating what a skill does or recommending a step be skipped, read that skill's SKILL.md: the summaries here are for orientation only.
+Recommend `/skill:<name>` for human invocation. Load model-invoked dependencies by reading and following their instructions. User-invoked skills are recommendations to the human, not implicit calls.
 
-A **flow** is a path through the skills. Most paths run along one **main flow**, and two **on-ramps** merge onto it. Everything else is standalone, or a vocabulary layer that runs underneath.
-
-Pi subagent workflows require `@tintinweb/pi-subagents`; follow the [shared backend contract](../PI-SUBAGENTS.md). Do not route users to silent sequential fallbacks or substitute another extension.
-
-Route labels below are skill names, not literal commands. Model-invoked dependencies are loaded by reading their SKILL.md and applying the instructions, not by typing a bare slash command. For context resets, Pi uses `/new` or a fresh session, not Claude's `/clear`; `/compact` is available in Pi. In Pi, tell the user to invoke a route as `/skill:<name>`; in Claude Code and harnesses where skills.sh installs bare commands, tell them to use `/<name>`.
+Pi delegation requires `@tintinweb/pi-subagents`; follow the [shared backend contract](../PI-SUBAGENTS.md). Stop when required capabilities are unavailable. Repository-maintenance skills are outside this public map.
 
 ## The main flow: idea → ship
 
-The route most work travels. You have an idea and want it built.
+A **flow** is a path through the skills. Most work follows this main flow; on-ramps generate work that joins it.
 
-1. **`/grill-with-docs`** sharpens the idea by interview. Start here whenever you are **working in a working directory**: it's stateful, retaining what it learns in `GLOSSARY.md` and ADRs. (No working directory? Use `/grill-me` instead, covered under Standalone. Both run the same `/grilling` primitive; `grill-with-docs` is the one that leaves a paper trail, which makes it the better of the two whenever a repo is there to leave it in.)
+1. **`/skill:grill-with-docs`** sharpens an idea by interview when you have a working directory. It retains domain language in `GLOSSARY.md` and decisions in ADRs. Without a workspace, use `/skill:grill-me`. Both use the model-invoked `grilling` primitive; only the stateful wrapper leaves the domain paper trail.
+2. **Can conversation settle the question?** If you need a runnable answer (state, business logic, or a UI to see), detour through `/skill:prototype`:
+   - `/skill:handoff` out to a fresh session in the prototype directory.
+   - Build throwaway code to answer one question.
+   - `/skill:handoff` back the findings, then reference them from the idea thread.
+3. **Is this a multi-session build?**
+   - **Yes:** `/skill:to-spec` synthesises the conversation, then `/skill:to-tickets` splits the spec into tracer-bullet tickets with **blocking edges**. Work blockers-first with `/skill:implement` per ticket, using `/new` between self-contained tickets, or use `/skill:implement-spec` to run the **task graph** across the ready **frontier** onto one **integration branch**.
+   - **No:** `/skill:implement` in the current context.
 
-2. **Branch: can you settle every question in conversation?** If a question needs a runnable answer (state, business logic, a UI you have to see), detour through a prototype, bridged by **`/handoff`** in both directions (a prototype lives in its own directory, which is exactly what `/handoff` is for; see Phase boundaries):
-   - **`/handoff`** out, then open a fresh session against that file,
-   - **`/prototype`** to answer the question with throwaway code,
-   - **`/handoff`** back what you learned, and reference it from the original idea thread.
-3. **Branch: is this a multi-session build?**
-   - **Yes** → **`/to-spec`** (turn the thread into a spec), then **`/to-tickets`** to split it into tracer-bullet tickets, each declaring its **blocking edges**. Then work the tickets one of two ways:
-     - **`/implement`** per ticket, **`/clear`ing context between each one**. On a local tracker that's one file per ticket under `.scratch/<feature>/issues/`, worked blockers-first by hand; on a real tracker the edges become native blocking links, so any ticket whose blockers are done can be grabbed. Each ticket is self-contained, so the last one's context is disposable.
-     - **`/implement-spec`** for the whole spec in one run. It reads the tickets as a **task graph**, runs implementer subagents across the ready **frontier** in parallel, and lands everything on one **integration branch**. Reach for it when you'd rather orchestrate the build than drive each ticket yourself.
-   - **No** → **`/implement`** right here, in the same context window.
+   Both drive `tdd` one red-green slice at a time and close with `code-review`, whose Standards and Spec axes stay separate. `implement` reviews each ticket; `implement-spec` reviews the integrated result. Reach for `/skill:tdd` directly for concrete test-first work, or `/skill:code-review` for a branch/PR review since a fixed point.
 
-   Either way, the code gets built by driving **`/tdd`** (one red-green slice at a time) and closes out with **`/code-review`**, a two-axis review (Standards + Spec) of the diff. `/implement` runs both per ticket; `/implement-spec`'s implementers each drive `/tdd`, and it runs one `/code-review` over the integration branch. Reach for **`/tdd`** on its own when you just want to build a concrete behaviour test-first without a full spec, and **`/code-review`** on its own whenever you want to review a branch or PR against a fixed point.
-
-   When the work goes up as a pull request, **`/pr`** shapes the body: the smallest visual that shows the change, before/after evidence that it works, and a one-way or two-way door call. It's model-invoked, so the agent reaches for it whenever it writes a PR.
-
-4. **`/retro`** closes the loop. After a build, and especially one that went sideways, it looks back over the session and suggests changes to the agent's **environment**, not the code: navigation pointers, automated checks, the coding standards `/code-review` enforces, steering files, tooling. Mechanical mistakes become deterministic checks; judgement calls become coding standards. The next build then starts from a better environment.
+   When writing a PR body, the model-invoked `pr` skill supplies the smallest visual summary, before/after evidence, and one-way/two-way door call.
+4. **`/skill:retro`** improves the agent's environment after the build, especially when it went sideways: navigation, deterministic checks, standards, steering files, and tooling. Mechanical mistakes become checks; judgement calls become standards.
 
 ### Context hygiene
 
-Keep steps 1–3 in **one unbroken context window** (don't compact or clear until after `/to-tickets`) so the grilling, spec, and tickets all build on the same thinking. Each `/implement` then starts fresh, working from the ticket. Run `/retro` in the session it's looking back on, before you clear; after clearing, point it at that session's log instead.
+Keep grilling, spec, and tickets in one unbroken context where possible. Each ticket implementation can then start fresh. Run retro in the session it reviews; after a restart, provide that session's log.
 
-
-The limit on this is the **[smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone)**: the window (~150k tokens on state-of-the-art models) within which the model still reasons sharply. If a session approaches it before `/to-tickets`, don't push on degraded; `/compact` at the nearest phase boundary and carry on (see Phase boundaries).
-
+The **[smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone)** is a reasoning-quality heuristic, not a fixed Pi token budget. The upstream ~150k figure is model-dependent. Check actual usage and limits. If the session cannot safely reach tickets, compact at the nearest phase boundary with instructions preserving the decisions.
 
 ## On-ramps
 
-A starting situation that generates work, then merges onto the main flow.
+- **Raw bugs and requests from other people:** `/skill:triage` moves issues through triage roles to agent-ready work. Do not triage tickets you created with `to-tickets`; those are already ready.
+- **Something is broken:** `/skill:diagnosing-bugs` builds a **tight feedback loop** that goes red on the exact bug before theorising, minimises it, and fixes it with a regression test. Recommend `/skill:retro` afterwards. Missing test seams may justify `/skill:improve-codebase-architecture`.
+- **A huge, foggy effort:** `/skill:wayfinder` charts a shared map of **decision tickets**, not deliverables, resolving one per session except parallel research. Save this slower, denser flow for work that cannot fit in one interview. When the map clears, hand its linked decisions to `/skill:to-spec`, then `to-tickets` and `implement`. Jump straight to implementation only if the effort proved genuinely small.
 
-- **Bugs and requests piling up** → **`triage`**. It moves issues through triage roles and produces agent-ready issues, which **`implement`** later picks up.
+## Codebase health and vocabulary
 
-  Triage is only for issues **you didn't create**, such as bug reports, incoming feature requests, or anything that arrives raw. Tickets that `to-tickets` produced are already agent-ready, so **don't triage them**.
-
-- **Something's broken** → **`/diagnosing-bugs`**. For the hard ones: the bug that resists a first glance, the intermittent flake, the regression that crept in between two known-good states. It refuses to theorise until it has a **tight feedback loop** (one command that already goes red on *this* bug), then fixes with a regression test. Once the fix is in, run **`/retro`** in the same session to ask what would have prevented the bug; where the real finding is that there's no good seam to lock it down, that's a job for **`/improve-codebase-architecture`**.
-
-
-- **A huge, foggy effort** (a greenfield project or a huge feature build, too big for one session) → **`wayfinder`**, the most cognitively demanding flow here. When the way from here to the destination isn't visible yet, it charts a **shared map** of **decision tickets** on the issue tracker and resolves them one at a time, producing **decisions, not deliverables**, until the fog is pushed back and the way is clear. Where **`grill-with-docs`** sharpens an idea you can hold in one session, wayfinder is for the idea you can't. It is slower and denser, so save it for exactly that, never a well-scoped feature.
-
-  When the map clears, **it hands off, it doesn't build**: merge onto the main flow at **`to-spec`**, which collapses the map's linked decisions into a buildable plan, then `to-tickets` and `implement` as usual. Looping the map straight into `implement` skips that collapse and throws the linked detail away. Go straight to `implement` only when the effort turned out genuinely small.
-
-## Codebase health
-
-Not feature work, just upkeep.
-
-- **`improve-codebase-architecture`**: run whenever you have a spare moment to keep the codebase good for agents to operate in. It surfaces **deepening opportunities**; picking one _generates an idea_ you can take into the main flow at `grill-with-docs`. It's the survey that finds the candidates; **`codebase-design`** (below) is the bench you design the chosen one on.
-
-## Vocabulary underneath
-
-Two model-invoked references that run *beneath* the other skills, each the single source of truth for its vocabulary. Reach for them directly when the **words**, not the process, are the problem; or let the skills above pull them in.
-
-- **`/domain-modeling`**: sharpen the project's *domain* language: challenge a fuzzy term, resolve an overloaded word ("account" doing three jobs), record a hard-to-reverse decision as an ADR. It's the active discipline `/grill-with-docs` drives to keep `GLOSSARY.md` a clean glossary.
-- **`/codebase-design`** is the deep-module vocabulary (module, interface, depth, seam, adapter, leverage, locality) for designing a module's *shape*: a lot of behaviour behind a small interface at a clean seam. `/tdd` and `/improve-codebase-architecture` both speak it.
-
+- **`/skill:improve-codebase-architecture`:** survey **deepening opportunities** during upkeep. Picking a candidate creates an idea for the main flow; `codebase-design` is the bench for designing its shape.
+- **`/skill:domain-modeling`:** sharpen domain language, resolve overloaded terms, and record hard-to-reverse decisions. `grill-with-docs` applies it to maintain the glossary.
+- **`/skill:codebase-design`:** deep-module vocabulary: interface, depth, seam, adapter, leverage, locality. Use it when module shape is the problem, including its independent design-it-twice branch. TDD and architecture surveys share this vocabulary.
 
 ## Phase boundaries
 
+Read [PHASE-BOUNDARIES.md](PHASE-BOUNDARIES.md) for the ordered decision tree. Decide at a boundary; mid-phase, continue or delegate a bounded side task.
 
-A **phase** is a chunk of work inside a session: the grilling, the implementation, the QA. At the **boundary** between two of them you have five options, and picking between them is the fuzziest decision in this whole map:
-
-- **Continue**: stay put. Costs nothing, loses nothing.
-- **`/clear`**: empty the window, when nothing here matters to what's next.
-- **`/handoff`** writes a portable markdown file. Narrow: only for a **new harness**, a **new directory**, a **colleague**, or forking a side task **mid-phase**. What it buys is portability.
-- **Subagent**: send a tightly-scoped task to its own window and get a report back.
-- **`/compact`** compresses this context and seeds a fresh session with it. The **default**, at the bottom of the tree rather than the first reach.
-
-Read [PHASE-BOUNDARIES.md](PHASE-BOUNDARIES.md) for the ordered tree: the five questions, the reasoning behind each branch, and why the primary-source cost makes **Continue** the one to rule out first. Make the decision **at** a boundary; mid-phase, continue or split the rest into subagents.
-
+1. **Continue:** preserve the conversation as a primary source.
+2. **`/new`:** start fresh when preceding context is disposable. Persisted sessions remain resumable with `/resume`.
+3. **`/skill:handoff`:** write a portable file for a new harness, directory, colleague, or mid-phase side task.
+4. **Subagent:** send bounded AFK work to its own context and receive a report.
+5. **`/compact`:** summarise relevant context within the active session. The default at the bottom of the tree, not the first reach.
 
 ## Standalone
 
-Off the main flow entirely.
+- **`/skill:grill-me`:** stateless interviewing when no repo/workspace is involved. With a workspace, prefer `grill-with-docs`.
+- **`/skill:grilling`:** the reusable interview discipline: rounds, frontier, facts are the agent's job, decisions are the human's. Use directly for an interview without a wrapper.
+- **`/skill:prototype`:** answer one design question with throwaway code. Retain the prototype as a primary source on a `prototype/<name>` branch and link it from the implementation issue; throwaway constrains the implementation, not preservation.
+- **`/skill:research`:** delegate primary-source reading to a background worker that saves cited Markdown. Keep working while it reads; its findings feed the main flow rather than replace it.
+- **`/skill:to-questionnaire`:** interview the user about the send (recipient and needed answer), then write questions for someone else's knowledge gap. The reply feeds grilling or spec synthesis.
+- **`/skill:wizard`:** generate a human-run interactive bash guide for dashboard clicks, credentials, provisioning, and cutovers the agent cannot perform itself.
+- **`/skill:wait-what`:** re-pitch a message that did not land, adding missing context in the project's domain vocabulary.
+- **`/skill:teach`:** learn across sessions using the directory as a stateful teaching workspace.
+- **`/skill:writing-for-agents`:** reference for skills, context files, and documents agents follow.
+- **`/skill:resolving-merge-conflicts`:** retained fork-only extra for tracing both sides' intent, resolving, and verifying an in-progress conflict.
 
-- **`/grill-me`**: the same relentless interview as `/grill-with-docs`, but **stateless**: it saves nothing locally and builds no `GLOSSARY.md`. Reach for it when you are **not working in a working directory** (sharpening a plan, a design, a piece of writing, anything with no repo under it). If you are in a working directory, use `/grill-with-docs` instead: it runs the same interview and leaves a paper trail, so it is strictly the better one.
+## Non-promoted skills
 
-- **`/grilling`** is the interview primitive itself: rounds, the frontier, facts are the agent's job and decisions are yours. `/grill-me` and `/grill-with-docs` are the two named ways in, and `/triage`, `/wayfinder` and `/improve-codebase-architecture` all run it internally. Reach for it directly only when you want the interview with no wrapper around it.
-- **`resolving-merge-conflicts`**: work through an in-progress merge or rebase conflict by tracing each side's intent, verify the result, and finish the operation. Retained in this Pi fork.
-- **`/prototype`** is a small, throwaway program that answers one design question: does this state model feel right, or what should this UI look like. Throwaway is a constraint on how the code is written, not a promise to destroy it: the answer folds into the real code, and the prototype itself is kept as a **primary source** on a `prototype/<name>` branch out of main, pointed at from the implementation issue. It's the detour in step 2 of the main flow, but reach for it any time a design question is hard to settle on paper.
-- **`/research`**: delegate reading legwork to a **background agent**: it investigates a question against **primary sources**, then leaves a cited Markdown file in the repo. Keep working while it reads. The file it produces is something to take *into* the main flow at `/grill-with-docs`, since research feeds the thinking rather than replacing it.
-- **`/to-questionnaire`** comes in when the thing blocking you isn't in your head or the codebase but in **someone else's**, and it writes them a questionnaire to fill in. It's the inverse of `/grill-me`: instead of interviewing you about the subject, it interviews you about the **send** (who it's going to, what you need back) and aims the questions at the gap. What comes back is material for `/grill-with-docs` or `/to-spec`.
-- **`/wizard`** is for the steps only a **human** can take: provisioning infrastructure, setting up credentials or CI secrets, clicking through an unfamiliar third-party dashboard, running a one-off migration or cutover. It generates an interactive bash script that opens each URL, captures each value, and writes it into `.env` and GitHub secrets, so the procedure stops being something you re-explain to an agent every time. Model-invoked, so the agent reaches for it the moment it hits a wall only you can pass. If the agent could just do it itself, it should; this is for where a human is genuinely in the loop.
-- **`/wait-what`** is the corrective for a message that didn't land. Use it mid-conversation, inside any other skill, and the agent re-pitches what it just said with the context you were missing, in plain English, using the `GLOSSARY.md` vocabulary. It works after the fact; `/grill-with-docs` is the upfront cure, because a shared language agreed early is what stops the jargon arriving at all.
-- **`/teach`**: learn a concept over multiple sessions, using the current directory as a stateful workspace.
-- **`/writing-for-agents`** is the reference for writing documents agents consume: skills, AGENTS.md, pointed-at docs.
+These remain available in the complete Pi port, but are beta or specialist workflows, not the promoted daily flow. Read their instructions before recommending them.
 
+- **`/skill:chief-of-staff`:** pursue a long-running goal through background agents and optional session-scoped schedules.
+- **`/skill:claude-handoff`:** historical upstream name for launching a fresh Pi background worker from a redacted handoff file. Unlike `handoff`, it launches the receiving worker.
+- **`/skill:loop-me`:** grill a workflow specification into stateful `workflows/*.md` files.
+- **`/skill:setup-ts-deep-modules`:** enforce TypeScript package entry-point boundaries with dependency-cruiser.
+- **`/skill:writing-beats`, `/skill:writing-fragments`, `/skill:writing-shape`:** writing workflows; select the one whose artifact matches the request.
+- **`/skill:git-guardrails-claude-code`:** historical upstream name for installing opt-in Pi bash-call git guardrails. `git-guardrails-pi` is the retained fork-only alias. Neither is a sandbox.
+- **`/skill:migrate-to-shoehorn`:** migrate the project to shoehorn where its prerequisites fit.
+- **`/skill:scaffold-exercises`:** scaffold exercises with its required project tooling.
+- **`/skill:setup-pre-commit`:** set up project pre-commit checks.
 
 ## Precondition
 
-**`setup-matt-pocock-skills`**: run before your first engineering flow to configure the issue tracker, triage labels, and doc layout the other skills assume. Custom issue trackers also work.
+Recommend `/skill:setup-matt-pocock-skills` before the first engineering flow to configure issue tracking, triage labels, and domain documentation. Custom trackers work too.

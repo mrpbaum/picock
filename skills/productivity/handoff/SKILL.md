@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 ## Usage
 
-In Pi, invoke `/skill:handoff [what the next session will be used for]`. The focus is optional; omit it for a general handoff.
+In Pi, invoke `/skill:handoff [what the next session will be used for]`. The focus is optional; omit it for a general handoff. Example: `/skill:handoff continue the prototype in a separate directory`.
 
 Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS (`$TMPDIR`, else `/tmp`; `%TEMP%` on Windows) - not the current workspace.
 

@@ -8,10 +8,10 @@ Implement the work described by the user in the spec or tickets.
 
 If the user passes a ticket reference, fetch it from the issue tracker and state its title before starting. If the reference is ambiguous, ask.
 
-Use the `tdd` skill where possible, at pre-agreed seams.
+Read and follow the available `tdd` skill's `SKILL.md` where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.
 
-Once done, use the `code-review` skill to review the work.
+Once done, read and follow the available `code-review` skill's `SKILL.md` to review the work. Its isolated passes require the [Pi backend contract](../PI-SUBAGENTS.md); stop if unavailable.
 
 Commit your work to the current branch.

@@ -1,111 +1,57 @@
-import assert from "node:assert/strict";
-import { mkdtemp, readdir, readFile, realpath, rm, stat } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join, relative, resolve } from "node:path";
-import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import assert from 'node:assert/strict';
+import { mkdtemp, readdir, readFile, realpath, rm, stat, writeFile, mkdir } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join, relative, resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
-const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const packageManifest = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
-const pluginManifest = JSON.parse(
-  await readFile(join(root, ".claude-plugin/plugin.json"), "utf8"),
-);
+const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
+const manifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'));
+assert.deepEqual(manifest.pi?.skills, ['./skills'], 'Distribute the complete port, not a promoted-only filter.');
+assert.ok(manifest.keywords?.includes('pi-package'));
+assert.equal(manifest.repository.url, 'https://github.com/mrpbaum/picock');
 
-const excludedBuckets = ["deprecated", "in-progress", "misc", "personal"];
-const expectedPiSkills = [
-  "./skills",
-  ...excludedBuckets.map((bucket) => `!skills/${bucket}/**`),
-];
-
-assert.deepEqual(
-  packageManifest.pi?.skills,
-  expectedPiSkills,
-  "package.json pi.skills must use the shared blacklist policy",
-);
-assert.ok(
-  packageManifest.keywords?.includes("pi-package"),
-  "package.json must include the pi-package keyword",
-);
-assert.equal(
-  packageManifest.version,
-  pluginManifest.version,
-  "package and Claude plugin versions must match",
-);
-
-async function findSkillDirectories(directory) {
+async function findSkills(directory) {
   const skills = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
+    if (!entry.isDirectory() || entry.name === 'node_modules') continue;
     const path = join(directory, entry.name);
-    if (entry.name === "node_modules") continue;
     try {
-      if ((await stat(join(path, "SKILL.md"))).isFile()) skills.push(path);
-    } catch {
-      // This directory is not itself a skill; continue recursively.
-    }
-    skills.push(...(await findSkillDirectories(path)));
+      if ((await stat(join(path, 'SKILL.md'))).isFile()) {
+        skills.push(path);
+        continue;
+      }
+    } catch { /* Recurse through non-skill folders. */ }
+    skills.push(...await findSkills(path));
   }
   return skills;
 }
-
-const allSkills = await findSkillDirectories(join(root, "skills"));
-const distributedSkills = allSkills.filter((path) => {
-  const [bucket] = relative(join(root, "skills"), path).split("/");
-  return !excludedBuckets.includes(bucket);
-});
-const expectedPaths = distributedSkills
-  .map((path) => `./${relative(root, path)}`)
-  .sort();
-
-const names = distributedSkills.map((path) => path.split("/").at(-1));
-const repositorySkills = await findSkillDirectories(join(root, ".pi/skills"));
-for (const path of repositorySkills) {
-  const name = path.split("/").at(-1);
-  assert.ok(
-    !names.includes(name),
-    `repository-maintenance skill ${name} must not be distributed or globally linked`,
-  );
+const distributed = await findSkills(join(root, 'skills'));
+const names = distributed.map((path) => path.split('/').at(-1));
+assert.equal(new Set(names).size, names.length, 'Skill names must be unique for flat linking.');
+for (const path of await findSkills(join(root, '.pi/skills'))) {
+  assert.ok(!names.includes(path.split('/').at(-1)), 'Maintenance skills must remain repository-only.');
 }
-assert.equal(
-  new Set(names).size,
-  names.length,
-  "distributed skills must have unique directory names for flat linking",
-);
-
-const pluginPaths = [...pluginManifest.skills].sort();
-assert.deepEqual(
-  pluginPaths,
-  expectedPaths,
-  "Claude plugin skills must match blacklist-based discovery",
-);
-
-const temporaryHome = await mkdtemp(join(tmpdir(), "picock-skill-validation-"));
+const home = await mkdtemp(join(tmpdir(), 'picock-distribution-'));
 try {
-  const result = spawnSync("bash", [join(root, "scripts/link-skills.sh")], {
-    cwd: root,
-    env: { ...process.env, HOME: temporaryHome },
-    encoding: "utf8",
-  });
+  const run = () => spawnSync('bash', [join(root, 'scripts/link-skills.sh')], { cwd: root, env: { ...process.env, HOME: home }, encoding: 'utf8' });
+  const result = run();
   assert.equal(result.status, 0, result.stderr || result.stdout);
-
-  for (const destination of [".claude/skills", ".agents/skills"]) {
-    const linkedNames = (await readdir(join(temporaryHome, destination))).sort();
-    assert.deepEqual(
-      linkedNames,
-      [...names].sort(),
-      `${destination} links must match blacklist-based discovery`,
-    );
-
-    for (const name of linkedNames) {
-      const target = await realpath(join(temporaryHome, destination, name));
-      assert.ok(
-        expectedPaths.includes(`./${relative(root, target)}`),
-        `${destination}/${name} points outside the distributed skill set`,
-      );
-    }
+  const destination = join(home, '.agents/skills');
+  assert.deepEqual((await readdir(destination)).sort(), [...names].sort());
+  for (const name of names) {
+    const target = await realpath(join(destination, name));
+    assert.ok(distributed.includes(target), `${name}: linked outside distribution`);
+    assert.ok(!relative(root, target).startsWith('.pi/'));
   }
+  // Re-linking is idempotent, and real user directories must not be deleted.
+  assert.equal(run().status, 0);
+  await rm(join(destination, names[0]));
+  await mkdir(join(destination, names[0]));
+  await writeFile(join(destination, names[0], 'keep.txt'), 'user data');
+  assert.notEqual(run().status, 0);
+  assert.equal(await readFile(join(destination, names[0], 'keep.txt'), 'utf8'), 'user data');
 } finally {
-  await rm(temporaryHome, { recursive: true, force: true });
+  await rm(home, { recursive: true, force: true });
 }
-
-console.log(`Validated ${expectedPaths.length} distributed skills.`);
+console.log(`Validated complete distribution and safe linking of ${distributed.length} skills.`);
