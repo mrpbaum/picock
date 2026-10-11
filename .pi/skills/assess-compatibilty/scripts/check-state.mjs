@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { spawnSync } from "node:child_process";
+import { sourceGit } from "../../../../scripts/source-git.mjs";
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -29,24 +29,20 @@ if (!shaPattern.test(marker.replace(/\n$/, "")) || !marker.endsWith("\n")) {
 
 const markerSha = marker.slice(0, 40);
 const document = readFileSync(resolve(repoRoot, "docs/pi-compatibilty.md"), "utf8");
-const baselines = [...document.matchAll(/^\| Upstream commit \| `([0-9a-f]{40})` \|$/gm)];
+const baselines = [...document.matchAll(/^\| Source commit \| `([0-9a-f]{40})` \|$/gm)];
 const baseline = baselines[0]?.[1];
 if (baselines.length !== 1) {
-  console.error("compatibility document has no unique upstream commit baseline");
+  console.error("compatibility document has no unique source commit baseline");
   process.exit(2);
 }
 
-function git(args) {
-  const result = spawnSync("git", args, { cwd: repoRoot, encoding: "utf8" });
-  if (result.status !== 0) {
-    console.error(result.stderr.trim() || `git ${args.join(" ")} failed`);
-    process.exit(2);
-  }
-  return result.stdout.trim();
+try {
+  sourceGit("rev-parse", "--verify", `${target}^{commit}`);
+  sourceGit("rev-parse", "--verify", `${markerSha}^{commit}`);
+} catch (error) {
+  console.error(error.message);
+  process.exit(2);
 }
-
-git(["rev-parse", "--verify", `${target}^{commit}`]);
-git(["rev-parse", "--verify", `${markerSha}^{commit}`]);
 if (markerSha !== target || baseline !== target) {
   console.error(`stale: marker=${markerSha} document=${baseline} target=${target}`);
   process.exit(1);

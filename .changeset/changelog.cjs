@@ -1,4 +1,4 @@
-// Keep upstream context and Pi adaptations together in the release changelog.
+// Keep source context and Pi adaptations together in the release changelog.
 // No network requests or GitHub credentials are needed for versioning.
 module.exports = {
   async getReleaseLine(changeset) {

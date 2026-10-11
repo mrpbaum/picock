@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const sections = ['Provenance', 'Upstream changes', 'Pi adaptations', 'Skill coverage', 'Verification'];
+export const sections = ['Provenance', 'Source changes', 'Pi adaptations', 'Skill coverage', 'Verification'];
 
 export function validateRecord(text, name) {
   const match = text.match(/^---\r?\n([\s\S]+?)\r?\n---\r?\n([\s\S]+)$/);
@@ -17,7 +17,7 @@ export function validateRecord(text, name) {
     const end = headings[index + 1]?.index ?? body.length;
     assert.ok(body.slice(start, end).trim().length > 0, `${name}: empty ${sections[index]}`);
   }
-  assert.doesNotMatch(body, /FULL_(?:PREVIOUS|REVIEWED)_UPSTREAM_SHA|\b(?:TODO|TBD)\b/, `${name}: unfilled template`);
+  assert.doesNotMatch(body, /FULL_(?:PREVIOUS|REVIEWED)_SOURCE_SHA|\b(?:TODO|TBD)\b/, `${name}: unfilled template`);
   assert.match(body, /^Source baseline: `(?:[0-9a-f]{40}|none)`$/m, `${name}: invalid source baseline`);
   assert.match(body, /^Source target: `[0-9a-f]{40}`$/m, `${name}: invalid source target`);
   return body;

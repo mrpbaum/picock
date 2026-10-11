@@ -22,7 +22,8 @@
     "version": "npm run validate:skills && changeset version",
     "validate:changesets": "node scripts/validate-changesets.mjs",
     "test:changesets": "node scripts/test-changesets.mjs",
-    "test:maintenance": "node scripts/test-maintenance.mjs && npm run test:changesets",
+    "test:maintenance": "node scripts/test-maintenance.mjs && npm run test:source && npm run test:changesets",
+    "test:source": "node scripts/test-source.mjs",
     "validate:pi-runtime": "node scripts/validate-pi-runtime.mjs"
   },
   "devDependencies": {

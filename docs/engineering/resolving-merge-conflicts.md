@@ -1,4 +1,4 @@
-> **Retained in this Pi fork.** Upstream removed the skill in v1.3.0, but this fork continues to distribute it for intent-based conflict resolution.
+> **Retained in this Pi port.** Source removed the skill in v1.3.0, but this port continues to distribute it for intent-based conflict resolution.
 
 ## What it does
 

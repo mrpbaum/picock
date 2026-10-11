@@ -2,23 +2,29 @@ import assert from 'node:assert/strict';
 import { existsSync, lstatSync, readFileSync, readlinkSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { portGit } from './source-git.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const read = (path) => readFileSync(resolve(root, path), 'utf8');
+const remotes = portGit('remote').split('\n').filter(Boolean);
+assert.ok(remotes.every((name) => name === 'origin'), 'Picock uses only its own origin remote; inspect source in a separate checkout');
 for (const path of ['.agents', '.claude-plugin', '.github', '.out-of-scope', 'scripts/sync-plugin-version.mjs']) {
   assert.ok(!existsSync(resolve(root, path)), `${path}: removed repository scaffolding was reintroduced`);
 }
 assert.ok(lstatSync(resolve(root, 'AGENTS.md')).isFile(), 'AGENTS.md must be the canonical regular file');
 assert.ok(lstatSync(resolve(root, 'CLAUDE.md')).isSymbolicLink(), 'CLAUDE.md must be a compatibility symlink');
 assert.equal(readlinkSync(resolve(root, 'CLAUDE.md')), 'AGENTS.md');
-for (const path of ['AGENTS.md', 'docs/maintenance/handoff-extract-adapted-skills.md', 'docs/maintenance/pi-port.md', 'docs/maintenance/sync-upstream.md']) {
+for (const path of ['AGENTS.md', 'docs/maintenance/handoff-extract-adapted-skills.md', 'docs/maintenance/pi-port.md', 'docs/maintenance/sync-source.md']) {
   assert.doesNotMatch(read(path), /\.agents\/(?:invocation|writing-docs|install-block)\.md/, `${path}: stale maintenance pointer`);
 }
 for (const path of ['docs/maintenance/invocation.md', 'docs/maintenance/writing-docs.md', 'docs/maintenance/changesets.md']) {
   assert.ok(existsSync(resolve(root, path)), `Missing maintenance guide ${path}`);
 }
-const sync = read('.pi/skills/sync-upstream/SKILL.md');
-for (const section of ['Provenance', 'Upstream changes', 'Pi adaptations', 'Skill coverage', 'Verification']) {
+const sync = read('.pi/skills/sync-source/SKILL.md');
+assert.match(sync, /^name: sync-source$/m);
+assert.ok(sync.includes('Never add a source remote here'));
+assert.ok(sync.includes('PICOCK_SOURCE_CHECKOUT'));
+for (const section of ['Provenance', 'Source changes', 'Pi adaptations', 'Skill coverage', 'Verification']) {
   assert.ok(sync.includes(`**${section}:**`), `sync must own the enriched ${section} section`);
 }
 assert.ok(sync.includes('docs/maintenance/changesets.md'));

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Sync Source"
+  short_description: "Sync source through a Pi compatibility gate"
+policy:
+  allow_implicit_invocation: false

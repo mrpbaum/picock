@@ -19,7 +19,11 @@ try {
   const loaded = loadSkills({ cwd: home, agentDir: home, skillPaths: [join(root, 'skills')], includeDefaults: false });
   assert.deepEqual(loaded.diagnostics, []);
   assert.equal(loaded.skills.length, 40);
-  assert.ok(!loaded.skills.some(({ name }) => ['sync-upstream', 'assess-compatibilty'].includes(name)));
+  assert.ok(!loaded.skills.some(({ name }) => ['sync-source', 'assess-compatibilty'].includes(name)));
+  const maintenance = loadSkills({ cwd: home, agentDir: home, skillPaths: [join(root, '.pi/skills')], includeDefaults: false });
+  assert.deepEqual(maintenance.diagnostics, []);
+  assert.deepEqual(maintenance.skills.map(({ name }) => name).sort(), ['assess-compatibilty', 'sync-source']);
+  assert.equal(maintenance.skills.find(({ name }) => name === 'sync-source').disableModelInvocation, true);
   const prompt = formatSkillsForPrompt(loaded.skills);
   assert.ok(!prompt.includes('<name>ask-matt</name>'), 'User-invoked skills must stay out of implicit catalogue');
   assert.ok(prompt.includes('<name>tdd</name>'));

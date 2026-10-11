@@ -20,14 +20,14 @@ The first, second, fifth, and sixth sections are required for a finished promote
 
 ## Evidence for questions
 
-Read existing questions in the page, relevant repository issues, upstream discussions, release records, and observed user confusion. If the upstream audience wiki exists locally, inspect its relevant entries. A real question beats an invented one. Do not pad a thin skill to match the question count of a popular one, or repeat historical upstream bugs as current port behavior.
+Read existing questions in the page, relevant repository issues, source discussions, release records, and observed user confusion. If the source audience wiki exists locally, inspect its relevant entries. A real question beats an invented one. Do not pad a thin skill to match the question count of a popular one, or repeat historical source bugs as current port behavior.
 
 ## Pi-facing accuracy
 
 - Use `/skill:<name>` in commands. Cross-skill dependencies name skills and describe reading/following them. Do not require Claude commands, hooks, a Skill dispatcher, or marketplace installation.
 - Keep install/update instructions authoritative in the top-level README rather than copying them across every page.
-- Do not claim this repository's pages are published on upstream's website. Existing `aihero.dev/skills-<name>` links identify upstream explanatory material, not the implementation here.
-- Link repository-local guidance and port behavior to this repository. Use absolute `https://github.com/mrpbaum/picock/blob/main/...` links if a human skill page must be portable outside the repository; never link the port's code to upstream as though it were identical. Maintenance guides may use relative links.
+- Do not claim this repository's pages are published on source's website. Existing `aihero.dev/skills-<name>` links identify source explanatory material, not the implementation here.
+- Link repository-local guidance and port behavior to this repository. Use absolute `https://github.com/mrpbaum/picock/blob/main/...` links if a human skill page must be portable outside the repository; never link the port's code to source as though it were identical. Maintenance guides may use relative links.
 - Label static versus runtime verification honestly. Installing a backend is not proof its workflows have run.
 - Respect the user/model invocation distinction in `invocation.md` and stop unsupported delegation instead of implying a sequential fallback.
 
@@ -44,5 +44,5 @@ Moves/renames update paths, bucket listings, top-level links, and router togethe
 - The page matches actual port behavior and invocation mode.
 - Its required sections are complete, questions are evidence-grounded, and signals are observable.
 - All local links, listings, and router references resolve to the intended implementation.
-- No copied upstream install policy or website-publishing claim controls the Pi port.
+- No copied source install policy or website-publishing claim controls the Pi port.
 - The enriched changeset records behavioral changes, coverage impact, and verification limits.

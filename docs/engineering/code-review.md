@@ -53,7 +53,7 @@ The **smell baseline** sits under the repo's standards. It is twelve code smells
 
 **What if another installation contains `code-review`?**
 
-Pi keeps the first discovered skill with a given name. Remove duplicate upstream or linked copies so `/skill:code-review` resolves to this port. Claude marketplace command names are not Pi's discovery authority.
+Pi keeps the first discovered skill with a given name. Remove duplicate source or linked copies so `/skill:code-review` resolves to this port. Claude marketplace command names are not Pi's discovery authority.
 
 **Its sub-agents keep invoking `/code-review` again and spawn more agents.**
 

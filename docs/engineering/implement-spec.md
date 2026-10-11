@@ -63,7 +63,7 @@ Worktrees don't remove collisions; they postpone them to merge time. A blocking 
 
 **Blocked tickets never start, even after their blocker has merged.**
 
-This is a known problem on GitHub. The tracker's blocked-by count only drops when a blocker *closes*, and tickets typically close when the PR merges, which is the end of the run. The tracker is the right source for the starting graph but can be stale mid-run. This fork instructs the orchestrator to compute the frontier from verified tickets integrated on the branch, rather than waiting for PR-linked issues to close.
+This is a known problem on GitHub. The tracker's blocked-by count only drops when a blocker *closes*, and tickets typically close when the PR merges, which is the end of the run. The tracker is the right source for the starting graph but can be stale mid-run. This port instructs the orchestrator to compute the frontier from verified tickets integrated on the branch, rather than waiting for PR-linked issues to close.
 
 **Does this replace Sandcastle or an AFK script?**
 

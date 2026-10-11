@@ -8,9 +8,11 @@
   </a>
 </p>
 
-# Picock: upstream skills ported to Pi
+# Picock: source skills ported to Pi
 
-A complete one-to-one Pi port of [Matt Pocock's skills](https://github.com/mattpocock/skills). Portable skills stay included; harness-specific instructions are adapted for Pi. You do not need a separate upstream skill installation. Upstream's engineering principles below remain the basis of the collection.
+A complete one-to-one Pi port of [Matt Pocock's skills](https://github.com/mattpocock/skills). Portable skills stay included; harness-specific instructions are adapted for Pi. You do not need a separate source skill installation. Matt's engineering principles below remain the basis of the collection.
+
+Picock is maintained independently, not through a Git fork workflow. Matt's repository is the read-only source of skill snapshots. It is not a remote in this repository; source attribution and per-file provenance remain intact.
 
 Developing real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.
 
@@ -22,9 +24,9 @@ If you want to keep up with changes to these skills, and any new ones I create, 
 
 ## Install, update, and invoke in Pi
 
-This package targets Pi 1.1.0 or newer, not Claude Code. The reviewed upstream snapshot contains 38 skills; this package retains all of them plus two documented fork-only extras. See the [port inventory and verification limits](./docs/maintenance/pi-port.md) and [per-file provenance](./docs/maintenance/upstream-port-manifest.json).
+This package targets Pi 1.1.0 or newer, not Claude Code. The reviewed source snapshot contains 38 skills; this package retains all of them plus two documented local-only extras. See the [port inventory and verification limits](./docs/maintenance/pi-port.md) and [per-file provenance](./docs/maintenance/source-port-manifest.json).
 
-Install the package and its **required subagent backend**, [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents). This is the sole supported Pi subagent extension for this fork, not an optional alternative. Review, exploration, parallel design, research, and spec implementation use its `Agent` tools:
+Install the package and its **required subagent backend**, [`@tintinweb/pi-subagents`](https://github.com/tintinweb/pi-subagents). This is the sole supported Pi subagent extension for this port, not an optional alternative. Review, exploration, parallel design, research, and spec implementation use its `Agent` tools:
 
 ```bash
 pi install git:github.com/mrpbaum/picock
@@ -35,7 +37,7 @@ The subagent dependency is installed separately, not automatically by this skill
 
 The Pi manifest distributes the entire `skills/` tree, including beta and miscellaneous skills. Promotion describes the daily-work listings below, not package discovery. The bucket READMEs list non-promoted workflows. Repository-only `.pi/skills/` maintenance skills are not distributed or globally linked.
 
-Remove duplicate upstream or independently linked copies before loading this package: Pi keeps the first discovered skill name, so a collision can shadow the port. Install either the Pi package or local links, not both.
+Remove duplicate source or independently linked copies before loading this package: Pi keeps the first discovered skill name, so a collision can shadow the port. Install either the Pi package or local links, not both.
 
 Update unpinned Pi packages with:
 
@@ -49,7 +51,7 @@ Inspect installed packages with `pi list` and resources with `pi config`. `pi up
 
 ## Maintenance and releases
 
-We update skill snapshots and their required dependencies, not upstream repository ancestry or scaffolding. Each update combines incorporated upstream changes with Pi adaptations in an [enriched Changeset](./docs/maintenance/changesets.md), preserving coverage, provenance, and verification in release notes. The [snapshot update guide](./docs/maintenance/sync-upstream.md) describes this repository-only workflow.
+We update skill snapshots and their required dependencies, not source repository ancestry or scaffolding. Each update combines incorporated source changes with Pi adaptations in an [enriched Changeset](./docs/maintenance/changesets.md), preserving coverage, provenance, and verification in release notes. The [snapshot update guide](./docs/maintenance/sync-source.md) describes this repository-only workflow.
 
 ## Why These Skills Exist
 
@@ -182,7 +184,7 @@ Skills I use daily for code work.
 - **[domain-modeling](./skills/engineering/domain-modeling/SKILL.md)**: Actively build and sharpen a project's domain model: challenge terms against the glossary, stress-test with edge-case scenarios, and update `GLOSSARY.md` and ADRs inline.
 - **[codebase-design](./skills/engineering/codebase-design/SKILL.md)**: Shared discipline and vocabulary for designing deep modules: a lot of behaviour behind a small interface, placed at a clean seam, testable through that interface.
 - **[code-review](./skills/engineering/code-review/SKILL.md)**: Two-axis review of the diff since a fixed point: **Standards** (does it follow the repo's coding standards, plus a Fowler smell baseline?) and **Spec** (does it faithfully implement the originating issue/spec?), run as parallel sub-agents so neither pollutes the other.
-- **[resolving-merge-conflicts](./skills/engineering/resolving-merge-conflicts/SKILL.md)**: Resolve merge or rebase conflicts by tracing both sides' intent, then verify and finish the operation. Retained in this Pi fork.
+- **[resolving-merge-conflicts](./skills/engineering/resolving-merge-conflicts/SKILL.md)**: Resolve merge or rebase conflicts by tracing both sides' intent, then verify and finish the operation. Retained in this Pi port.
 - **[pr](./skills/engineering/pr/SKILL.md)**: The shape a pull request body should take: a summary as the smallest visual that makes the change clear, before/after evidence that it works, and a merge-danger call (one-way or two-way door, plus blast radius).
 - **[wizard](./skills/engineering/wizard/SKILL.md)**: Generate an interactive bash wizard that walks a human through steps only they can perform: provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover.
 

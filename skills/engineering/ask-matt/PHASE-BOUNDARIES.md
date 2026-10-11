@@ -18,7 +18,7 @@ The **phase boundary** is the gap between two phases, and it is the only place t
 
 Work top to bottom at the boundary. The first **yes** wins.
 
-**1. Can you continue in this session?** Two things make the answer yes: the next phase needs this phase as a **primary source**, or you have enough [smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone) left (the upstream ~150k-token figure is a heuristic; check the selected model's actual limits and usage) for the next phase to fit. Grilling → implementation is the standard yes: the implementation wants the reasoning verbatim, not a summary of it. Continue costs nothing and loses nothing, so rule it out before anything else.
+**1. Can you continue in this session?** Two things make the answer yes: the next phase needs this phase as a **primary source**, or you have enough [smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone) left (the source ~150k-token figure is a heuristic; check the selected model's actual limits and usage) for the next phase to fit. Grilling → implementation is the standard yes: the implementation wants the reasoning verbatim, not a summary of it. Continue costs nothing and loses nothing, so rule it out before anything else.
 
 **2. Is the context irrelevant to what comes next?** Is everything in this session (the exploration, the decisions, the dead ends) disposable? If so, **`/new`**. It takes no time and hands back the whole window. The old persisted session stays resumable with `/resume`.
 

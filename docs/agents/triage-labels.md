@@ -12,4 +12,4 @@ The skills speak in terms of five canonical triage roles. This file maps those r
 
 When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
 
-Judge every issue against this port's [`SCOPE.md`](../../SCOPE.md) before picking a state. Do not inherit upstream rejection decisions. Rejections close as "not planned" only after the maintainer confirms; record new local decisions where the bundled triage workflow specifies.
+Judge every issue against this port's [`SCOPE.md`](../../SCOPE.md) before picking a state. Do not inherit source rejection decisions. Rejections close as "not planned" only after the maintainer confirms; record new local decisions where the bundled triage workflow specifies.

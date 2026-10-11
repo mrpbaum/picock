@@ -33,12 +33,12 @@ At a boundary between phases, ask in this order:
 | Subagent | A bounded task can run without human steering |
 | `/compact` | Relevant context should be summarised within the active session |
 
-The upstream ~150k-token smart-zone figure is a heuristic. Check the selected model's limits and actual usage, not a universal Pi budget. Mid-phase, continue or delegate a bounded side task rather than compacting away the live reasoning.
+The source ~150k-token smart-zone figure is a heuristic. Check the selected model's limits and actual usage, not a universal Pi budget. Mid-phase, continue or delegate a bounded side task rather than compacting away the live reasoning.
 
 ## Common questions
 
 **It says a user-invoked skill is missing.**
-User-invoked skills are hidden from the automatic model catalogue. Check the installed directories and Pi discovery before concluding they are absent; use `/skill:<name>` to invoke them explicitly. Do not install a duplicate upstream copy to fix catalogue visibility.
+User-invoked skills are hidden from the automatic model catalogue. Check the installed directories and Pi discovery before concluding they are absent; use `/skill:<name>` to invoke them explicitly. Do not install a duplicate source copy to fix catalogue visibility.
 
 **It described a skill incorrectly.**
 The trace should show a read of that skill's `SKILL.md` before the claim. The router is a secondary source; the target instructions win when they disagree.

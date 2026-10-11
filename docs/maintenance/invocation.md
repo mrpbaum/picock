@@ -1,13 +1,13 @@
 # Pi skill invocation
 
-Preserve each upstream skill's invocation mode in the one-to-one port.
+Preserve each source skill's invocation mode in the one-to-one port.
 
 - **User-invoked:** set `disable-model-invocation: true`. The human invokes `/skill:<name>`; the skill is absent from Pi's implicit model catalogue. Recommend these skills to the human, rather than implicitly running them as dependencies.
 - **Model-invoked:** omit that flag. The model reads and follows `SKILL.md` when the task fits. The human can also invoke `/skill:<name>` explicitly.
 
 This is routing policy, not filesystem access control. A hidden user-invoked skill still exists on disk. A missing catalogue entry alone does not prove it is uninstalled.
 
-Keep upstream `agents/openai.yaml` metadata alongside its skill; for user-invoked skills its `policy.allow_implicit_invocation: false` must agree with frontmatter. Pi does not use this Codex metadata to enforce invocation.
+Keep source `agents/openai.yaml` metadata alongside its skill; for user-invoked skills its `policy.allow_implicit_invocation: false` must agree with frontmatter. Pi does not use this Codex metadata to enforce invocation.
 
 ## Composition
 

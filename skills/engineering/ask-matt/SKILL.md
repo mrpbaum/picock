@@ -34,7 +34,7 @@ A **flow** is a path through the skills. Most work follows this main flow; on-ra
 
 Keep grilling, spec, and tickets in one unbroken context where possible. Each ticket implementation can then start fresh. Run retro in the session it reviews; after a restart, provide that session's log.
 
-The **[smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone)** is a reasoning-quality heuristic, not a fixed Pi token budget. The upstream ~150k figure is model-dependent. Check actual usage and limits. If the session cannot safely reach tickets, compact at the nearest phase boundary with instructions preserving the decisions.
+The **[smart zone](https://www.aihero.dev/ai-coding-dictionary/smart-zone)** is a reasoning-quality heuristic, not a fixed Pi token budget. The source ~150k figure is model-dependent. Check actual usage and limits. If the session cannot safely reach tickets, compact at the nearest phase boundary with instructions preserving the decisions.
 
 ## On-ramps
 
@@ -69,18 +69,18 @@ Read [PHASE-BOUNDARIES.md](PHASE-BOUNDARIES.md) for the ordered decision tree. D
 - **`/skill:wait-what`:** re-pitch a message that did not land, adding missing context in the project's domain vocabulary.
 - **`/skill:teach`:** learn across sessions using the directory as a stateful teaching workspace.
 - **`/skill:writing-for-agents`:** reference for skills, context files, and documents agents follow.
-- **`/skill:resolving-merge-conflicts`:** retained fork-only extra for tracing both sides' intent, resolving, and verifying an in-progress conflict.
+- **`/skill:resolving-merge-conflicts`:** retained local-only extra for tracing both sides' intent, resolving, and verifying an in-progress conflict.
 
 ## Non-promoted skills
 
 These remain available in the complete Pi port, but are beta or specialist workflows, not the promoted daily flow. Read their instructions before recommending them.
 
 - **`/skill:chief-of-staff`:** pursue a long-running goal through background agents and optional session-scoped schedules.
-- **`/skill:claude-handoff`:** historical upstream name for launching a fresh Pi background worker from a redacted handoff file. Unlike `handoff`, it launches the receiving worker.
+- **`/skill:claude-handoff`:** historical source name for launching a fresh Pi background worker from a redacted handoff file. Unlike `handoff`, it launches the receiving worker.
 - **`/skill:loop-me`:** grill a workflow specification into stateful `workflows/*.md` files.
 - **`/skill:setup-ts-deep-modules`:** enforce TypeScript package entry-point boundaries with dependency-cruiser.
 - **`/skill:writing-beats`, `/skill:writing-fragments`, `/skill:writing-shape`:** writing workflows; select the one whose artifact matches the request.
-- **`/skill:git-guardrails-claude-code`:** historical upstream name for installing opt-in Pi bash-call git guardrails. `git-guardrails-pi` is the retained fork-only alias. Neither is a sandbox.
+- **`/skill:git-guardrails-claude-code`:** historical source name for installing opt-in Pi bash-call git guardrails. `git-guardrails-pi` is the retained local-only alias. Neither is a sandbox.
 - **`/skill:migrate-to-shoehorn`:** migrate the project to shoehorn where its prerequisites fit.
 - **`/skill:scaffold-exercises`:** scaffold exercises with its required project tooling.
 - **`/skill:setup-pre-commit`:** set up project pre-commit checks.

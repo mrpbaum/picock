@@ -2,21 +2,21 @@
 
 ## Source boundary
 
-This package ports all **38 upstream skills** at `49dd158d1076134a641b33efb035946536778336` (upstream package `1.3.1`). Portable skills remain included. The [provenance manifest](./upstream-port-manifest.json) maps 108 upstream files to their source commit/blob and distinguishes unchanged copies from adaptations. Pi-only helpers are identified separately.
+This package ports all **38 source skills** at `49dd158d1076134a641b33efb035946536778336` (source package `1.3.1`). Portable skills remain included. The [provenance manifest](./source-port-manifest.json) maps 108 source files to their source commit/blob and distinguishes unchanged copies from adaptations. Pi-only helpers are identified separately.
 
-This is not a claim to track the newest upstream HEAD. The local `upstream/main` ref had moved past the compatibility ledger's baseline during implementation. Updating to a newer snapshot requires the rewritten maintenance procedure and a fresh upstream assessment.
+Picock is maintained independently. The source repository is read-only evidence, not a Git remote or ancestry relationship. The only remote here is picock's own origin. This pin does not claim to be the newest source HEAD; a newer snapshot requires reviewed copying and a fresh source assessment.
 
-Two fork-only extras remain for existing users: `resolving-merge-conflicts` and `git-guardrails-pi`. They are not counted as upstream ports. The latter is an alias of the canonical Pi guardrail implementation under upstream's historical `git-guardrails-claude-code` name. Total Pi discovery is **40 skills**: 28 in the promoted buckets and 12 in beta/misc buckets. Promotion controls public listing structure, not availability.
+Two local-only extras remain for existing users: `resolving-merge-conflicts` and `git-guardrails-pi`. They are not counted as source ports. The latter is an alias of the canonical Pi guardrail implementation under source's historical `git-guardrails-claude-code` name. Total Pi discovery is **40 skills**: 28 in the promoted buckets and 12 in beta/misc buckets. Promotion controls public listing structure, not availability.
 
 ## Runtime dependencies and naming
 
 Pi `>=1.1.0` and the separately installed `@tintinweb/pi-subagents` backend are required for delegation. The reviewed backend reference is `0.20.0`; its effective settings and agent definitions must support each requested workflow. Package-installed and symlinked skill paths must be passed explicitly to children where named preloading cannot find them.
 
-The upstream names `claude-handoff` and `git-guardrails-claude-code` remain for parity, but their instructions launch Pi workers and install Pi event handlers. They do not launch Claude or write Claude hook settings. Git guardrails remain opt-in and command-level, not a sandbox.
+The source names `claude-handoff` and `git-guardrails-claude-code` remain for parity, but their instructions launch Pi workers and install Pi event handlers. They do not launch Claude or write Claude hook settings. Git guardrails remain opt-in and command-level, not a sandbox.
 
-Claude plugin metadata, this repository's GitHub issue forms, and inherited rejection records have been removed. Useful repository guidance lives under `docs/maintenance/`, and inherited pending upstream release notes are archived outside the active Changeset queue. The original shell-hook script remains bundled source reference material, not the Pi installation. Package versioning and validation do not synchronise Claude metadata. No skills were deleted in this implementation. The upstream debugging redaction requirements were restored and the unrelated fork post-mortem addition was removed, as stated before implementation.
+Claude plugin metadata, this repository's GitHub issue forms, and inherited rejection records have been removed. Useful repository guidance lives under `docs/maintenance/`, and inherited pending source release notes are archived outside the active Changeset queue. The original shell-hook script remains bundled source reference material, not the Pi installation. Package versioning and validation do not synchronise Claude metadata. No skills were deleted in this implementation. The source debugging redaction requirements were restored and the unrelated local post-mortem addition was removed, as stated before implementation.
 
-Repository-maintenance skills remain under `.pi/skills/` and are not distributed, globally linked, or publicly routed. `docs/pi-compatibilty.md` and its marker retain their upstream evidence baseline unchanged. `AGENTS.md` is the canonical regular instruction file. `CLAUDE.md` points to it through a compatibility symlink, so there is only one instruction source.
+Repository-maintenance skills remain under `.pi/skills/` and are not distributed, globally linked, or publicly routed. `docs/pi-compatibilty.md` and its marker retain their source evidence baseline unchanged. `AGENTS.md` is the canonical regular instruction file. `CLAUDE.md` points to it through a compatibility symlink, so there is only one instruction source.
 
 ## Verification
 
@@ -30,7 +30,16 @@ node .pi/skills/assess-compatibilty/scripts/check-state.mjs 49dd158d1076134a641b
 git diff --check
 ```
 
-The suite checks all upstream skill names and invocation policies, complete file provenance, unchanged/adapted classification, bundled links outside code examples, router coverage, promoted docs, backend pointers, safe idempotent linking, repository-only maintenance exclusion, restored debugging behavior, and synthetic git-guardrail handler cases. It also checks enriched records, maintenance ownership, and bundled tracker independence from the removed GitHub issue forms. `test:maintenance` checks unrelated source snapshots, stale evidence, marker syntax, and duplicate ledger pins. Its `test:changesets` step validates negative record cases and runs actual Changesets versioning in a disposable repository with credentials unset: 1.3.1 becomes 1.4.0, complete summaries survive, only fixture records are consumed, and a second version run is a no-op. It does not version the real package. It requires the recorded upstream Git object, which is part of this repository's existing history.
+For source evidence, prefer a separate checkout of the manifest's `sourceRepository`, containing the recorded source and assessment commits:
+
+```bash
+export PICOCK_SOURCE_CHECKOUT=/absolute/path/to/source-checkout
+npm run validate:skills
+```
+
+This variable also applies to the manifest generator and assessment state checker. They never fetch or add remotes. Without it, cached Git objects in picock are usable offline if present; missing evidence stops the check with checkout instructions. A new clone does not need shared source ancestry.
+
+The suite checks all source skill names and invocation policies, complete file provenance, unchanged/adapted classification, bundled links outside code examples, router coverage, promoted docs, backend pointers, safe idempotent linking, repository-only maintenance exclusion, restored debugging behavior, and synthetic git-guardrail handler cases. It also checks enriched records, maintenance ownership, and bundled tracker independence from the removed GitHub issue forms. `test:maintenance` checks unrelated source snapshots, stale evidence, marker syntax, and duplicate ledger pins. Its `test:changesets` step validates negative record cases and runs actual Changesets versioning in a disposable repository with credentials unset: 1.3.1 becomes 1.4.0, complete summaries survive, only fixture records are consumed, and a second version run is a no-op. It does not version the real package. It requires the recorded source Git objects in the separate checkout or an existing local object cache, not inherited Git history. `test:source` exercises the full provenance checker and manifest generator in a fresh port repository without source objects or remotes.
 
 Run integration checks against a specific installed Pi package root:
 
@@ -62,4 +71,4 @@ Updating the existing development lockfile reported 18 npm audit findings (2 mod
 
 ## Maintenance
 
-Read and follow `.pi/skills/sync-upstream/SKILL.md` for reviewed skill-snapshot updates, not whole-repository tracking. Each completed update records upstream changes, Pi adaptations, coverage, provenance, and verification together in an enriched Changeset (see `docs/maintenance/changesets.md`). Bundled wayfinder/tracker and triage body templates are preserved independently of optional repository issue forms. Use `scripts/update-port-manifest.mjs <reviewed-upstream-sha>` only after reviewing the mapped content; advancing its baseline requires `--reviewed`. The generator is not a compatibility assessment and must not be used to stamp unported files as current. The upstream ledger/marker remain owned by `assess-compatibilty`.
+Read and follow `.pi/skills/sync-source/SKILL.md` for reviewed skill-snapshot updates, not whole-repository tracking. Each completed update records source changes, Pi adaptations, coverage, provenance, and verification together in an enriched Changeset (see `docs/maintenance/changesets.md`). Bundled wayfinder/tracker and triage body templates are preserved independently of optional repository issue forms. Use `scripts/update-port-manifest.mjs <reviewed-source-sha>` only after reviewing the mapped content; advancing its baseline requires `--reviewed`. The generator is not a compatibility assessment and must not be used to stamp unported files as current. The source ledger/marker remain owned by `assess-compatibilty`.

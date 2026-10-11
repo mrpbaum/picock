@@ -1,8 +1,24 @@
-# Matt Pocock Skills
+# Picock
 
-A collection of agent skills distributed by this fork for Pi. Skills are organized into buckets and consumed through per-repo configuration emitted by the `setup-matt-pocock-skills` skill (in Pi, `/skill:setup-matt-pocock-skills`).
+A collection of agent skills distributed by this port for Pi. Skills are organized into buckets and consumed through per-repo configuration emitted by the `setup-matt-pocock-skills` skill (in Pi, `/skill:setup-matt-pocock-skills`).
 
 ## Language
+
+**Source collection**:
+Matt Pocock's original skill collection, consulted read-only for skill intent, content, and bundled dependencies. It is not this port's parent repository.
+_Avoid_: upstream collection, parent fork
+
+**Source snapshot**:
+A reviewed revision of the **Source collection** defining which skills and bundled files the port corresponds to.
+_Avoid_: upstream baseline
+
+**Pi port**:
+The independently maintained collection that preserves the **Source snapshot**'s skill intent while adapting harness-specific behavior for Pi.
+_Avoid_: fork
+
+**Local extra**:
+A separately identified skill or alias maintained in the **Pi port** but absent from its **Source snapshot**.
+_Avoid_: fork-only skill
 
 **Issue tracker**:
 The tool that hosts a repo's issues: GitHub Issues, Linear, a local `.scratch/` markdown convention, or similar. Skills like `to-tickets`, `to-spec`, and `triage` read from and write to it.
@@ -19,6 +35,9 @@ A `wayfinder` unit: a child **Issue** of a `wayfinder:map` holding a *question* 
 A canonical state-machine label applied to an **Issue** during triage (e.g. `needs-triage`, `ready-for-afk`). Each role maps to a real label string in the **Issue tracker** via `docs/agents/triage-labels.md`.
 
 ## Relationships
+
+- A **Pi port** corresponds to a reviewed **Source snapshot** of the **Source collection**.
+- A **Local extra** belongs to the **Pi port**, not its source-parity count.
 
 - An **Issue tracker** holds many **Issues**
 - An **Issue** carries one **Triage role** at a time

@@ -5,7 +5,7 @@ argument-hint: "What will the next session be used for?"
 disable-model-invocation: true
 ---
 
-The upstream name is retained for one-to-one correspondence, but this port launches a Pi worker, not Claude.
+The source name is retained for one-to-one correspondence, but this port launches a Pi worker, not Claude.
 
 Follow the [required Pi backend contract](../../engineering/PI-SUBAGENTS.md). Stop before launch if the backend is unavailable. Write a handoff summary of the current conversation and save it to a unique, owner-readable file in the OS temporary directory. Then launch `Agent` with `subagent_type: "general-purpose"`, a descriptive `description` and `name` (for example `fix-login`), `run_in_background: true`, and `inherit_context: false`. Its prompt names the absolute summary path and tells it to read that file and continue the bounded task directly, without delegating again. Use the current working directory; omit worktree isolation for this handoff unless the user explicitly wants a committed-state copy.
 
